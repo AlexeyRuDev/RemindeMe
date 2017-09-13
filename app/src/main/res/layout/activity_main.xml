@@ -2,12 +2,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:weightSum="1">
+    android:weightSum="1"
+    android:background="@color/mainBackground">
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="0.08"
-        android:text="HelloWorld" />
+    <include android:id="@+id/toolbar"
+        layout="@layout/toolbar"/>
 </LinearLayout>

@@ -1,3 +1,4 @@
 <resources>
-    <string name="app_name">RemindMe</string>
+    <string name="app_name">RemindMeBeta</string>
+    <string name="search">Search</string>
 </resources>
