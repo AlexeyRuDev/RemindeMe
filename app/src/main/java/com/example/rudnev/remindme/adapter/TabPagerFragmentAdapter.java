@@ -6,9 +6,6 @@ import android.support.v4.app.FragmentPagerAdapter;
 
 import com.example.rudnev.remindme.fragments.ExampleFragment;
 
-/**
- * Created by rudnev on 15.09.2017.
- */
 
 public class TabPagerFragmentAdapter extends FragmentPagerAdapter {
 

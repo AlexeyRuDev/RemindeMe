@@ -9,9 +9,6 @@ import android.view.ViewGroup;
 
 import com.example.rudnev.remindme.R;
 
-/**
- * Created by rudnev on 15.09.2017.
- */
 
 public class ExampleFragment extends Fragment {
 

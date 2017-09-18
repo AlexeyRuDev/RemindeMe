@@ -15,9 +15,6 @@ import android.view.MenuItem;
 
 import com.example.rudnev.remindme.adapter.TabPagerFragmentAdapter;
 
-/**
- * Created by rudnev on 12.09.2017.
- */
 
 public class MainActivity extends AppCompatActivity {
 
