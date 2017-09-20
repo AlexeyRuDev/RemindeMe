@@ -1,8 +1,8 @@
 package com.example.rudnev.remindme.fragments;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,17 +10,17 @@ import android.view.ViewGroup;
 import com.example.rudnev.remindme.R;
 
 
-public class ExampleFragment extends Fragment {
+public class ToDoFragment extends AbstractTabFragment {
 
-    private static final int LAYOUT = R.layout.example_fragment;
+    private static final int LAYOUT = R.layout.todo_fragment;
 
-    private View view;
-
-    public static ExampleFragment getInstance(){
+    public static ToDoFragment getInstance(Context context){
         Bundle args = new Bundle();
-        ExampleFragment exampleFragment = new ExampleFragment();
-        exampleFragment.setArguments(args);
-        return exampleFragment;
+        ToDoFragment todoFragment = new ToDoFragment();
+        todoFragment.setArguments(args);
+        todoFragment.setContext(context);
+        todoFragment.setTitle(context.getString(R.string.todo_tab));
+        return todoFragment;
     }
 
     @Nullable
@@ -28,5 +28,10 @@ public class ExampleFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(LAYOUT, container, false);
         return view;
+    }
+
+
+    public void setContext(Context context) {
+        this.context = context;
     }
 }

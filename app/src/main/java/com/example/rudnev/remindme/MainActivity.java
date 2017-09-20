@@ -3,6 +3,7 @@ package com.example.rudnev.remindme;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
@@ -13,7 +14,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.MenuItem;
 
-import com.example.rudnev.remindme.adapter.TabPagerFragmentAdapter;
+import com.example.rudnev.remindme.adapter.TabFragmentAdapter;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -22,6 +23,7 @@ public class MainActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private DrawerLayout drawerLayout;
     private ViewPager viewPager;
+    private FloatingActionButton fab;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -31,6 +33,11 @@ public class MainActivity extends AppCompatActivity {
         initToolbar();
         initNavigationView();
         initTabs();
+        initFAB();
+    }
+
+    private void initFAB() {
+        fab = (FloatingActionButton)findViewById(R.id.fab);
     }
 
     private void initToolbar() {
@@ -69,13 +76,13 @@ public class MainActivity extends AppCompatActivity {
 
     private void initTabs() {
         viewPager = (ViewPager)findViewById(R.id.viewPager);
-        TabPagerFragmentAdapter adapter = new TabPagerFragmentAdapter(getSupportFragmentManager());
+        TabFragmentAdapter adapter = new TabFragmentAdapter(this, getSupportFragmentManager());
         viewPager.setAdapter(adapter);
         TabLayout tabLayout = (TabLayout)findViewById(R.id.tablayout);
         tabLayout.setupWithViewPager(viewPager);
     }
 
     private void showNotificationTab(){
-        viewPager.setCurrentItem(Constants.TAB_TWO);
+        viewPager.setCurrentItem(Constants.TAB_TODO);
     }
 }

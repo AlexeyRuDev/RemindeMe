@@ -46,7 +46,7 @@
             android:src="@mipmap/ic_plus"
             android:layout_gravity="end|bottom"
             android:layout_marginBottom="@dimen/fab_margin"
-            android:layout_marginRight="16dp"/>
+            android:layout_marginRight="@dimen/fab_margin"/>
 
     </android.support.design.widget.CoordinatorLayout>
 
