@@ -21,12 +21,15 @@ public class HistoryFragment extends AbstractTabFragment {
 
     private static final int LAYOUT = R.layout.history_fragment;
 
+    private List<RemindDTO> data;
+    private RemindListAdapter adapter;
 
-    public static HistoryFragment getInstance(Context context){
+    public static HistoryFragment getInstance(Context context, List<RemindDTO> datas){
 
         Bundle args = new Bundle();
         HistoryFragment historyFragment = new HistoryFragment();
         historyFragment.setArguments(args);
+        historyFragment.setData(datas);
         historyFragment.setContext(context);
         historyFragment.setTitle(context.getString(R.string.history_tab));
         return historyFragment;
@@ -38,7 +41,8 @@ public class HistoryFragment extends AbstractTabFragment {
         view = inflater.inflate(LAYOUT, container, false);
         RecyclerView rv = (RecyclerView)view.findViewById(R.id.recyclerView);
         rv.setLayoutManager(new LinearLayoutManager(context));
-        rv.setAdapter(new RemindListAdapter(createMockRemindListDatas()));
+        adapter = new RemindListAdapter(data);
+        rv.setAdapter(adapter);
         return view;
     }
 
@@ -47,16 +51,14 @@ public class HistoryFragment extends AbstractTabFragment {
     }
 
 
-    private List<RemindDTO> createMockRemindListDatas() {
-        List<RemindDTO> datas = new ArrayList<>();
-        datas.add(new RemindDTO("Item1"));
-        datas.add(new RemindDTO("Item2"));
-        datas.add(new RemindDTO("Item3"));
-        datas.add(new RemindDTO("Item4"));
-        datas.add(new RemindDTO("Item5"));
-        datas.add(new RemindDTO("Item6"));
-        datas.add(new RemindDTO("Item7"));
 
-        return datas;
+    public void setData(List<RemindDTO> data) {
+        this.data = data;
+    }
+
+    public void refreshData(List<RemindDTO>data){
+        //adapter = new RemindListAdapter(data);
+        adapter.setData(data);
+        adapter.notifyDataSetChanged();
     }
 }
