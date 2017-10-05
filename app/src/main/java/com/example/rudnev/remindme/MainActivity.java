@@ -1,5 +1,6 @@
 package com.example.rudnev.remindme;
 
+import android.app.Dialog;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -12,15 +13,21 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.rudnev.remindme.adapter.TabFragmentAdapter;
 import com.example.rudnev.remindme.dto.RemindDTO;
@@ -29,7 +36,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements CreateItemDialog.EditNameDialogListener {
 
     private static final int LAYOUT = R.layout.activity_main;
     private Toolbar toolbar;
@@ -37,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
     private ViewPager viewPager;
     private FloatingActionButton fab;
     private DBHelper dbHelper;
+    private String textFromDialog;
 
     private TabFragmentAdapter adapter;
 
@@ -58,15 +66,31 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ContentValues cv = new ContentValues();
+                /*ContentValues cv = new ContentValues();
                 String name = "TEST";
                 SQLiteDatabase db = dbHelper.getWritableDatabase();
                 cv.put("name", name);
                 long rowID = db.insert("mytable", null, cv);
-                dbHelper.close();
-                new RemindMeTask().execute();
+                dbHelper.close();*/
+                //new RemindMeTask().execute();
+                showEditDialog();
+
+                /*List<RemindDTO>data = adapter.getDatas();
+                data.add(new RemindDTO("New"));
+                adapter.setDatas(data);
+                adapter.updateRVAdapter();*/
             }
         });
+    }
+
+    public void setTextFromDialog(String textFromDialog) {
+        this.textFromDialog = textFromDialog;
+    }
+
+    private void showEditDialog() {
+        FragmentManager fm = getSupportFragmentManager();
+        CreateItemDialog createItemDialog = new CreateItemDialog();
+        createItemDialog.show(fm, "create_item_dialog");
     }
 
     private void initToolbar() {
@@ -103,32 +127,41 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+
     private void initTabs() {
         viewPager = (ViewPager)findViewById(R.id.viewPager);
         adapter = new TabFragmentAdapter(this, getSupportFragmentManager());
         viewPager.setAdapter(adapter);
-
-        new RemindMeTask().execute();
+        createMockData();
+        //new RemindMeTask().execute();
         TabLayout tabLayout = (TabLayout)findViewById(R.id.tablayout);
         tabLayout.setupWithViewPager(viewPager);
+    }
+
+    private void createMockData() {
+        List<RemindDTO>datas = new ArrayList<>();
+        datas.add(new RemindDTO("Testd"));
+        datas.add(new RemindDTO("Testa"));
+        datas.add(new RemindDTO("Testb"));
+        datas.add(new RemindDTO("Testc"));
+        adapter.setDatas(datas);
     }
 
     private void showNotificationTab(){
         viewPager.setCurrentItem(Constants.TAB_TODO);
     }
 
-    private class RemindMeTask extends AsyncTask<Void, Void, List<RemindDTO>>{
+    @Override
+    public void onFinishEditDialog(String inputText) {
+        Toast.makeText(this, "Hi, " + inputText, Toast.LENGTH_SHORT).show();
+    }
+
+    /*private class RemindMeTask extends AsyncTask<Void, Void, List<RemindDTO>>{
 
         @Override
         protected List<RemindDTO> doInBackground(Void... voids) {
             List<RemindDTO> datas = new ArrayList<>();
             //datas.add(new RemindDTO("Item1"));
-            /*datas.add(new RemindDTO("Item2"));
-            datas.add(new RemindDTO("Item3"));
-            datas.add(new RemindDTO("Item4"));
-            datas.add(new RemindDTO("Item5"));
-            datas.add(new RemindDTO("Item6"));
-            datas.add(new RemindDTO("Item7"));*/
 
             //FIX
             try {
@@ -159,7 +192,7 @@ public class MainActivity extends AppCompatActivity {
         protected void onPostExecute(List<RemindDTO> remindDTO) {
             adapter.setDatas(remindDTO);
         }
-    }
+    }*/
     class DBHelper extends SQLiteOpenHelper {
 
         public DBHelper(Context context) {

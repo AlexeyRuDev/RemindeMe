@@ -63,4 +63,12 @@ public class TabFragmentAdapter extends FragmentPagerAdapter {
         this.datas = datas;
         historyFragment.refreshData(datas);
     }
+
+    public void updateRVAdapter(){
+        historyFragment.updateRV();
+    }
+
+    public List<RemindDTO> getDatas() {
+        return datas;
+    }
 }

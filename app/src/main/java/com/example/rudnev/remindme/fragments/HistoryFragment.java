@@ -23,6 +23,7 @@ public class HistoryFragment extends AbstractTabFragment {
 
     private List<RemindDTO> data;
     private RemindListAdapter adapter;
+    RecyclerView rv;
 
     public static HistoryFragment getInstance(Context context, List<RemindDTO> datas){
 
@@ -39,9 +40,9 @@ public class HistoryFragment extends AbstractTabFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(LAYOUT, container, false);
-        RecyclerView rv = (RecyclerView)view.findViewById(R.id.recyclerView);
+        rv = (RecyclerView)view.findViewById(R.id.recyclerView);
         rv.setLayoutManager(new LinearLayoutManager(context));
-        adapter = new RemindListAdapter(data);
+        //adapter = new RemindListAdapter(data);
         rv.setAdapter(adapter);
         return view;
     }
@@ -57,8 +58,19 @@ public class HistoryFragment extends AbstractTabFragment {
     }
 
     public void refreshData(List<RemindDTO>data){
-        //adapter = new RemindListAdapter(data);
-        adapter.setData(data);
+        adapter = new RemindListAdapter(data);
+        //adapter.setData(data);
         adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onResume() {
+        adapter.notifyDataSetChanged();
+        super.onResume();
+    }
+
+    public void updateRV(){
+        rv.getAdapter().notifyDataSetChanged();
+        //rv.setAdapter(adapter);
     }
 }
