@@ -31,6 +31,8 @@ import android.widget.Toast;
 
 import com.example.rudnev.remindme.adapter.TabFragmentAdapter;
 import com.example.rudnev.remindme.dto.RemindDTO;
+import com.example.rudnev.remindme.sql.RemindDBAdapter;
+import com.example.rudnev.remindme.sql.RemindDBHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,7 +45,8 @@ public class MainActivity extends AppCompatActivity implements CreateItemDialog.
     private DrawerLayout drawerLayout;
     private ViewPager viewPager;
     private FloatingActionButton fab;
-    private DBHelper dbHelper;
+    //private RemindDBHelper dbHelper;
+    private RemindDBAdapter dbAdapter;
     private String textFromDialog;
 
     private TabFragmentAdapter adapter;
@@ -54,26 +57,22 @@ public class MainActivity extends AppCompatActivity implements CreateItemDialog.
         super.onCreate(savedInstanceState);
         setContentView(LAYOUT);
         initToolbar();
-        dbHelper = new DBHelper(this);
+        //dbHelper = new RemindDBHelper(this);
+        dbAdapter = new RemindDBAdapter(this);
         initNavigationView();
         initTabs();
         initFAB();
-
     }
+
 
     private void initFAB() {
         fab = (FloatingActionButton)findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                /*ContentValues cv = new ContentValues();
-                String name = "TEST";
-                SQLiteDatabase db = dbHelper.getWritableDatabase();
-                cv.put("name", name);
-                long rowID = db.insert("mytable", null, cv);
-                dbHelper.close();*/
-                //new RemindMeTask().execute();
-                showEditDialog();
+                dbAdapter.addItem("Test", "TestNote");
+                new RemindMeTask().execute();
+                //showEditDialog();
 
                 /*List<RemindDTO>data = adapter.getDatas();
                 data.add(new RemindDTO("New"));
@@ -132,8 +131,8 @@ public class MainActivity extends AppCompatActivity implements CreateItemDialog.
         viewPager = (ViewPager)findViewById(R.id.viewPager);
         adapter = new TabFragmentAdapter(this, getSupportFragmentManager());
         viewPager.setAdapter(adapter);
-        createMockData();
-        //new RemindMeTask().execute();
+        //createMockData();
+        new RemindMeTask().execute();
         TabLayout tabLayout = (TabLayout)findViewById(R.id.tablayout);
         tabLayout.setupWithViewPager(viewPager);
     }
@@ -156,11 +155,11 @@ public class MainActivity extends AppCompatActivity implements CreateItemDialog.
         Toast.makeText(this, "Hi, " + inputText, Toast.LENGTH_SHORT).show();
     }
 
-    /*private class RemindMeTask extends AsyncTask<Void, Void, List<RemindDTO>>{
+    private class RemindMeTask extends AsyncTask<Void, Void, List<RemindDTO>>{
 
         @Override
         protected List<RemindDTO> doInBackground(Void... voids) {
-            List<RemindDTO> datas = new ArrayList<>();
+            List<RemindDTO> datas = dbAdapter.getAllItems();
             //datas.add(new RemindDTO("Item1"));
 
             //FIX
@@ -169,22 +168,6 @@ public class MainActivity extends AppCompatActivity implements CreateItemDialog.
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            ContentValues cv = new ContentValues();
-            String name = "TEST";
-            SQLiteDatabase db = dbHelper.getWritableDatabase();
-            Cursor c = db.query("mytable", null, null, null, null, null, null);
-            if (c.moveToFirst()) {
-
-                // определяем номера столбцов по имени в выборке
-                int idColIndex = c.getColumnIndex("id");
-                int nameColIndex = c.getColumnIndex("name");
-
-                do {
-                    datas.add(new RemindDTO(c.getString(nameColIndex)));
-                } while (c.moveToNext());
-            } else
-            c.close();
-            dbHelper.close();
             return datas;
         }
 
@@ -192,25 +175,29 @@ public class MainActivity extends AppCompatActivity implements CreateItemDialog.
         protected void onPostExecute(List<RemindDTO> remindDTO) {
             adapter.setDatas(remindDTO);
         }
-    }*/
-    class DBHelper extends SQLiteOpenHelper {
-
-        public DBHelper(Context context) {
-            // конструктор суперкласса
-            super(context, "myDB", null, 1);
-        }
-
-        @Override
-        public void onCreate(SQLiteDatabase db) {
-            db.execSQL("create table mytable ("
-                    + "id integer primary key autoincrement,"
-                    + "name text"
-                    + ");");
-        }
-
-        @Override
-        public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-
-        }
     }
+
+    /*private List<RemindDTO> getDataFromDB(){
+        List<RemindDTO> datas = new ArrayList<>();
+        //datas.add(new RemindDTO("Item1"));
+
+        ContentValues cv = new ContentValues();
+        String name = "TEST";
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        Cursor c = db.query("mytable", null, null, null, null, null, null);
+        if (c.moveToFirst()) {
+
+            // определяем номера столбцов по имени в выборке
+            int idColIndex = c.getColumnIndex("id");
+            int nameColIndex = c.getColumnIndex("name");
+
+            do {
+                datas.add(new RemindDTO(c.getString(nameColIndex)));
+            } while (c.moveToNext());
+        } else
+            c.close();
+        dbHelper.close();
+        return datas;
+    }*/
+
 }

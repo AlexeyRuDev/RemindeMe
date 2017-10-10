@@ -3,13 +3,16 @@ package com.example.rudnev.remindme.fragments;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.rudnev.remindme.R;
+import com.example.rudnev.remindme.RemindItemClickListener;
 import com.example.rudnev.remindme.adapter.RemindListAdapter;
 import com.example.rudnev.remindme.dto.RemindDTO;
 
@@ -17,7 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class HistoryFragment extends AbstractTabFragment {
+public class HistoryFragment extends AbstractTabFragment implements RemindItemClickListener{
 
     private static final int LAYOUT = R.layout.history_fragment;
 
@@ -42,7 +45,7 @@ public class HistoryFragment extends AbstractTabFragment {
         view = inflater.inflate(LAYOUT, container, false);
         rv = (RecyclerView)view.findViewById(R.id.recyclerView);
         rv.setLayoutManager(new LinearLayoutManager(context));
-        //adapter = new RemindListAdapter(data);
+        adapter = new RemindListAdapter(data, this);
         rv.setAdapter(adapter);
         return view;
     }
@@ -58,8 +61,8 @@ public class HistoryFragment extends AbstractTabFragment {
     }
 
     public void refreshData(List<RemindDTO>data){
-        adapter = new RemindListAdapter(data);
-        //adapter.setData(data);
+        //adapter = new RemindListAdapter(data);
+        adapter.setData(data);
         adapter.notifyDataSetChanged();
     }
 
@@ -72,5 +75,10 @@ public class HistoryFragment extends AbstractTabFragment {
     public void updateRV(){
         rv.getAdapter().notifyDataSetChanged();
         //rv.setAdapter(adapter);
+    }
+
+    @Override
+    public void remindListClicked(View v, int position) {
+        Toast.makeText(getContext(), " "+position, Toast.LENGTH_SHORT).show();
     }
 }
