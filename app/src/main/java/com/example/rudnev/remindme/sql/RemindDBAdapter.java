@@ -52,9 +52,9 @@ public class RemindDBAdapter {
 
     public void updateItem(){}
 
-    public void removeItem(String title){
+    public void removeItem(String name){
         SQLiteDatabase db = dbHelper.getWritableDatabase();
-        db.delete("mytable", "name = " + title, null);
+        db.delete("mytable", "name = " + "\""+name+"\"", null);
         dbHelper.close();
     }
 }

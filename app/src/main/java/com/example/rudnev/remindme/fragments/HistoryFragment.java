@@ -15,6 +15,7 @@ import com.example.rudnev.remindme.R;
 import com.example.rudnev.remindme.RemindItemClickListener;
 import com.example.rudnev.remindme.adapter.RemindListAdapter;
 import com.example.rudnev.remindme.dto.RemindDTO;
+import com.example.rudnev.remindme.sql.RemindDBAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +28,7 @@ public class HistoryFragment extends AbstractTabFragment implements RemindItemCl
     private List<RemindDTO> data;
     private RemindListAdapter adapter;
     RecyclerView rv;
+    private RemindDBAdapter dbAdapter;
 
     public static HistoryFragment getInstance(Context context, List<RemindDTO> datas){
 
@@ -72,13 +74,12 @@ public class HistoryFragment extends AbstractTabFragment implements RemindItemCl
         super.onResume();
     }
 
-    public void updateRV(){
-        rv.getAdapter().notifyDataSetChanged();
-        //rv.setAdapter(adapter);
-    }
-
     @Override
     public void remindListClicked(View v, int position) {
-        Toast.makeText(getContext(), " "+position, Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getContext(), " "+position, Toast.LENGTH_SHORT).show();
+        dbAdapter = new RemindDBAdapter(context);
+        dbAdapter.removeItem(adapter.getTitle(position));
+        adapter.setData(dbAdapter.getAllItems());
+        adapter.notifyDataSetChanged();
     }
 }

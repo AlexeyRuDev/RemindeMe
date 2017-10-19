@@ -70,9 +70,8 @@ public class MainActivity extends AppCompatActivity implements CreateItemDialog.
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                dbAdapter.addItem("Test", "TestNote");
-                new RemindMeTask().execute();
-                //showEditDialog();
+                //dbAdapter.addItem("Test", "TestNote");
+                showEditDialog();
 
                 /*List<RemindDTO>data = adapter.getDatas();
                 data.add(new RemindDTO("New"));
@@ -137,14 +136,6 @@ public class MainActivity extends AppCompatActivity implements CreateItemDialog.
         tabLayout.setupWithViewPager(viewPager);
     }
 
-    private void createMockData() {
-        List<RemindDTO>datas = new ArrayList<>();
-        datas.add(new RemindDTO("Testd"));
-        datas.add(new RemindDTO("Testa"));
-        datas.add(new RemindDTO("Testb"));
-        datas.add(new RemindDTO("Testc"));
-        adapter.setDatas(datas);
-    }
 
     private void showNotificationTab(){
         viewPager.setCurrentItem(Constants.TAB_TODO);
@@ -152,7 +143,8 @@ public class MainActivity extends AppCompatActivity implements CreateItemDialog.
 
     @Override
     public void onFinishEditDialog(String inputText) {
-        Toast.makeText(this, "Hi, " + inputText, Toast.LENGTH_SHORT).show();
+        dbAdapter.addItem(inputText, "FromDialog");
+        new RemindMeTask().execute();
     }
 
     private class RemindMeTask extends AsyncTask<Void, Void, List<RemindDTO>>{

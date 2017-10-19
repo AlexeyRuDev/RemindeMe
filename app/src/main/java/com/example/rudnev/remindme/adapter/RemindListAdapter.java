@@ -67,5 +67,9 @@ public class RemindListAdapter extends RecyclerView.Adapter<RemindListAdapter.Re
         this.data = data;
     }
 
+    public String getTitle(int position){
+
+        return data.get(position).getTitle();
+    }
 
 }
