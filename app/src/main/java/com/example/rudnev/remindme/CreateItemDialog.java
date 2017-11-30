@@ -1,6 +1,9 @@
 package com.example.rudnev.remindme;
 
 
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.view.KeyEvent;
@@ -31,7 +34,10 @@ public class CreateItemDialog extends DialogFragment implements TextView.OnEdito
         mEditTextNote = (EditText) view.findViewById(R.id.noteText);
         mOkBtn = (Button) view.findViewById(R.id.createBtn);
         mCloseBtn = (Button) view.findViewById(R.id.closeBtn);
-        getDialog().setTitle("Hello");
+
+        mEditTextTitle.setBackgroundResource(R.drawable.edit_text_bg);
+        mEditTextNote.setBackgroundResource(R.drawable.edit_text_bg);
+
         mOkBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -43,6 +49,13 @@ public class CreateItemDialog extends DialogFragment implements TextView.OnEdito
         return view;
     }
 
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        setStyle(DialogFragment.STYLE_NO_TITLE, 0);
+
+    }
 
     @Override
     public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {

@@ -80,24 +80,25 @@ public class TabFragmentAdapter extends FragmentStatePagerAdapter implements Tab
 
     @Override
     public void onTabSelected(TabLayout.Tab tab) {
-        Toast.makeText(context, "Position selected = " + tab.getPosition(), Toast.LENGTH_SHORT).show();
+        if(tab.getPosition()==0){
+            updateFragmentState(tab.getPosition(), true);
+        }
     }
 
     @Override
     public void onTabUnselected(TabLayout.Tab tab) {
-        Toast.makeText(context, "Position unselected = " + tab.getPosition(), Toast.LENGTH_SHORT).show();
+
     }
 
     @Override
     public void onTabReselected(TabLayout.Tab tab) {
-        Toast.makeText(context, "Position reselected = " + tab.getPosition(), Toast.LENGTH_SHORT).show();
     }
 
     private void updateFragmentState(int pos, boolean current) {
-        /*final Fragment fragment = map.get(pos);
+        final Fragment fragment = tabs.get(pos);
         if (fragment != null && fragment instanceof TabSelectedListener) {
             ((TabSelectedListener) fragment).onFragmentBecomesCurrent(current);
-        }*/
+        }
     }
 
    public interface TabSelectedListener {

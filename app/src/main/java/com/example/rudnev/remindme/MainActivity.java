@@ -142,9 +142,11 @@ public class MainActivity extends AppCompatActivity implements CreateItemDialog.
             @Override
             public void onPageSelected(int position) {
                 Log.i("PageSelected position ", " " + position);
-               /* if(position == 0){
-                    new RemindMeTask().execute();
-                }*/
+                if(position == 0){
+                    fab.show();
+                }else{
+                    fab.hide();
+                }
             }
 
             @Override

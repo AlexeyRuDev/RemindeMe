@@ -103,6 +103,6 @@ public class HistoryFragment extends AbstractTabFragment implements RemindItemCl
     public void onFragmentBecomesCurrent(boolean current) {
         //Analog onResume
         dbAdapter = new RemindDBAdapter(context);
-        refreshData(dbAdapter.getAllItems());
+        setData(dbAdapter.getAllItems());
     }
 }
