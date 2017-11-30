@@ -3,9 +3,9 @@ package com.example.rudnev.remindme.fragments;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,16 +14,17 @@ import android.widget.Toast;
 import com.example.rudnev.remindme.R;
 import com.example.rudnev.remindme.RemindItemClickListener;
 import com.example.rudnev.remindme.adapter.RemindListAdapter;
+import com.example.rudnev.remindme.adapter.TabFragmentAdapter;
 import com.example.rudnev.remindme.dto.RemindDTO;
 import com.example.rudnev.remindme.sql.RemindDBAdapter;
 
-import java.util.ArrayList;
 import java.util.List;
 
 
-public class HistoryFragment extends AbstractTabFragment implements RemindItemClickListener{
+public class HistoryFragment extends AbstractTabFragment implements RemindItemClickListener, TabFragmentAdapter.TabSelectedListener{
 
     private static final int LAYOUT = R.layout.history_fragment;
+
 
     private List<RemindDTO> data;
     private RemindListAdapter adapter;
@@ -44,6 +45,8 @@ public class HistoryFragment extends AbstractTabFragment implements RemindItemCl
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
+        Log.i("ONCREATEHISTORY", "OnCreate");
         view = inflater.inflate(LAYOUT, container, false);
         rv = (RecyclerView)view.findViewById(R.id.recyclerView);
         rv.setLayoutManager(new LinearLayoutManager(context));
@@ -55,7 +58,6 @@ public class HistoryFragment extends AbstractTabFragment implements RemindItemCl
     public void setContext(Context context) {
         this.context = context;
     }
-
 
 
     public void setData(List<RemindDTO> data) {
@@ -70,6 +72,8 @@ public class HistoryFragment extends AbstractTabFragment implements RemindItemCl
 
     @Override
     public void onResume() {
+        Log.i("ONRESUMEHISTORY", "OnResume");
+        refreshData(data);
         adapter.notifyDataSetChanged();
         super.onResume();
     }
@@ -81,5 +85,24 @@ public class HistoryFragment extends AbstractTabFragment implements RemindItemCl
         dbAdapter.removeItem(adapter.getTitle(position));
         adapter.setData(dbAdapter.getAllItems());
         adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        Log.i("ONPAUSEHISTORY", "OnPauseHistory");
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        Log.i("ONSTOPHISTORY", "OnStopHistory");
+    }
+
+    @Override
+    public void onFragmentBecomesCurrent(boolean current) {
+        //Analog onResume
+        dbAdapter = new RemindDBAdapter(context);
+        refreshData(dbAdapter.getAllItems());
     }
 }

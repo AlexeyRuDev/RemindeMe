@@ -21,6 +21,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
@@ -63,6 +64,8 @@ public class MainActivity extends AppCompatActivity implements CreateItemDialog.
         initTabs();
         initFAB();
     }
+
+
 
 
     private void initFAB() {
@@ -130,9 +133,29 @@ public class MainActivity extends AppCompatActivity implements CreateItemDialog.
         viewPager = (ViewPager)findViewById(R.id.viewPager);
         adapter = new TabFragmentAdapter(this, getSupportFragmentManager());
         viewPager.setAdapter(adapter);
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                Log.i("PageSelected position ", " " + position);
+               /* if(position == 0){
+                    new RemindMeTask().execute();
+                }*/
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
         //createMockData();
         new RemindMeTask().execute();
         TabLayout tabLayout = (TabLayout)findViewById(R.id.tablayout);
+        tabLayout.addOnTabSelectedListener(adapter);
         tabLayout.setupWithViewPager(viewPager);
     }
 

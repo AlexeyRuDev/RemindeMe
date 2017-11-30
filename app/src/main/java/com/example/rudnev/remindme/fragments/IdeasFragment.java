@@ -3,6 +3,7 @@ package com.example.rudnev.remindme.fragments;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,6 +28,7 @@ public class IdeasFragment extends AbstractTabFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        Log.i("ONCREATEIDEAS", "OnCreateIdeas");
         view = inflater.inflate(LAYOUT, container, false);
         return view;
     }
@@ -34,5 +36,23 @@ public class IdeasFragment extends AbstractTabFragment {
 
     public void setContext(Context context) {
         this.context = context;
+    }
+
+    @Override
+    public void onResume() {
+        Log.i("ONRESUMEIDEAS", "OnResumeIdeas");
+        super.onResume();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        Log.i("ONPAUSEIDEAS", "OnPauseIdeas");
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        Log.i("ONSTOPIDEAS", "OnStopIdeas");
     }
 }
