@@ -10,13 +10,13 @@
         android:layout_height="25dp"
         android:background="@color/colorPrimary"
         android:text="Create Item"
-        android:textColor="@color/cardview_light_background" />
+        android:textColor="@color/mainBackground" />
 
     <EditText
         android:id="@+id/titleText"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:background="@color/colorWhite"
+        android:background="@color/mainBackground"
         android:ems="10"
         android:selectAllOnFocus="false" />
 
@@ -26,7 +26,7 @@
         android:layout_height="100dp"
         android:ems="10"
         android:inputType="textMultiLine"
-        android:background="@color/colorWhite"/>
+        android:background="@color/mainBackground"/>
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -41,7 +41,7 @@
             android:layout_gravity="end"
             android:text="Ok"
             android:background="@color/colorPrimary"
-            android:textColor="@color/cardview_light_background"/>
+            android:textColor="@color/mainBackground"/>
 
         <Button
             android:id="@+id/closeBtn"
@@ -50,7 +50,7 @@
             android:layout_gravity="end"
             android:text="Close"
             android:background="@color/colorPrimary"
-            android:textColor="@color/cardview_light_background"/>
+            android:textColor="@color/mainBackground"/>
     </LinearLayout>
 
 </LinearLayout>
