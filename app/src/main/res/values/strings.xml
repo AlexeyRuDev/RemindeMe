@@ -9,4 +9,6 @@
     <string name="ideas_tab">Ideas</string>
     <string name="todo_tab">ToDo</string>
     <string name="birthdays_tab">Birthdays</string>
+    <string name="edit">Edit</string>
+    <string name="delete">Delete</string>
 </resources>

@@ -2,14 +2,17 @@ package com.example.rudnev.remindme.adapter;
 
 
 import android.support.v7.widget.CardView;
+import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.rudnev.remindme.MainActivity;
 import com.example.rudnev.remindme.R;
 import com.example.rudnev.remindme.RemindItemClickListener;
 import com.example.rudnev.remindme.dto.RemindDTO;
@@ -53,6 +56,13 @@ public class RemindListAdapter extends RecyclerView.Adapter<RemindListAdapter.Re
             itemView.setOnClickListener(this);
             cardView = (CardView) itemView.findViewById(R.id.cardview);
             title = (TextView) itemView.findViewById(R.id.title);
+            ImageButton imageButton = itemView.findViewById(R.id.ib_popup_menu);
+            imageButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    showPopup(view, getLayoutPosition());
+                }
+            });
 
         }
         @Override
@@ -60,6 +70,32 @@ public class RemindListAdapter extends RecyclerView.Adapter<RemindListAdapter.Re
         {
             itemClickListener.remindListClicked(v, this.getLayoutPosition());
 
+        }
+        private void showPopup(View view, final int position) {
+            // pass the imageview id
+            View menuItemView = view.findViewById(R.id.ib_popup_menu);
+            PopupMenu popup = new PopupMenu(view.getContext(), menuItemView);
+            MenuInflater inflate = popup.getMenuInflater();
+            inflate.inflate(R.menu.popup_cardview_menu, popup.getMenu());
+
+            popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+
+                @Override
+                public boolean onMenuItemClick(MenuItem item) {
+                    switch (item.getItemId()) {
+                        case R.id.edit:
+
+                            break;
+                        case R.id.delete:
+                            itemClickListener.remindListClicked(itemView, getLayoutPosition());
+                            break;
+                        default:
+                            return false;
+                    }
+                    return false;
+                }
+            });
+            popup.show();
         }
     }
 
@@ -71,5 +107,4 @@ public class RemindListAdapter extends RecyclerView.Adapter<RemindListAdapter.Re
 
         return data.get(position).getTitle();
     }
-
 }
