@@ -4,9 +4,12 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -45,8 +48,9 @@ public class HistoryFragment extends AbstractTabFragment implements RemindItemCl
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        Log.i("ONCREATEHISTORY", "OnCreate");
         view = inflater.inflate(LAYOUT, container, false);
+        dbAdapter = new RemindDBAdapter(context);
+        data = dbAdapter.getAllItems();
         rv = (RecyclerView)view.findViewById(R.id.recyclerView);
         rv.setLayoutManager(new LinearLayoutManager(context));
         adapter = new RemindListAdapter(data, this);
@@ -69,13 +73,13 @@ public class HistoryFragment extends AbstractTabFragment implements RemindItemCl
         adapter.notifyDataSetChanged();
     }
 
-    @Override
+    /*@Override
     public void onResume() {
         Log.i("ONRESUMEHISTORY", "OnResume");
         refreshData(data);
         adapter.notifyDataSetChanged();
         super.onResume();
-    }
+    }*/
 
     @Override
     public void remindListClicked(View v, int position) {
@@ -84,6 +88,34 @@ public class HistoryFragment extends AbstractTabFragment implements RemindItemCl
         dbAdapter.removeItem(adapter.getTitle(position));
         adapter.setData(dbAdapter.getAllItems());
         adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void popupMenuItemClicked(final View view, final int position) {
+        // pass the imageview id
+        View menuItemView = view.findViewById(R.id.ib_popup_menu);
+        PopupMenu popup = new PopupMenu(view.getContext(), menuItemView);
+        MenuInflater inflate = popup.getMenuInflater();
+        inflate.inflate(R.menu.popup_cardview_menu, popup.getMenu());
+
+        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.edit:
+
+                        break;
+                    case R.id.delete:
+                        remindListClicked(view, position);
+                        break;
+                    default:
+                        return false;
+                }
+                return false;
+            }
+        });
+        popup.show();
     }
 
     @Override
@@ -102,6 +134,7 @@ public class HistoryFragment extends AbstractTabFragment implements RemindItemCl
     public void onFragmentBecomesCurrent(boolean current) {
         //Analog onResume
         dbAdapter = new RemindDBAdapter(context);
-        setData(dbAdapter.getAllItems());
+        data = dbAdapter.getAllItems();
+        setData(data);
     }
 }

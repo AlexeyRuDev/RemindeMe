@@ -60,7 +60,7 @@ public class RemindListAdapter extends RecyclerView.Adapter<RemindListAdapter.Re
             imageButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    showPopup(view, getLayoutPosition());
+                    itemClickListener.popupMenuItemClicked(view, getLayoutPosition());
                 }
             });
 
@@ -70,32 +70,6 @@ public class RemindListAdapter extends RecyclerView.Adapter<RemindListAdapter.Re
         {
             itemClickListener.remindListClicked(v, this.getLayoutPosition());
 
-        }
-        private void showPopup(View view, final int position) {
-            // pass the imageview id
-            View menuItemView = view.findViewById(R.id.ib_popup_menu);
-            PopupMenu popup = new PopupMenu(view.getContext(), menuItemView);
-            MenuInflater inflate = popup.getMenuInflater();
-            inflate.inflate(R.menu.popup_cardview_menu, popup.getMenu());
-
-            popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-
-                @Override
-                public boolean onMenuItemClick(MenuItem item) {
-                    switch (item.getItemId()) {
-                        case R.id.edit:
-
-                            break;
-                        case R.id.delete:
-                            itemClickListener.remindListClicked(itemView, getLayoutPosition());
-                            break;
-                        default:
-                            return false;
-                    }
-                    return false;
-                }
-            });
-            popup.show();
         }
     }
 
