@@ -2,21 +2,29 @@ package com.example.rudnev.remindme.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CalendarView;
+import android.widget.Toast;
 
+import com.example.rudnev.remindme.EventDecorator;
 import com.example.rudnev.remindme.R;
+import com.prolificinteractive.materialcalendarview.CalendarDay;
+import com.prolificinteractive.materialcalendarview.DayViewFacade;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
+import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
+
+import java.util.HashSet;
 
 
 public class IdeasFragment extends AbstractTabFragment {
 
     private static final int LAYOUT = R.layout.ideas_fragment;
     private MaterialCalendarView calendarView;
+    HashSet<CalendarDay> dates;
 
 
     public static IdeasFragment getInstance(Context context){
@@ -34,7 +42,15 @@ public class IdeasFragment extends AbstractTabFragment {
         Log.i("ONCREATEIDEAS", "OnCreateIdeas");
         view = inflater.inflate(LAYOUT, container, false);
         calendarView = view.findViewById(R.id.calendarView);
-
+        dates = new HashSet<>();
+        calendarView.setOnDateChangedListener(new OnDateSelectedListener() {
+            @Override
+            public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
+                Toast.makeText(context, "Date = " + date.getDate(), Toast.LENGTH_SHORT).show();
+                dates.add(date);
+                widget.addDecorator(new EventDecorator(R.color.cardview_light_background, dates));
+            }
+        });
         return view;
     }
 

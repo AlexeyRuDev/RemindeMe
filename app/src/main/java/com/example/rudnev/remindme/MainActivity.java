@@ -141,7 +141,7 @@ public class MainActivity extends AppCompatActivity implements CreateItemDialog.
             }
         });
         //createMockData();
-        new RemindMeTask().execute();
+        //new RemindMeTask().execute();
         TabLayout tabLayout = (TabLayout)findViewById(R.id.tablayout);
         tabLayout.addOnTabSelectedListener(adapter);
         tabLayout.setupWithViewPager(viewPager);
@@ -155,10 +155,11 @@ public class MainActivity extends AppCompatActivity implements CreateItemDialog.
     @Override
     public void onFinishEditDialog(String inputText) {
         dbAdapter.addItem(inputText, "FromDialog");
-        new RemindMeTask().execute();
+        adapter.setDatas(dbAdapter.getAllItems());
+        //new RemindMeTask().execute();
     }
 
-    private class RemindMeTask extends AsyncTask<Void, Void, List<RemindDTO>>{
+    /*private class RemindMeTask extends AsyncTask<Void, Void, List<RemindDTO>>{
 
         @Override
         protected List<RemindDTO> doInBackground(Void... voids) {
@@ -178,7 +179,7 @@ public class MainActivity extends AppCompatActivity implements CreateItemDialog.
         protected void onPostExecute(List<RemindDTO> remindDTO) {
             adapter.setDatas(remindDTO);
         }
-    }
+    }*/
 
     /*private List<RemindDTO> getDataFromDB(){
         List<RemindDTO> datas = new ArrayList<>();
