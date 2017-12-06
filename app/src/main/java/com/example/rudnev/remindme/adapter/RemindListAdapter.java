@@ -17,6 +17,7 @@ import com.example.rudnev.remindme.R;
 import com.example.rudnev.remindme.RemindItemClickListener;
 import com.example.rudnev.remindme.dto.RemindDTO;
 
+import java.util.Date;
 import java.util.List;
 
 public class RemindListAdapter extends RecyclerView.Adapter<RemindListAdapter.RemindViewHolder> {
@@ -39,6 +40,7 @@ public class RemindListAdapter extends RecyclerView.Adapter<RemindListAdapter.Re
     public void onBindViewHolder(RemindViewHolder holder, int position) {
 
         holder.title.setText(data.get(position).getTitle());
+        holder.note.setText(data.get(position).getNote());
     }
 
     @Override
@@ -50,12 +52,15 @@ public class RemindListAdapter extends RecyclerView.Adapter<RemindListAdapter.Re
 
         CardView cardView;
         TextView title;
+        TextView note;
+        TextView date;
 
         public RemindViewHolder(View itemView) {
             super(itemView);
             itemView.setOnClickListener(this);
             cardView = (CardView) itemView.findViewById(R.id.cardview);
             title = (TextView) itemView.findViewById(R.id.title);
+            note = (TextView) itemView.findViewById(R.id.note);
             ImageButton imageButton = itemView.findViewById(R.id.ib_popup_menu);
             imageButton.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -80,5 +85,13 @@ public class RemindListAdapter extends RecyclerView.Adapter<RemindListAdapter.Re
     public String getTitle(int position){
 
         return data.get(position).getTitle();
+    }
+    public String getNote(int position){
+
+        return data.get(position).getNote();
+    }
+    public String getDate(int position){
+
+        return data.get(position).getDate();
     }
 }

@@ -34,7 +34,6 @@ public class MainActivity extends AppCompatActivity implements CreateItemDialog.
     private FloatingActionButton fab;
     //private RemindDBHelper dbHelper;
     private RemindDBAdapter dbAdapter;
-    private String textFromDialog;
 
     private TabFragmentAdapter adapter;
 
@@ -68,10 +67,6 @@ public class MainActivity extends AppCompatActivity implements CreateItemDialog.
                 adapter.updateRVAdapter();*/
             }
         });
-    }
-
-    public void setTextFromDialog(String textFromDialog) {
-        this.textFromDialog = textFromDialog;
     }
 
     private void showEditDialog() {
@@ -153,8 +148,8 @@ public class MainActivity extends AppCompatActivity implements CreateItemDialog.
     }
 
     @Override
-    public void onFinishEditDialog(String inputText) {
-        dbAdapter.addItem(inputText, "FromDialog");
+    public void onFinishEditDialog(String inputText, String note, String date) {
+        dbAdapter.addItem(inputText, note, date);
         adapter.setDatas(dbAdapter.getAllItems());
         //new RemindMeTask().execute();
     }

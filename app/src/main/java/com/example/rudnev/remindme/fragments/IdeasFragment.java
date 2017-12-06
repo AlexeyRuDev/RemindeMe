@@ -10,10 +10,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.example.rudnev.remindme.EventDecorator;
 import com.example.rudnev.remindme.R;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
-import com.prolificinteractive.materialcalendarview.DayViewFacade;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
 
@@ -47,8 +45,8 @@ public class IdeasFragment extends AbstractTabFragment {
             @Override
             public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
                 Toast.makeText(context, "Date = " + date.getDate(), Toast.LENGTH_SHORT).show();
-                dates.add(date);
-                widget.addDecorator(new EventDecorator(R.color.cardview_light_background, dates));
+                //dates.add(date);
+                //widget.addDecorator(new EventDecorator(R.color.cardview_light_background, dates));
             }
         });
         return view;

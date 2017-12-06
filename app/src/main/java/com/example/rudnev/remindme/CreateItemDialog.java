@@ -15,21 +15,25 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import java.util.Date;
+
 public class CreateItemDialog extends DialogFragment implements TextView.OnEditorActionListener {
 
     private EditText mEditTextTitle;
     private EditText mEditTextNote;
     private Button mOkBtn;
     private Button mCloseBtn;
+    private Date date;
 
     public interface EditNameDialogListener {
-        void onFinishEditDialog(String inputText);
+        void onFinishEditDialog(String inputText, String note, String date);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.create_item_dialog, container);
+        date = new Date();
         mEditTextTitle = (EditText) view.findViewById(R.id.titleText);
         mEditTextNote = (EditText) view.findViewById(R.id.noteText);
         mOkBtn = (Button) view.findViewById(R.id.createBtn);
@@ -42,7 +46,8 @@ public class CreateItemDialog extends DialogFragment implements TextView.OnEdito
             @Override
             public void onClick(View view) {
                 EditNameDialogListener activity = (EditNameDialogListener) getActivity();
-                activity.onFinishEditDialog(mEditTextTitle.getText().toString());
+
+                activity.onFinishEditDialog(mEditTextTitle.getText().toString(), mEditTextNote.getText().toString(), date.toString());
                 dismiss();
             }
         });
@@ -61,7 +66,7 @@ public class CreateItemDialog extends DialogFragment implements TextView.OnEdito
     public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
         if (EditorInfo.IME_ACTION_DONE == i) {
             EditNameDialogListener activity = (EditNameDialogListener) getActivity();
-            activity.onFinishEditDialog(mEditTextTitle.getText().toString());
+            activity.onFinishEditDialog(mEditTextTitle.getText().toString(), mEditTextNote.getText().toString(), date.toString());
             this.dismiss();
             return true;
         }

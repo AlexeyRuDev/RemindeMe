@@ -8,14 +8,14 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class RemindDBHelper extends SQLiteOpenHelper {
 
     public RemindDBHelper(Context context) {
-        super(context, "myDB", null, 1);
+        super(context, "myRemindDB", null, 1);
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL("create table mytable ("
+        db.execSQL("create table remindtable ("
                 + "id integer primary key autoincrement,"
-                + "name text"
+                + "title text, note text, date date"
                 + ");");
     }
 

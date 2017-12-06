@@ -7,7 +7,10 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.example.rudnev.remindme.dto.RemindDTO;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 
@@ -21,28 +24,33 @@ public class RemindDBAdapter {
         dbHelper = new RemindDBHelper(context);
     }
 
-    public void addItem(String title, String note){
+    public void addItem(String title, String note, String date) {
+
         ContentValues cv = new ContentValues();
         SQLiteDatabase db = dbHelper.getWritableDatabase();
-        cv.put("name", title);
-        long rowID = db.insert("mytable", null, cv);
+        cv.put("title", title);
+        cv.put("note", note);
+        cv.put("date", date);
+        long rowID = db.insert("remindtable", null, cv);
         dbHelper.close();
     }
 
-    public List<RemindDTO> getAllItems(){
+    public List<RemindDTO> getAllItems() {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         List<RemindDTO> datas = new ArrayList<>();
         ContentValues cv = new ContentValues();
-        String name = "TEST";
         SQLiteDatabase db = dbHelper.getWritableDatabase();
-        Cursor c = db.query("mytable", null, null, null, null, null, null);
+        Cursor c = db.query("remindtable", null, null, null, null, null, null);
         if (c.moveToFirst()) {
 
             // определяем номера столбцов по имени в выборке
             int idColIndex = c.getColumnIndex("id");
-            int nameColIndex = c.getColumnIndex("name");
+            int titleColIndex = c.getColumnIndex("title");
+            int noteColIndex = c.getColumnIndex("note");
+            int dateColIndex = c.getColumnIndex("date");
 
             do {
-                datas.add(new RemindDTO(c.getString(nameColIndex)));
+                datas.add(new RemindDTO(c.getString(titleColIndex), c.getString(noteColIndex), c.getString(dateColIndex)));
             } while (c.moveToNext());
         } else
             c.close();
@@ -50,11 +58,12 @@ public class RemindDBAdapter {
         return datas;
     }
 
-    public void updateItem(){}
+    public void updateItem() {
+    }
 
-    public void removeItem(String name){
+    public void removeItem(String name) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
-        db.delete("mytable", "name = " + "\""+name+"\"", null);
+        db.delete("remindtable", "title = " + "\"" + name + "\"", null);
         dbHelper.close();
     }
 }
