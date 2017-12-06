@@ -61,9 +61,9 @@ public class RemindDBAdapter {
     public void updateItem() {
     }
 
-    public void removeItem(String name) {
+    public void removeItem(String title) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
-        db.delete("remindtable", "title = " + "\"" + name + "\"", null);
+        db.delete("remindtable", "title = " + "\"" + title + "\"", null);
         dbHelper.close();
     }
 }

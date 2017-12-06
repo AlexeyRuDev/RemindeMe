@@ -41,6 +41,7 @@ public class RemindListAdapter extends RecyclerView.Adapter<RemindListAdapter.Re
 
         holder.title.setText(data.get(position).getTitle());
         holder.note.setText(data.get(position).getNote());
+        holder.date.setText(data.get(position).getDate());
     }
 
     @Override
@@ -61,6 +62,7 @@ public class RemindListAdapter extends RecyclerView.Adapter<RemindListAdapter.Re
             cardView = (CardView) itemView.findViewById(R.id.cardview);
             title = (TextView) itemView.findViewById(R.id.title);
             note = (TextView) itemView.findViewById(R.id.note);
+            date = (TextView) itemView.findViewById(R.id.date);
             ImageButton imageButton = itemView.findViewById(R.id.ib_popup_menu);
             imageButton.setOnClickListener(new View.OnClickListener() {
                 @Override

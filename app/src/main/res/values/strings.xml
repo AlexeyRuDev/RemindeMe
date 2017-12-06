@@ -11,4 +11,6 @@
     <string name="birthdays_tab">Birthdays</string>
     <string name="edit">Edit</string>
     <string name="delete">Delete</string>
+    <string name="ok">Ok</string>
+    <string name="close">Close</string>
 </resources>
