@@ -75,7 +75,7 @@ public class RemindListAdapter extends RecyclerView.Adapter<RemindListAdapter.Re
         @Override
         public void onClick(View v)
         {
-            itemClickListener.remindListClicked(v, this.getLayoutPosition());
+            itemClickListener.remindListRemoveClicked(v, this.getLayoutPosition());
 
         }
     }

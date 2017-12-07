@@ -24,7 +24,7 @@ public class RemindDBAdapter {
         dbHelper = new RemindDBHelper(context);
     }
 
-    public void addItem(String title, String note, String date) {
+    public long addItem(String title, String note, String date) {
 
         ContentValues cv = new ContentValues();
         SQLiteDatabase db = dbHelper.getWritableDatabase();
@@ -33,10 +33,11 @@ public class RemindDBAdapter {
         cv.put("date", date);
         long rowID = db.insert("remindtable", null, cv);
         dbHelper.close();
+        return rowID;
     }
 
     public List<RemindDTO> getAllItems() {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        //SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         List<RemindDTO> datas = new ArrayList<>();
         ContentValues cv = new ContentValues();
         SQLiteDatabase db = dbHelper.getWritableDatabase();
@@ -50,7 +51,7 @@ public class RemindDBAdapter {
             int dateColIndex = c.getColumnIndex("date");
 
             do {
-                datas.add(new RemindDTO(c.getString(titleColIndex), c.getString(noteColIndex), c.getString(dateColIndex)));
+                datas.add(new RemindDTO(c.getLong(idColIndex), c.getString(titleColIndex), c.getString(noteColIndex), c.getString(dateColIndex)));
             } while (c.moveToNext());
         } else
             c.close();
@@ -58,7 +59,14 @@ public class RemindDBAdapter {
         return datas;
     }
 
-    public void updateItem() {
+    public void updateItem(long itemID, String title, String note, String date) {
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        cv.put("title", title);
+        cv.put("note", note);
+        cv.put("date", date);
+        db.update("remindtable", cv, "id = " + "\"" + itemID + "\"", null);
+        dbHelper.close();
     }
 
     public void removeItem(String title) {

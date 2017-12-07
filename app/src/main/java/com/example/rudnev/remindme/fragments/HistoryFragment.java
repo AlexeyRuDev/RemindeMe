@@ -3,6 +3,7 @@ package com.example.rudnev.remindme.fragments;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
@@ -13,6 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.rudnev.remindme.CreateItemDialog;
 import com.example.rudnev.remindme.R;
 import com.example.rudnev.remindme.RemindItemClickListener;
 import com.example.rudnev.remindme.adapter.RemindListAdapter;
@@ -82,11 +84,26 @@ public class HistoryFragment extends AbstractTabFragment implements RemindItemCl
     }*/
 
     @Override
-    public void remindListClicked(View v, int position) {
+    public void remindListRemoveClicked(View v, int position) {
         //Toast.makeText(getContext(), " "+position, Toast.LENGTH_SHORT).show();
         dbAdapter = new RemindDBAdapter(context);
         dbAdapter.removeItem(adapter.getTitle(position));
         adapter.setData(dbAdapter.getAllItems());
+        adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void remindListUpdateClicked(View v, int position) {
+        FragmentManager fm = getActivity().getSupportFragmentManager();
+        CreateItemDialog createItemDialog = new CreateItemDialog();
+        Bundle args = new Bundle();
+        args.putString("title", data.get(position).getTitle());
+        args.putString("note", data.get(position).getNote());
+        args.putString("date", data.get(position).getDate());
+        //fix to real id
+        args.putLong("itemID", data.get(position).getId());
+        createItemDialog.setArguments(args);
+        createItemDialog.show(fm, "create_item_dialog");
         adapter.notifyDataSetChanged();
     }
 
@@ -104,10 +121,10 @@ public class HistoryFragment extends AbstractTabFragment implements RemindItemCl
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.edit:
-
+                        remindListUpdateClicked(view, position);
                         break;
                     case R.id.delete:
-                        remindListClicked(view, position);
+                        remindListRemoveClicked(view, position);
                         break;
                     default:
                         return false;

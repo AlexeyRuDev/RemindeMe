@@ -5,11 +5,13 @@ import java.util.Date;
 
 public class RemindDTO {
 
+    private long id;
     private String title;
     private String note;
     private String date;
 
-    public RemindDTO(String title, String note, String date) {
+    public RemindDTO(long id, String title, String note, String date) {
+        this.id = id;
         this.title = title;
         this.note = note;
         this.date = date;
@@ -37,5 +39,13 @@ public class RemindDTO {
 
     public void setDate(String date) {
         this.date = date;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 }

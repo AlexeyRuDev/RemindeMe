@@ -30,9 +30,11 @@ public class CreateItemDialog extends DialogFragment implements TextView.OnEdito
     private Button mCloseBtn;
     private CalendarDay date;
     private String formatDate;
+    private long itemID;
+    private boolean fromEditDialog;
 
     public interface EditNameDialogListener {
-        void onFinishEditDialog(String inputText, String note, String date);
+        void onFinishEditDialog(long itemID, String inputText, String note, String date, boolean fromEditDialog);
     }
 
     @Override
@@ -40,7 +42,7 @@ public class CreateItemDialog extends DialogFragment implements TextView.OnEdito
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.create_item_dialog, container);
         date = CalendarDay.today();
-        formatDate = date.getYear()+"/"+(date.getMonth()+1)+"/"+date.getDay();
+
         mEditTextTitle = (EditText) view.findViewById(R.id.titleText);
         mEditTextNote = (EditText) view.findViewById(R.id.noteText);
         mOkBtn = (Button) view.findViewById(R.id.createBtn);
@@ -48,12 +50,23 @@ public class CreateItemDialog extends DialogFragment implements TextView.OnEdito
 
         mEditTextTitle.setBackgroundResource(R.drawable.edit_text_bg);
         mEditTextNote.setBackgroundResource(R.drawable.edit_text_bg);
+
+        if(getArguments()!=null){
+            mEditTextTitle.setText(getArguments().getString("title"));
+            mEditTextNote.setText(getArguments().getString("note"));
+            formatDate = getArguments().getString("date");
+            itemID = getArguments().getLong("itemID");
+            fromEditDialog = true;
+        }else{
+            formatDate = date.getYear() + "/" + (date.getMonth() + 1) + "/" + date.getDay();
+            fromEditDialog = false;
+        }
+
         mOkBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 EditNameDialogListener activity = (EditNameDialogListener) getActivity();
-
-                activity.onFinishEditDialog(mEditTextTitle.getText().toString(), mEditTextNote.getText().toString(), formatDate);
+                activity.onFinishEditDialog(itemID, mEditTextTitle.getText().toString(), mEditTextNote.getText().toString(), formatDate, fromEditDialog);
                 dismiss();
             }
         });
@@ -75,9 +88,13 @@ public class CreateItemDialog extends DialogFragment implements TextView.OnEdito
 
     @Override
     public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
+        long pseudoID = 0;
         if (EditorInfo.IME_ACTION_DONE == i) {
             EditNameDialogListener activity = (EditNameDialogListener) getActivity();
-            activity.onFinishEditDialog(mEditTextTitle.getText().toString(), mEditTextNote.getText().toString(), date.toString());
+            if(getArguments()!=null){
+                pseudoID = getArguments().getLong("itemID");
+            }
+            activity.onFinishEditDialog(pseudoID, mEditTextTitle.getText().toString(), mEditTextNote.getText().toString(), date.toString(), fromEditDialog);
             this.dismiss();
             return true;
         }

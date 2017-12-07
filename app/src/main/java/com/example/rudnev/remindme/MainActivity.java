@@ -148,9 +148,14 @@ public class MainActivity extends AppCompatActivity implements CreateItemDialog.
     }
 
     @Override
-    public void onFinishEditDialog(String inputText, String note, String date) {
-        dbAdapter.addItem(inputText, note, date);
+    public void onFinishEditDialog(long itemID, String inputText, String note, String date, boolean fromEditDialog) {
+        if(fromEditDialog){
+            dbAdapter.updateItem(itemID, inputText, note, date);
+        }else{
+            dbAdapter.addItem(inputText, note, date);
+        }
         adapter.setDatas(dbAdapter.getAllItems());
+        adapter.notifyDataSetChanged();
         //new RemindMeTask().execute();
     }
 
