@@ -41,7 +41,7 @@ public class RemindListAdapter extends RecyclerView.Adapter<RemindListAdapter.Re
 
         holder.title.setText(data.get(position).getTitle());
         holder.note.setText(data.get(position).getNote());
-        holder.date.setText(data.get(position).getDate());
+        holder.date.setText(data.get(position).getDate().toString());
     }
 
     @Override
@@ -92,7 +92,7 @@ public class RemindListAdapter extends RecyclerView.Adapter<RemindListAdapter.Re
 
         return data.get(position).getNote();
     }
-    public String getDate(int position){
+    public Date getDate(int position){
 
         return data.get(position).getDate();
     }

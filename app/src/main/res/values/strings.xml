@@ -8,7 +8,7 @@
     <string name="today_tab">Today</string>
     <string name="calendar_tab">Calendar</string>
     <string name="archive_tab">Archive</string>
-    <string name="birthdays_tab">Birthdays</string>
+    <string name="notes_tab">Notes</string>
     <string name="edit">Edit</string>
     <string name="delete">Delete</string>
     <string name="ok">Ok</string>

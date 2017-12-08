@@ -1,6 +1,8 @@
 package com.example.rudnev.remindme.fragments;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
@@ -22,18 +24,22 @@ import com.example.rudnev.remindme.adapter.TabFragmentAdapter;
 import com.example.rudnev.remindme.dto.RemindDTO;
 import com.example.rudnev.remindme.sql.RemindDBAdapter;
 
+import java.util.Date;
 import java.util.List;
 
 
 public class TodayFragment extends AbstractTabFragment implements RemindItemClickListener, TabFragmentAdapter.TabSelectedListener{
 
     private static final int LAYOUT = R.layout.today_fragment;
+    private static final int REQUEST_TODAY = 1;
 
 
-    private List<RemindDTO> data;
+    private List<RemindDTO> datas;
     private RemindListAdapter adapter;
     RecyclerView rv;
     private RemindDBAdapter dbAdapter;
+    private long mItemID;
+    private Date mItemDate;
 
     public static TodayFragment getInstance(Context context, List<RemindDTO> datas){
 
@@ -52,10 +58,10 @@ public class TodayFragment extends AbstractTabFragment implements RemindItemClic
 
         view = inflater.inflate(LAYOUT, container, false);
         dbAdapter = new RemindDBAdapter(context);
-        data = dbAdapter.getAllItems();
+        datas = dbAdapter.getAllItems();
         rv = (RecyclerView)view.findViewById(R.id.recyclerView);
         rv.setLayoutManager(new LinearLayoutManager(context));
-        adapter = new RemindListAdapter(data, this);
+        adapter = new RemindListAdapter(datas, this);
         rv.setAdapter(adapter);
         return view;
     }
@@ -66,7 +72,7 @@ public class TodayFragment extends AbstractTabFragment implements RemindItemClic
 
 
     public void setData(List<RemindDTO> data) {
-        this.data = data;
+        this.datas = data;
     }
 
     public void refreshData(List<RemindDTO>data){
@@ -96,15 +102,29 @@ public class TodayFragment extends AbstractTabFragment implements RemindItemClic
     public void remindListUpdateClicked(View v, int position) {
         FragmentManager fm = getActivity().getSupportFragmentManager();
         CreateItemDialog createItemDialog = new CreateItemDialog();
+        createItemDialog.setTargetFragment(this, REQUEST_TODAY);
         Bundle args = new Bundle();
-        args.putString("title", data.get(position).getTitle());
-        args.putString("note", data.get(position).getNote());
-        args.putString("date", data.get(position).getDate());
-        //fix to real id
-        args.putLong("itemID", data.get(position).getId());
+        mItemID = datas.get(position).getId();
+        mItemDate = datas.get(position).getDate();
+        args.putString("title", datas.get(position).getTitle());
+        args.putString("note", datas.get(position).getNote());
+        //args.putString("date", data.get(position).getDate());
+        //args.putLong("itemID", datas.get(position).getId());
         createItemDialog.setArguments(args);
         createItemDialog.show(fm, "create_item_dialog");
         adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == Activity.RESULT_OK) {
+            String title = data.getStringExtra("title");
+            String note = data.getStringExtra("note");
+            CreateItemDialog.EditNameDialogListener activity = (CreateItemDialog.EditNameDialogListener) getActivity();
+            activity.onFinishEditDialog(mItemID, title, note, mItemDate, true);
+            //int weight = data.getIntExtra(WeightDialogFragment.TAG_WEIGHT_SELECTED, -1);
+        }
     }
 
     @Override
@@ -151,7 +171,7 @@ public class TodayFragment extends AbstractTabFragment implements RemindItemClic
     public void onFragmentBecomesCurrent(boolean current) {
         //Analog onResume
         dbAdapter = new RemindDBAdapter(context);
-        data = dbAdapter.getAllItems();
-        setData(data);
+        datas = dbAdapter.getAllItems();
+        setData(datas);
     }
 }

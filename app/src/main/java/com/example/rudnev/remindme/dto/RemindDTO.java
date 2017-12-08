@@ -8,9 +8,9 @@ public class RemindDTO {
     private long id;
     private String title;
     private String note;
-    private String date;
+    private Date date;
 
-    public RemindDTO(long id, String title, String note, String date) {
+    public RemindDTO(long id, String title, String note, Date date) {
         this.id = id;
         this.title = title;
         this.note = note;
@@ -33,11 +33,11 @@ public class RemindDTO {
         this.note = note;
     }
 
-    public String getDate() {
+    public Date getDate() {
         return date;
     }
 
-    public void setDate(String date) {
+    public void setDate(Date date) {
         this.date = date;
     }
 

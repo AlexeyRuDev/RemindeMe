@@ -10,18 +10,18 @@ import android.view.ViewGroup;
 import com.example.rudnev.remindme.R;
 
 
-public class BirthdaysFragment extends AbstractTabFragment {
+public class NotesFragment extends AbstractTabFragment {
 
-    private static final int LAYOUT = R.layout.birthdays_fragment;
+    private static final int LAYOUT = R.layout.notes_fragment;
 
 
-    public static BirthdaysFragment getInstance(Context context){
+    public static NotesFragment getInstance(Context context){
         Bundle args = new Bundle();
-        BirthdaysFragment birthdaysFragment = new BirthdaysFragment();
-        birthdaysFragment.setArguments(args);
-        birthdaysFragment.setContext(context);
-        birthdaysFragment.setTitle(context.getString(R.string.birthdays_tab));
-        return birthdaysFragment;
+        NotesFragment notesFragment = new NotesFragment();
+        notesFragment.setArguments(args);
+        notesFragment.setContext(context);
+        notesFragment.setTitle(context.getString(R.string.notes_tab));
+        return notesFragment;
     }
 
     @Nullable

@@ -1,9 +1,11 @@
 package com.example.rudnev.remindme;
 
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.view.KeyEvent;
@@ -29,12 +31,12 @@ public class CreateItemDialog extends DialogFragment implements TextView.OnEdito
     private Button mOkBtn;
     private Button mCloseBtn;
     private CalendarDay date;
-    private String formatDate;
+    private Date formatDate;
     private long itemID;
     private boolean fromEditDialog;
 
     public interface EditNameDialogListener {
-        void onFinishEditDialog(long itemID, String inputText, String note, String date, boolean fromEditDialog);
+        void onFinishEditDialog(long itemID, String inputText, String note, Date date, boolean fromEditDialog);
     }
 
     @Override
@@ -54,20 +56,27 @@ public class CreateItemDialog extends DialogFragment implements TextView.OnEdito
         if(getArguments()!=null){
             mEditTextTitle.setText(getArguments().getString("title"));
             mEditTextNote.setText(getArguments().getString("note"));
-            formatDate = getArguments().getString("date");
-            itemID = getArguments().getLong("itemID");
+            //formatDate = getArguments().getString("date");
+            //itemID = getArguments().getLong("itemID");
             fromEditDialog = true;
         }else{
             //formatDate = date.getYear() + "/" + (date.getMonth() + 1) + "/" + date.getDay();
-            formatDate = date.getDate().toString();
+            formatDate = date.getDate();
             fromEditDialog = false;
         }
 
         mOkBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                EditNameDialogListener activity = (EditNameDialogListener) getActivity();
-                activity.onFinishEditDialog(itemID, mEditTextTitle.getText().toString(), mEditTextNote.getText().toString(), formatDate, fromEditDialog);
+                if(getArguments()!=null) {
+                    Intent intent = new Intent();
+                    intent.putExtra("title", mEditTextTitle.getText().toString());
+                    intent.putExtra("note", mEditTextNote.getText().toString());
+                    getTargetFragment().onActivityResult(getTargetRequestCode(), Activity.RESULT_OK, intent);
+                }else{
+                    EditNameDialogListener activity = (EditNameDialogListener) getActivity();
+                    activity.onFinishEditDialog(itemID, mEditTextTitle.getText().toString(), mEditTextNote.getText().toString(), formatDate, fromEditDialog);
+                }
                 dismiss();
             }
         });
@@ -95,7 +104,7 @@ public class CreateItemDialog extends DialogFragment implements TextView.OnEdito
             if(getArguments()!=null){
                 pseudoID = getArguments().getLong("itemID");
             }
-            activity.onFinishEditDialog(pseudoID, mEditTextTitle.getText().toString(), mEditTextNote.getText().toString(), date.toString(), fromEditDialog);
+            activity.onFinishEditDialog(pseudoID, mEditTextTitle.getText().toString(), mEditTextNote.getText().toString(), formatDate, fromEditDialog);
             this.dismiss();
             return true;
         }

@@ -56,14 +56,8 @@ public class CalendarFragment extends AbstractTabFragment {
         datas = dbAdapter.getAllItems();
         Calendar cal = Calendar.getInstance();
         for(RemindDTO s : datas){
-            SimpleDateFormat sdf = new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy", Locale.ENGLISH);
-            try {
-                cal.setTime(sdf.parse(s.getDate()));
-                dates.add(CalendarDay.from(cal));
-                calendarView.addDecorator(new EventDecorator(R.color.colorPrimary, dates));
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
+            dates.add(CalendarDay.from(s.getDate()));
+            calendarView.addDecorator(new EventDecorator(R.color.colorPrimary, dates));
         }
         calendarView.setOnDateChangedListener(new OnDateSelectedListener() {
             @Override

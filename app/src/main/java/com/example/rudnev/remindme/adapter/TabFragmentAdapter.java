@@ -9,7 +9,7 @@ import android.util.Log;
 
 import com.example.rudnev.remindme.dto.RemindDTO;
 import com.example.rudnev.remindme.fragments.AbstractTabFragment;
-import com.example.rudnev.remindme.fragments.BirthdaysFragment;
+import com.example.rudnev.remindme.fragments.NotesFragment;
 import com.example.rudnev.remindme.fragments.TodayFragment;
 import com.example.rudnev.remindme.fragments.CalendarFragment;
 import com.example.rudnev.remindme.fragments.ArchiveFragment;
@@ -59,7 +59,7 @@ public class TabFragmentAdapter extends FragmentStatePagerAdapter implements Tab
         tabs.put(0, todayFragment);
         tabs.put(1, CalendarFragment.getInstance(context));
         tabs.put(2, ArchiveFragment.getInstance(context));
-        tabs.put(3, BirthdaysFragment.getInstance(context));
+        tabs.put(3, NotesFragment.getInstance(context));
     }
 
     public void setDatas(List<RemindDTO> datas) {

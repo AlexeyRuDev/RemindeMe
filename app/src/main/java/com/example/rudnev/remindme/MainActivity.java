@@ -22,6 +22,7 @@ import com.example.rudnev.remindme.adapter.TabFragmentAdapter;
 import com.example.rudnev.remindme.dto.RemindDTO;
 import com.example.rudnev.remindme.sql.RemindDBAdapter;
 
+import java.util.Date;
 import java.util.List;
 
 
@@ -148,11 +149,11 @@ public class MainActivity extends AppCompatActivity implements CreateItemDialog.
     }
 
     @Override
-    public void onFinishEditDialog(long itemID, String inputText, String note, String date, boolean fromEditDialog) {
+    public void onFinishEditDialog(long itemID, String inputText, String note, Date date, boolean fromEditDialog) {
         if(fromEditDialog){
-            dbAdapter.updateItem(itemID, inputText, note, date);
+            dbAdapter.updateItem(itemID, inputText, note, date.toString());
         }else{
-            dbAdapter.addItem(inputText, note, date);
+            dbAdapter.addItem(inputText, note, date.toString());
         }
         adapter.setDatas(dbAdapter.getAllItems());
         adapter.notifyDataSetChanged();

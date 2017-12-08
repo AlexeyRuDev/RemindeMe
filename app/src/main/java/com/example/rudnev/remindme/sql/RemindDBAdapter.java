@@ -5,13 +5,19 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.example.rudnev.remindme.EventDecorator;
+import com.example.rudnev.remindme.R;
 import com.example.rudnev.remindme.dto.RemindDTO;
+import com.prolificinteractive.materialcalendarview.CalendarDay;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 
 
 public class RemindDBAdapter {
@@ -39,6 +45,8 @@ public class RemindDBAdapter {
     public List<RemindDTO> getAllItems() {
         //SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         List<RemindDTO> datas = new ArrayList<>();
+        HashSet<CalendarDay> dates = new HashSet<>();
+        Calendar cal = Calendar.getInstance();
         ContentValues cv = new ContentValues();
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         Cursor c = db.query("remindtable", null, null, null, null, null, null);
@@ -51,7 +59,14 @@ public class RemindDBAdapter {
             int dateColIndex = c.getColumnIndex("date");
 
             do {
-                datas.add(new RemindDTO(c.getLong(idColIndex), c.getString(titleColIndex), c.getString(noteColIndex), c.getString(dateColIndex)));
+                SimpleDateFormat sdf = new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy", Locale.ENGLISH);
+                try {
+                    cal.setTime(sdf.parse(c.getString(dateColIndex)));
+                    datas.add(new RemindDTO(c.getLong(idColIndex), c.getString(titleColIndex), c.getString(noteColIndex), cal.getTime()));
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
             } while (c.moveToNext());
         } else
             c.close();
