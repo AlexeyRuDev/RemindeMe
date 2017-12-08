@@ -1,27 +1,22 @@
 package com.example.rudnev.remindme.adapter;
 
 import android.content.Context;
-import android.os.Parcelable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.example.rudnev.remindme.dto.RemindDTO;
 import com.example.rudnev.remindme.fragments.AbstractTabFragment;
 import com.example.rudnev.remindme.fragments.BirthdaysFragment;
-import com.example.rudnev.remindme.fragments.HistoryFragment;
-import com.example.rudnev.remindme.fragments.IdeasFragment;
-import com.example.rudnev.remindme.fragments.ToDoFragment;
+import com.example.rudnev.remindme.fragments.TodayFragment;
+import com.example.rudnev.remindme.fragments.CalendarFragment;
+import com.example.rudnev.remindme.fragments.ArchiveFragment;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.SortedMap;
 import java.util.TreeMap;
 
 
@@ -31,7 +26,7 @@ public class TabFragmentAdapter extends FragmentStatePagerAdapter implements Tab
     private Context context;
     private final static int NUM_SIZE = 4;
 
-    private HistoryFragment historyFragment;
+    private TodayFragment todayFragment;
 
     private List<RemindDTO> datas;
 
@@ -60,16 +55,16 @@ public class TabFragmentAdapter extends FragmentStatePagerAdapter implements Tab
 
     private void initTabsMap(Context context){
         tabs = new TreeMap<>();
-        historyFragment = HistoryFragment.getInstance(context, datas);
-        tabs.put(0, historyFragment);
-        tabs.put(1, IdeasFragment.getInstance(context));
-        tabs.put(2, ToDoFragment.getInstance(context));
+        todayFragment = TodayFragment.getInstance(context, datas);
+        tabs.put(0, todayFragment);
+        tabs.put(1, CalendarFragment.getInstance(context));
+        tabs.put(2, ArchiveFragment.getInstance(context));
         tabs.put(3, BirthdaysFragment.getInstance(context));
     }
 
     public void setDatas(List<RemindDTO> datas) {
         this.datas = datas;
-        historyFragment.refreshData(datas);
+        todayFragment.refreshData(datas);
     }
 
 

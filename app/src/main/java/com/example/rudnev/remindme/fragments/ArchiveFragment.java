@@ -11,23 +11,23 @@ import android.view.ViewGroup;
 import com.example.rudnev.remindme.R;
 
 
-public class ToDoFragment extends AbstractTabFragment {
+public class ArchiveFragment extends AbstractTabFragment {
 
-    private static final int LAYOUT = R.layout.todo_fragment;
+    private static final int LAYOUT = R.layout.archive_fragment;
 
-    public static ToDoFragment getInstance(Context context){
+    public static ArchiveFragment getInstance(Context context){
         Bundle args = new Bundle();
-        ToDoFragment todoFragment = new ToDoFragment();
-        todoFragment.setArguments(args);
-        todoFragment.setContext(context);
-        todoFragment.setTitle(context.getString(R.string.todo_tab));
-        return todoFragment;
+        ArchiveFragment archiveFragment = new ArchiveFragment();
+        archiveFragment.setArguments(args);
+        archiveFragment.setContext(context);
+        archiveFragment.setTitle(context.getString(R.string.archive_tab));
+        return archiveFragment;
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        Log.i("ONCREATETODO", "OnCreateToDo");
+        Log.i("ONCREATEARCHIVE", "OnCreateArchive");
         view = inflater.inflate(LAYOUT, container, false);
         return view;
     }
@@ -39,19 +39,19 @@ public class ToDoFragment extends AbstractTabFragment {
 
     @Override
     public void onResume() {
-        Log.i("ONRESUMETODO", "OnResumeToDo");
+        Log.i("ONRESUMEARCHIVE", "OnResumeArchive");
         super.onResume();
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        Log.i("ONPAUSETODO", "OnPauseToDo");
+        Log.i("ONPAUSEARCHIVE", "OnPauseArchive");
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        Log.i("ONSTOPTODO", "OnStopToDo");
+        Log.i("ONSTOPARCHIVE", "OnStopArchive");
     }
 }

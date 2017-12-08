@@ -58,7 +58,8 @@ public class CreateItemDialog extends DialogFragment implements TextView.OnEdito
             itemID = getArguments().getLong("itemID");
             fromEditDialog = true;
         }else{
-            formatDate = date.getYear() + "/" + (date.getMonth() + 1) + "/" + date.getDay();
+            //formatDate = date.getYear() + "/" + (date.getMonth() + 1) + "/" + date.getDay();
+            formatDate = date.getDate().toString();
             fromEditDialog = false;
         }
 

@@ -25,9 +25,9 @@ import com.example.rudnev.remindme.sql.RemindDBAdapter;
 import java.util.List;
 
 
-public class HistoryFragment extends AbstractTabFragment implements RemindItemClickListener, TabFragmentAdapter.TabSelectedListener{
+public class TodayFragment extends AbstractTabFragment implements RemindItemClickListener, TabFragmentAdapter.TabSelectedListener{
 
-    private static final int LAYOUT = R.layout.history_fragment;
+    private static final int LAYOUT = R.layout.today_fragment;
 
 
     private List<RemindDTO> data;
@@ -35,15 +35,15 @@ public class HistoryFragment extends AbstractTabFragment implements RemindItemCl
     RecyclerView rv;
     private RemindDBAdapter dbAdapter;
 
-    public static HistoryFragment getInstance(Context context, List<RemindDTO> datas){
+    public static TodayFragment getInstance(Context context, List<RemindDTO> datas){
 
         Bundle args = new Bundle();
-        HistoryFragment historyFragment = new HistoryFragment();
-        historyFragment.setArguments(args);
-        historyFragment.setData(datas);
-        historyFragment.setContext(context);
-        historyFragment.setTitle(context.getString(R.string.history_tab));
-        return historyFragment;
+        TodayFragment todayFragment = new TodayFragment();
+        todayFragment.setArguments(args);
+        todayFragment.setData(datas);
+        todayFragment.setContext(context);
+        todayFragment.setTitle(context.getString(R.string.today_tab));
+        return todayFragment;
     }
 
     @Nullable
@@ -138,13 +138,13 @@ public class HistoryFragment extends AbstractTabFragment implements RemindItemCl
     @Override
     public void onPause() {
         super.onPause();
-        Log.i("ONPAUSEHISTORY", "OnPauseHistory");
+        Log.i("ONPAUSETODAY", "OnPauseToday");
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        Log.i("ONSTOPHISTORY", "OnStopHistory");
+        Log.i("ONSTOPTODAY", "OnStopToday");
     }
 
     @Override
