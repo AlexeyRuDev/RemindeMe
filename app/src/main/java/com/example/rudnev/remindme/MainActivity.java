@@ -22,8 +22,10 @@ import com.example.rudnev.remindme.adapter.TabFragmentAdapter;
 import com.example.rudnev.remindme.dto.RemindDTO;
 import com.example.rudnev.remindme.sql.RemindDBAdapter;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 
 public class MainActivity extends AppCompatActivity implements CreateItemDialog.EditNameDialogListener {
@@ -150,10 +152,11 @@ public class MainActivity extends AppCompatActivity implements CreateItemDialog.
 
     @Override
     public void onFinishEditDialog(long itemID, String inputText, String note, Date date, boolean fromEditDialog) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
         if(fromEditDialog){
-            dbAdapter.updateItem(itemID, inputText, note, date.toString());
+            dbAdapter.updateItem(itemID, inputText, note, sdf.format(date));
         }else{
-            dbAdapter.addItem(inputText, note, date.toString());
+            dbAdapter.addItem(inputText, note, sdf.format(date));
         }
         adapter.setDatas(dbAdapter.getAllItems());
         adapter.notifyDataSetChanged();

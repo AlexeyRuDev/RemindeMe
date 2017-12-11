@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.widget.Toast;
 
 import com.example.rudnev.remindme.EventDecorator;
 import com.example.rudnev.remindme.R;
@@ -24,6 +25,8 @@ public class RemindDBAdapter {
 
     Context context;
     RemindDBHelper dbHelper;
+    String selection = null;
+    String[] selectionArgs = null;
 
     public RemindDBAdapter(Context context) {
         this.context = context;
@@ -31,7 +34,6 @@ public class RemindDBAdapter {
     }
 
     public long addItem(String title, String note, String date) {
-
         ContentValues cv = new ContentValues();
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         cv.put("title", title);
@@ -47,9 +49,11 @@ public class RemindDBAdapter {
         List<RemindDTO> datas = new ArrayList<>();
         HashSet<CalendarDay> dates = new HashSet<>();
         Calendar cal = Calendar.getInstance();
-        ContentValues cv = new ContentValues();
+        selection = "strftime('%Y', date) = ?";
+        selectionArgs = new String[] { String.valueOf(cal.get(Calendar.YEAR)) };
+        //selectionArgs = new String[] { CalendarDay.today().toString() };
         SQLiteDatabase db = dbHelper.getWritableDatabase();
-        Cursor c = db.query("remindtable", null, null, null, null, null, null);
+        Cursor c = db.query("remindtable", null, selection, selectionArgs, null, null, null);
         if (c.moveToFirst()) {
 
             // определяем номера столбцов по имени в выборке
@@ -59,7 +63,9 @@ public class RemindDBAdapter {
             int dateColIndex = c.getColumnIndex("date");
 
             do {
-                SimpleDateFormat sdf = new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy", Locale.ENGLISH);
+                //SimpleDateFormat sdf = new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy", Locale.ENGLISH);
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
+
                 try {
                     cal.setTime(sdf.parse(c.getString(dateColIndex)));
                     datas.add(new RemindDTO(c.getLong(idColIndex), c.getString(titleColIndex), c.getString(noteColIndex), cal.getTime()));
