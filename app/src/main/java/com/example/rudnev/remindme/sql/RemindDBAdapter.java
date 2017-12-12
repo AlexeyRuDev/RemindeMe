@@ -4,10 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.widget.Toast;
 
-import com.example.rudnev.remindme.EventDecorator;
-import com.example.rudnev.remindme.R;
 import com.example.rudnev.remindme.dto.RemindDTO;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 
@@ -15,13 +12,16 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 
 
 public class RemindDBAdapter {
+
+    private final int TODAY_FRAGMENT = 1;
+    private final int CALENDAR_FRAGMENT = 2;
+    private final int ARCHIVE_FRAGMENT = 3;
 
     Context context;
     RemindDBHelper dbHelper;
@@ -44,13 +44,25 @@ public class RemindDBAdapter {
         return rowID;
     }
 
-    public List<RemindDTO> getAllItems() {
-        //SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+    public List<RemindDTO> getAllItems(int tabNumber) {
+        SimpleDateFormat sdfCal = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
         List<RemindDTO> datas = new ArrayList<>();
         HashSet<CalendarDay> dates = new HashSet<>();
         Calendar cal = Calendar.getInstance();
-        selection = "strftime('%Y', date) = ?";
-        selectionArgs = new String[] { String.valueOf(cal.get(Calendar.YEAR)) };
+        String tadayFormstDate = sdfCal.format(cal.getTime());
+        switch(tabNumber){
+            case TODAY_FRAGMENT:
+                selection = "date(date) = ?";
+                break;
+            case CALENDAR_FRAGMENT:
+                selection = "date(date) >= ?";
+                break;
+            case ARCHIVE_FRAGMENT:
+                selection = "date(date) < ?";
+                break;
+        }
+
+        selectionArgs = new String[] { tadayFormstDate };
         //selectionArgs = new String[] { CalendarDay.today().toString() };
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         Cursor c = db.query("remindtable", null, selection, selectionArgs, null, null, null);
@@ -64,8 +76,7 @@ public class RemindDBAdapter {
 
             do {
                 //SimpleDateFormat sdf = new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy", Locale.ENGLISH);
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
-
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
                 try {
                     cal.setTime(sdf.parse(c.getString(dateColIndex)));
                     datas.add(new RemindDTO(c.getLong(idColIndex), c.getString(titleColIndex), c.getString(noteColIndex), cal.getTime()));
@@ -95,4 +106,35 @@ public class RemindDBAdapter {
         db.delete("remindtable", "title = " + "\"" + title + "\"", null);
         dbHelper.close();
     }
+
+   /* public static String formatDateTime(Context context, String timeToFormat) {
+
+        String finalDateTime = "";
+
+        SimpleDateFormat iso8601Format = new SimpleDateFormat(
+                "yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+
+        Date date = null;
+        if (timeToFormat != null) {
+            try {
+                date = iso8601Format.parse(timeToFormat);
+            } catch (ParseException e) {
+                date = null;
+            }
+
+            if (date != null) {
+                long when = date.getTime();
+                int flags = 0;
+                flags |= android.text.format.DateUtils.FORMAT_SHOW_TIME;
+                flags |= android.text.format.DateUtils.FORMAT_SHOW_DATE;
+                flags |= android.text.format.DateUtils.FORMAT_ABBREV_MONTH;
+                flags |= android.text.format.DateUtils.FORMAT_SHOW_YEAR;
+
+                finalDateTime = android.text.format.DateUtils.formatDateTime(context,
+                        when + TimeZone.getDefault().getOffset(when), flags);
+            }
+        }
+        return finalDateTime;
+    }*/
+
 }

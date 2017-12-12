@@ -47,6 +47,7 @@ public class CreateItemDialog extends DialogFragment implements TextView.OnEdito
         View view = inflater.inflate(R.layout.create_item_dialog, container);
         //date = CalendarDay.today();
         date = Calendar.getInstance();
+        date.set(Calendar.DATE, date.get(Calendar.DATE)+2);
 
         mEditTextTitle = (EditText) view.findViewById(R.id.titleText);
         mEditTextNote = (EditText) view.findViewById(R.id.noteText);

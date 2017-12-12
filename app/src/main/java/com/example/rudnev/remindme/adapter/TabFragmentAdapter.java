@@ -27,6 +27,7 @@ public class TabFragmentAdapter extends FragmentStatePagerAdapter implements Tab
     private final static int NUM_SIZE = 4;
 
     private TodayFragment todayFragment;
+    private ArchiveFragment archiveFragment;
 
     private List<RemindDTO> datas;
 
@@ -56,15 +57,17 @@ public class TabFragmentAdapter extends FragmentStatePagerAdapter implements Tab
     private void initTabsMap(Context context){
         tabs = new TreeMap<>();
         todayFragment = TodayFragment.getInstance(context, datas);
+        archiveFragment = ArchiveFragment.getInstance(context, datas);
         tabs.put(0, todayFragment);
         tabs.put(1, CalendarFragment.getInstance(context));
-        tabs.put(2, ArchiveFragment.getInstance(context));
+        tabs.put(2, archiveFragment);
         tabs.put(3, NotesFragment.getInstance(context));
     }
 
     public void setDatas(List<RemindDTO> datas) {
         this.datas = datas;
         todayFragment.refreshData(datas);
+        //archiveFragment.refreshData(datas);
     }
 
 

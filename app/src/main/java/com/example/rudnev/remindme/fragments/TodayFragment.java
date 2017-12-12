@@ -58,7 +58,7 @@ public class TodayFragment extends AbstractTabFragment implements RemindItemClic
 
         view = inflater.inflate(LAYOUT, container, false);
         dbAdapter = new RemindDBAdapter(context);
-        datas = dbAdapter.getAllItems();
+        datas = dbAdapter.getAllItems(1);
         rv = (RecyclerView)view.findViewById(R.id.recyclerView);
         rv.setLayoutManager(new LinearLayoutManager(context));
         adapter = new RemindListAdapter(datas, this);
@@ -94,7 +94,7 @@ public class TodayFragment extends AbstractTabFragment implements RemindItemClic
         //Toast.makeText(getContext(), " "+position, Toast.LENGTH_SHORT).show();
         dbAdapter = new RemindDBAdapter(context);
         dbAdapter.removeItem(adapter.getTitle(position));
-        adapter.setData(dbAdapter.getAllItems());
+        adapter.setData(dbAdapter.getAllItems(1));
         adapter.notifyDataSetChanged();
     }
 
@@ -171,7 +171,7 @@ public class TodayFragment extends AbstractTabFragment implements RemindItemClic
     public void onFragmentBecomesCurrent(boolean current) {
         //Analog onResume
         dbAdapter = new RemindDBAdapter(context);
-        datas = dbAdapter.getAllItems();
+        datas = dbAdapter.getAllItems(1);
         setData(datas);
     }
 }

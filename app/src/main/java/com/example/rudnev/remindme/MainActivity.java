@@ -152,13 +152,13 @@ public class MainActivity extends AppCompatActivity implements CreateItemDialog.
 
     @Override
     public void onFinishEditDialog(long itemID, String inputText, String note, Date date, boolean fromEditDialog) {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
         if(fromEditDialog){
             dbAdapter.updateItem(itemID, inputText, note, sdf.format(date));
         }else{
             dbAdapter.addItem(inputText, note, sdf.format(date));
         }
-        adapter.setDatas(dbAdapter.getAllItems());
+        adapter.setDatas(dbAdapter.getAllItems(1));
         adapter.notifyDataSetChanged();
         //new RemindMeTask().execute();
     }

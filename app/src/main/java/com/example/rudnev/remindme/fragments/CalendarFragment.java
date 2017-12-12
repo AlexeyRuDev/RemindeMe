@@ -53,7 +53,7 @@ public class CalendarFragment extends AbstractTabFragment {
         dates = new HashSet<>();
         dbAdapter = new RemindDBAdapter(context);
         List<RemindDTO> datas = new ArrayList<>();
-        datas = dbAdapter.getAllItems();
+        datas = dbAdapter.getAllItems(2);
         Calendar cal = Calendar.getInstance();
         for(RemindDTO s : datas){
             dates.add(CalendarDay.from(s.getDate()));
