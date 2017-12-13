@@ -24,6 +24,7 @@ import com.example.rudnev.remindme.adapter.TabFragmentAdapter;
 import com.example.rudnev.remindme.dto.RemindDTO;
 import com.example.rudnev.remindme.sql.RemindDBAdapter;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -121,8 +122,10 @@ public class TodayFragment extends AbstractTabFragment implements RemindItemClic
         if (resultCode == Activity.RESULT_OK) {
             String title = data.getStringExtra("title");
             String note = data.getStringExtra("note");
+            Date date = new Date();
+            date.setTime(data.getLongExtra("date", 0));
             CreateItemDialog.EditNameDialogListener activity = (CreateItemDialog.EditNameDialogListener) getActivity();
-            activity.onFinishEditDialog(mItemID, title, note, mItemDate, true);
+            activity.onFinishEditDialog(mItemID, title, note, date, true);
             //int weight = data.getIntExtra(WeightDialogFragment.TAG_WEIGHT_SELECTED, -1);
         }
     }

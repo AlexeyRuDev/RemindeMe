@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.example.rudnev.remindme.CalendarItemsDialog;
 import com.example.rudnev.remindme.EventDecorator;
 import com.example.rudnev.remindme.R;
 import com.example.rudnev.remindme.dto.RemindDTO;
@@ -33,6 +34,8 @@ public class CalendarFragment extends AbstractTabFragment {
     private MaterialCalendarView calendarView;
     HashSet<CalendarDay> dates;
     private RemindDBAdapter dbAdapter;
+    private List<RemindDTO> datas;
+
 
 
     public static CalendarFragment getInstance(Context context){
@@ -52,7 +55,7 @@ public class CalendarFragment extends AbstractTabFragment {
         calendarView = view.findViewById(R.id.calendarView);
         dates = new HashSet<>();
         dbAdapter = new RemindDBAdapter(context);
-        List<RemindDTO> datas = new ArrayList<>();
+        datas = new ArrayList<>();
         datas = dbAdapter.getAllItems(2);
         Calendar cal = Calendar.getInstance();
         for(RemindDTO s : datas){
@@ -62,9 +65,11 @@ public class CalendarFragment extends AbstractTabFragment {
         calendarView.setOnDateChangedListener(new OnDateSelectedListener() {
             @Override
             public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
-                Toast.makeText(context, date.toString(), Toast.LENGTH_SHORT).show();
+                //Toast.makeText(context, date.toString(), Toast.LENGTH_SHORT).show();
                 //dates.add(date);
                 widget.addDecorator(new EventDecorator(R.color.colorPrimary, dates));
+                CalendarItemsDialog calendarItemsDialog = CalendarItemsDialog.getInstance(context, datas);
+                calendarItemsDialog.show(getFragmentManager(), "add_calendar_item");
 
             }
         });
