@@ -102,8 +102,14 @@ public class CreateItemDialog extends DialogFragment implements TextView.OnEdito
                     intent.putExtra("date", date.getTimeInMillis());
                     getTargetFragment().onActivityResult(getTargetRequestCode(), Activity.RESULT_OK, intent);
                 }else{
-                    EditNameDialogListener activity = (EditNameDialogListener) getActivity();
-                    activity.onFinishEditDialog(itemID, mEditTextTitle.getText().toString(), mEditTextNote.getText().toString(), formatDate, fromEditDialog);
+                    if(getTargetRequestCode() == 2){
+                        EditNameDialogListener dialog = (EditNameDialogListener) getTargetFragment();
+                        dialog.onFinishEditDialog(itemID, mEditTextTitle.getText().toString(), mEditTextNote.getText().toString(), formatDate, fromEditDialog);
+                    }else{
+                        EditNameDialogListener activity = (EditNameDialogListener) getActivity();
+                        activity.onFinishEditDialog(itemID, mEditTextTitle.getText().toString(), mEditTextNote.getText().toString(), formatDate, fromEditDialog);
+                    }
+
                 }
                 dismiss();
             }

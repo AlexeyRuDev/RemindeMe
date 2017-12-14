@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 
 import com.example.rudnev.remindme.R;
 import com.example.rudnev.remindme.RemindItemClickListener;
+import com.example.rudnev.remindme.adapter.ArchiveListAdapter;
 import com.example.rudnev.remindme.adapter.RemindListAdapter;
 import com.example.rudnev.remindme.adapter.TabFragmentAdapter;
 import com.example.rudnev.remindme.dto.RemindDTO;
@@ -29,7 +30,7 @@ public class ArchiveFragment extends AbstractTabFragment implements RemindItemCl
     private static final int LAYOUT = R.layout.archive_fragment;
 
     private List<RemindDTO> datas;
-    private RemindListAdapter adapter;
+    private ArchiveListAdapter adapter;
     RecyclerView rv;
     private RemindDBAdapter dbAdapter;
     private long mItemID;
@@ -51,10 +52,10 @@ public class ArchiveFragment extends AbstractTabFragment implements RemindItemCl
         Log.i("ONCREATEARCHIVE", "OnCreateArchive");
         view = inflater.inflate(LAYOUT, container, false);
         dbAdapter = new RemindDBAdapter(context);
-        datas = dbAdapter.getAllItems(3);
+        datas = dbAdapter.getAllItems(3, null);
         rv = (RecyclerView)view.findViewById(R.id.recyclerViewArchive);
         rv.setLayoutManager(new LinearLayoutManager(context));
-        adapter = new RemindListAdapter(datas, this);
+        adapter = new ArchiveListAdapter(datas, this);
         rv.setAdapter(adapter);
         return view;
     }
@@ -100,7 +101,7 @@ public class ArchiveFragment extends AbstractTabFragment implements RemindItemCl
         //Toast.makeText(getContext(), " "+position, Toast.LENGTH_SHORT).show();
         dbAdapter = new RemindDBAdapter(context);
         dbAdapter.removeItem(adapter.getTitle(position));
-        adapter.setData(dbAdapter.getAllItems(3));
+        adapter.setData(dbAdapter.getAllItems(3, null));
         adapter.notifyDataSetChanged();
     }
 
@@ -141,7 +142,11 @@ public class ArchiveFragment extends AbstractTabFragment implements RemindItemCl
     public void onFragmentBecomesCurrent(boolean current) {
         //Analog onResume
         dbAdapter = new RemindDBAdapter(context);
-        datas = dbAdapter.getAllItems(3);
+        datas = dbAdapter.getAllItems(3, null);
         setData(datas);
+        if(adapter!=null){
+            adapter.setData(datas);
+            adapter.notifyDataSetChanged();
+        }
     }
 }

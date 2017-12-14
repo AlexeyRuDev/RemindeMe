@@ -12,6 +12,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
@@ -19,14 +20,14 @@ import java.util.Locale;
 
 public class RemindDBAdapter {
 
-    private final int TODAY_FRAGMENT = 1;
+    private final int TODAY_OR_CALENDAR_ITEMS_FRAGMENT = 1;
     private final int CALENDAR_FRAGMENT = 2;
     private final int ARCHIVE_FRAGMENT = 3;
 
-    Context context;
-    RemindDBHelper dbHelper;
-    String selection = null;
-    String[] selectionArgs = null;
+    private Context context;
+    private RemindDBHelper dbHelper;
+    private String selection = null;
+    private String[] selectionArgs = null;
 
     public RemindDBAdapter(Context context) {
         this.context = context;
@@ -44,14 +45,15 @@ public class RemindDBAdapter {
         return rowID;
     }
 
-    public List<RemindDTO> getAllItems(int tabNumber) {
+    public List<RemindDTO> getAllItems(int tabNumber, Date date) {
         SimpleDateFormat sdfCal = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
         List<RemindDTO> datas = new ArrayList<>();
-        HashSet<CalendarDay> dates = new HashSet<>();
         Calendar cal = Calendar.getInstance();
-        String tadayFormstDate = sdfCal.format(cal.getTime());
         switch(tabNumber){
-            case TODAY_FRAGMENT:
+            case TODAY_OR_CALENDAR_ITEMS_FRAGMENT:
+                if(date != null) {
+                    cal.setTime(date);
+                }
                 selection = "date(date) = ?";
                 break;
             case CALENDAR_FRAGMENT:
@@ -61,7 +63,7 @@ public class RemindDBAdapter {
                 selection = "date(date) < ?";
                 break;
         }
-
+        String tadayFormstDate = sdfCal.format(cal.getTime());
         selectionArgs = new String[] { tadayFormstDate };
         //selectionArgs = new String[] { CalendarDay.today().toString() };
         SQLiteDatabase db = dbHelper.getWritableDatabase();

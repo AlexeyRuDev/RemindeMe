@@ -17,6 +17,7 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.example.rudnev.remindme.adapter.TabFragmentAdapter;
 import com.example.rudnev.remindme.dto.RemindDTO;
@@ -158,7 +159,7 @@ public class MainActivity extends AppCompatActivity implements CreateItemDialog.
         }else{
             dbAdapter.addItem(inputText, note, sdf.format(date));
         }
-        adapter.setDatas(dbAdapter.getAllItems(1));
+        adapter.setDatas(dbAdapter.getAllItems(1, date));
         adapter.notifyDataSetChanged();
         //new RemindMeTask().execute();
     }

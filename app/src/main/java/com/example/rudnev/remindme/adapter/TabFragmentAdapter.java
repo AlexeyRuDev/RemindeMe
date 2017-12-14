@@ -78,9 +78,7 @@ public class TabFragmentAdapter extends FragmentStatePagerAdapter implements Tab
 
     @Override
     public void onTabSelected(TabLayout.Tab tab) {
-        if(tab.getPosition()==0){
-            updateFragmentState(tab.getPosition(), true);
-        }
+        updateFragmentState(tab.getPosition(), true);
     }
 
     @Override

@@ -8,29 +8,27 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.example.rudnev.remindme.CalendarItemsDialog;
 import com.example.rudnev.remindme.EventDecorator;
 import com.example.rudnev.remindme.R;
+import com.example.rudnev.remindme.adapter.TabFragmentAdapter;
 import com.example.rudnev.remindme.dto.RemindDTO;
 import com.example.rudnev.remindme.sql.RemindDBAdapter;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Locale;
 
 
-public class CalendarFragment extends AbstractTabFragment {
+public class CalendarFragment extends AbstractTabFragment implements TabFragmentAdapter.TabSelectedListener, CalendarItemsDialog.CalendarItemsUpdateListener {
 
     private static final int LAYOUT = R.layout.calendar_fragment;
+    private static final int CALENDARFRAGMENT = 1;
     private MaterialCalendarView calendarView;
     HashSet<CalendarDay> dates;
     private RemindDBAdapter dbAdapter;
@@ -56,19 +54,18 @@ public class CalendarFragment extends AbstractTabFragment {
         dates = new HashSet<>();
         dbAdapter = new RemindDBAdapter(context);
         datas = new ArrayList<>();
-        datas = dbAdapter.getAllItems(2);
+        datas = dbAdapter.getAllItems(2, null);
         Calendar cal = Calendar.getInstance();
-        for(RemindDTO s : datas){
-            dates.add(CalendarDay.from(s.getDate()));
-            calendarView.addDecorator(new EventDecorator(R.color.colorPrimary, dates));
-        }
+        updateCalendar(datas);
+
         calendarView.setOnDateChangedListener(new OnDateSelectedListener() {
             @Override
             public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
                 //Toast.makeText(context, date.toString(), Toast.LENGTH_SHORT).show();
                 //dates.add(date);
                 widget.addDecorator(new EventDecorator(R.color.colorPrimary, dates));
-                CalendarItemsDialog calendarItemsDialog = CalendarItemsDialog.getInstance(context, datas);
+                CalendarItemsDialog calendarItemsDialog = CalendarItemsDialog.getInstance(context, date.getDate());
+                calendarItemsDialog.setTargetFragment(CalendarFragment.this, CALENDARFRAGMENT);
                 calendarItemsDialog.show(getFragmentManager(), "add_calendar_item");
 
             }
@@ -82,20 +79,23 @@ public class CalendarFragment extends AbstractTabFragment {
     }
 
     @Override
-    public void onResume() {
-        Log.i("ONRESUMECALENDAR", "OnResumeCalendar");
-        super.onResume();
+    public void onFragmentBecomesCurrent(boolean current) {
+        datas = dbAdapter.getAllItems(2, null);
+        updateCalendar(datas);
+    }
+
+    private void updateCalendar(List<RemindDTO>datas){
+        dates.clear();
+        calendarView.removeDecorators();
+        for(RemindDTO s : datas){
+            dates.add(CalendarDay.from(s.getDate()));
+            calendarView.addDecorator(new EventDecorator(R.color.colorPrimary, dates));
+        }
     }
 
     @Override
-    public void onPause() {
-        super.onPause();
-        Log.i("ONPAUSECALENDAR", "OnPauseCalendar");
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        Log.i("ONSTOPCALENDAR", "OnStopCalendar");
+    public void onCloseDialog() {
+        datas = dbAdapter.getAllItems(2, null);
+        updateCalendar(datas);
     }
 }

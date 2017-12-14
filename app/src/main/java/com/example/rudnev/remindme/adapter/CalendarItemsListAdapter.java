@@ -1,17 +1,12 @@
 package com.example.rudnev.remindme.adapter;
 
-
 import android.support.v7.widget.CardView;
-import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.rudnev.remindme.R;
 import com.example.rudnev.remindme.RemindItemClickListener;
@@ -20,24 +15,24 @@ import com.example.rudnev.remindme.dto.RemindDTO;
 import java.util.Date;
 import java.util.List;
 
-public class RemindListAdapter extends RecyclerView.Adapter<RemindListAdapter.RemindViewHolder> {
 
+public class CalendarItemsListAdapter extends RecyclerView.Adapter<CalendarItemsListAdapter.RemindViewHolder>  {
     private List<RemindDTO> data;
-    private static RemindItemClickListener itemClickListener;
+    private static RemindItemClickListener calItemClickListener;
 
-    public RemindListAdapter(List<RemindDTO> data, RemindItemClickListener remindItemClickListener){
+    public CalendarItemsListAdapter(List<RemindDTO> data, RemindItemClickListener remindItemClickListener){
         this.data = data;
-        itemClickListener = remindItemClickListener;
+        calItemClickListener = remindItemClickListener;
     }
 
     @Override
-    public RemindViewHolder onCreateViewHolder(final ViewGroup parent, int viewType) {
+    public CalendarItemsListAdapter.RemindViewHolder onCreateViewHolder(final ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.remind_item, parent, false);
-        return new RemindViewHolder(view);
+        return new CalendarItemsListAdapter.RemindViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(RemindViewHolder holder, int position) {
+    public void onBindViewHolder(CalendarItemsListAdapter.RemindViewHolder holder, int position) {
 
         holder.title.setText(data.get(position).getTitle());
         holder.note.setText(data.get(position).getNote());
@@ -67,7 +62,7 @@ public class RemindListAdapter extends RecyclerView.Adapter<RemindListAdapter.Re
             imageButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    itemClickListener.popupMenuItemClicked(view, getLayoutPosition());
+                    calItemClickListener.popupMenuItemClicked(view, getLayoutPosition());
                 }
             });
 
@@ -75,7 +70,7 @@ public class RemindListAdapter extends RecyclerView.Adapter<RemindListAdapter.Re
         @Override
         public void onClick(View v)
         {
-            itemClickListener.remindListRemoveClicked(v, this.getLayoutPosition());
+            calItemClickListener.remindListRemoveClicked(v, this.getLayoutPosition());
 
         }
     }
