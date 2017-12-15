@@ -17,6 +17,10 @@ public class RemindDBHelper extends SQLiteOpenHelper {
                 + "id integer primary key autoincrement,"
                 + "title text, note text, date date"
                 + ");");
+        db.execSQL("create table remindnotestable ("
+                + "id integer primary key autoincrement,"
+                + "title text, note text, date date"
+                + ");");
     }
 
     @Override

@@ -78,25 +78,6 @@ public class ArchiveFragment extends AbstractTabFragment implements RemindItemCl
     }
 
     @Override
-    public void onResume() {
-        Log.i("ONRESUMEARCHIVE", "OnResumeArchive");
-        super.onResume();
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        Log.i("ONPAUSEARCHIVE", "OnPauseArchive");
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        Log.i("ONSTOPARCHIVE", "OnStopArchive");
-    }
-
-
-    @Override
     public void remindListRemoveClicked(View v, int position) {
         //Toast.makeText(getContext(), " "+position, Toast.LENGTH_SHORT).show();
         dbAdapter = new RemindDBAdapter(context);

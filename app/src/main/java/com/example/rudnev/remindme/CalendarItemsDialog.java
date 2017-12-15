@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.TimeZone;
 
 public class CalendarItemsDialog extends DialogFragment implements RemindItemClickListener, CreateItemDialog.EditNameDialogListener{
 
@@ -136,6 +137,7 @@ public class CalendarItemsDialog extends DialogFragment implements RemindItemCli
     @Override
     public void onFinishEditDialog(long itemID, String inputText, String note, Date date, boolean fromEditDialog) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+        sdf.setTimeZone(TimeZone.getTimeZone("RU"));
         if(fromEditDialog){
             dbAdapter.updateItem(itemID, inputText, note, sdf.format(date));
         }else{
