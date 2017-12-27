@@ -2,11 +2,8 @@ package com.example.rudnev.remindme;
 
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.DatePickerDialog;
-import android.app.Dialog;
 import android.app.TimePickerDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
@@ -15,7 +12,6 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -23,13 +19,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
-import com.prolificinteractive.materialcalendarview.CalendarDay;
-import com.prolificinteractive.materialcalendarview.CalendarUtils;
-
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Locale;
 
 public class CreateItemDialog extends DialogFragment implements TextView.OnEditorActionListener {
 
@@ -54,7 +45,8 @@ public class CreateItemDialog extends DialogFragment implements TextView.OnEdito
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.create_item_dialog, container);
         //date = CalendarDay.today();
-        date = Calendar.getInstance();
+        if(date == null)
+            date = Calendar.getInstance();
         mEditTextTitle = (EditText) view.findViewById(R.id.titleText);
         mEditTextNote = (EditText) view.findViewById(R.id.noteText);
         mTextViewDate = (TextView) view.findViewById(R.id.dateText);
@@ -138,6 +130,10 @@ public class CreateItemDialog extends DialogFragment implements TextView.OnEdito
                 date.get(Calendar.MONTH),
                 date.get(Calendar.DAY_OF_MONTH))
                 .show();
+    }
+
+    public void setDateField(Calendar date){
+        this.date = date;
     }
 
     private void setInitialDateTime() {

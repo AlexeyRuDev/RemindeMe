@@ -9,13 +9,12 @@ import android.util.Log;
 
 import com.example.rudnev.remindme.dto.RemindDTO;
 import com.example.rudnev.remindme.fragments.AbstractTabFragment;
+import com.example.rudnev.remindme.fragments.ArchiveFragment;
+import com.example.rudnev.remindme.fragments.CalendarFragment;
 import com.example.rudnev.remindme.fragments.NotesFragment;
 import com.example.rudnev.remindme.fragments.TodayFragment;
-import com.example.rudnev.remindme.fragments.CalendarFragment;
-import com.example.rudnev.remindme.fragments.ArchiveFragment;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;

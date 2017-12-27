@@ -2,8 +2,8 @@ package com.example.rudnev.remindme;
 
 
 public class Constants {
-    public static final int TAB_HISTORY = 0;
-    public static final int TAB_IDEAS = 1;
-    public static final int TAB_TODO = 2;
-    public static final int TAB_BIRTHDAYS = 3;
+    public static final int TAB_TODAY = 0;
+    public static final int TAB_CALENDAR = 1;
+    public static final int TAB_ARCHIVE = 2;
+    public static final int TAB_NOTES = 3;
 }

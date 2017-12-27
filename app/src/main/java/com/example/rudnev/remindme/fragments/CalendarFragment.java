@@ -51,10 +51,11 @@ public class CalendarFragment extends AbstractTabFragment implements TabFragment
         Log.i("ONCREATECALENDAR", "OnCreateCalendar");
         view = inflater.inflate(LAYOUT, container, false);
         calendarView = view.findViewById(R.id.calendarView);
+        calendarView.setPagingEnabled(false);
         dates = new HashSet<>();
         dbAdapter = new RemindDBAdapter(context);
         datas = new ArrayList<>();
-        datas = dbAdapter.getAllItems(2, null);
+        //datas = dbAdapter.getAllItems(2, null);
         Calendar cal = Calendar.getInstance();
         updateCalendar(datas);
 
@@ -63,7 +64,7 @@ public class CalendarFragment extends AbstractTabFragment implements TabFragment
             public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
                 //Toast.makeText(context, date.toString(), Toast.LENGTH_SHORT).show();
                 //dates.add(date);
-                widget.addDecorator(new EventDecorator(R.color.colorPrimary, dates));
+                widget.addDecorator(new EventDecorator(R.color.colorPrimary, dates, context));
                 CalendarItemsDialog calendarItemsDialog = CalendarItemsDialog.getInstance(context, date.getDate());
                 calendarItemsDialog.setTargetFragment(CalendarFragment.this, CALENDARFRAGMENT);
                 calendarItemsDialog.show(getFragmentManager(), "add_calendar_item");
@@ -89,7 +90,7 @@ public class CalendarFragment extends AbstractTabFragment implements TabFragment
         calendarView.removeDecorators();
         for(RemindDTO s : datas){
             dates.add(CalendarDay.from(s.getDate()));
-            calendarView.addDecorator(new EventDecorator(R.color.colorPrimary, dates));
+            calendarView.addDecorator(new EventDecorator(R.color.colorPrimary, dates, context));
         }
     }
 

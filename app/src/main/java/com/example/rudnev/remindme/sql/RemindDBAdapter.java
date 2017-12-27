@@ -161,10 +161,9 @@ public class RemindDBAdapter {
         dbHelper.close();
     }
 
-    //FIX Remove by id
-    public void removeItem(String title) {
+    public void removeItem(long id) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
-        db.delete("remindtable", "title = " + "\"" + title + "\"", null);
+        db.delete("remindtable", "id = " + "\"" + id + "\"", null);
         dbHelper.close();
     }
 

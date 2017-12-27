@@ -1,6 +1,5 @@
 package com.example.rudnev.remindme;
 
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -17,15 +16,12 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
 import com.example.rudnev.remindme.adapter.TabFragmentAdapter;
-import com.example.rudnev.remindme.dto.RemindDTO;
 import com.example.rudnev.remindme.sql.RemindDBAdapter;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 import java.util.Locale;
 
 
@@ -36,7 +32,6 @@ public class MainActivity extends AppCompatActivity implements CreateItemDialog.
     private DrawerLayout drawerLayout;
     private ViewPager viewPager;
     private FloatingActionButton fab;
-    //private RemindDBHelper dbHelper;
     private RemindDBAdapter dbAdapter;
 
     private TabFragmentAdapter adapter;
@@ -47,7 +42,6 @@ public class MainActivity extends AppCompatActivity implements CreateItemDialog.
         super.onCreate(savedInstanceState);
         setContentView(LAYOUT);
         initToolbar();
-        //dbHelper = new RemindDBHelper(this);
         dbAdapter = new RemindDBAdapter(this);
         initNavigationView();
         initTabs();
@@ -55,20 +49,12 @@ public class MainActivity extends AppCompatActivity implements CreateItemDialog.
     }
 
 
-
-
     private void initFAB() {
         fab = (FloatingActionButton)findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //dbAdapter.addItem("Test", "TestNote");
                 showEditDialog();
-
-                /*List<RemindDTO>data = adapter.getDatas();
-                data.add(new RemindDTO("New"));
-                adapter.setDatas(data);
-                adapter.updateRVAdapter();*/
             }
         });
     }
@@ -105,7 +91,7 @@ public class MainActivity extends AppCompatActivity implements CreateItemDialog.
                 drawerLayout.closeDrawer(Gravity.LEFT);
                 switch(item.getItemId()){
                     case R.id.actionNotifItem:
-                        showNotificationTab();
+                        showCalendarTab();
                 }
                 return true;
             }
@@ -127,7 +113,7 @@ public class MainActivity extends AppCompatActivity implements CreateItemDialog.
             @Override
             public void onPageSelected(int position) {
                 Log.i("PageSelected position ", " " + position);
-                if(position == 0){
+                if(position == Constants.TAB_TODAY){
                     fab.show();
                 }else{
                     fab.hide();
@@ -139,16 +125,14 @@ public class MainActivity extends AppCompatActivity implements CreateItemDialog.
 
             }
         });
-        //createMockData();
-        //new RemindMeTask().execute();
         TabLayout tabLayout = (TabLayout)findViewById(R.id.tablayout);
         tabLayout.addOnTabSelectedListener(adapter);
         tabLayout.setupWithViewPager(viewPager);
     }
 
 
-    private void showNotificationTab(){
-        viewPager.setCurrentItem(Constants.TAB_TODO);
+    private void showCalendarTab(){
+        viewPager.setCurrentItem(Constants.TAB_CALENDAR);
     }
 
     @Override
@@ -164,49 +148,5 @@ public class MainActivity extends AppCompatActivity implements CreateItemDialog.
         //new RemindMeTask().execute();
     }
 
-    /*private class RemindMeTask extends AsyncTask<Void, Void, List<RemindDTO>>{
-
-        @Override
-        protected List<RemindDTO> doInBackground(Void... voids) {
-            List<RemindDTO> datas = dbAdapter.getAllItems();
-            //datas.add(new RemindDTO("Item1"));
-
-            //FIX
-            try {
-                Thread.sleep(1000L);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            return datas;
-        }
-
-        @Override
-        protected void onPostExecute(List<RemindDTO> remindDTO) {
-            adapter.setDatas(remindDTO);
-        }
-    }*/
-
-    /*private List<RemindDTO> getDataFromDB(){
-        List<RemindDTO> datas = new ArrayList<>();
-        //datas.add(new RemindDTO("Item1"));
-
-        ContentValues cv = new ContentValues();
-        String name = "TEST";
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
-        Cursor c = db.query("mytable", null, null, null, null, null, null);
-        if (c.moveToFirst()) {
-
-            // определяем номера столбцов по имени в выборке
-            int idColIndex = c.getColumnIndex("id");
-            int nameColIndex = c.getColumnIndex("name");
-
-            do {
-                datas.add(new RemindDTO(c.getString(nameColIndex)));
-            } while (c.moveToNext());
-        } else
-            c.close();
-        dbHelper.close();
-        return datas;
-    }*/
 
 }

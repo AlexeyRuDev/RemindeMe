@@ -9,7 +9,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -24,7 +23,6 @@ import com.example.rudnev.remindme.adapter.TabFragmentAdapter;
 import com.example.rudnev.remindme.dto.RemindDTO;
 import com.example.rudnev.remindme.sql.RemindDBAdapter;
 
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -59,7 +57,7 @@ public class TodayFragment extends AbstractTabFragment implements RemindItemClic
 
         view = inflater.inflate(LAYOUT, container, false);
         dbAdapter = new RemindDBAdapter(context);
-        datas = dbAdapter.getAllItems(1, null);
+        //datas = dbAdapter.getAllItems(1, null);
         rv = (RecyclerView)view.findViewById(R.id.recyclerView);
         rv.setLayoutManager(new LinearLayoutManager(context));
         adapter = new RemindListAdapter(datas, this);
@@ -94,7 +92,7 @@ public class TodayFragment extends AbstractTabFragment implements RemindItemClic
     public void remindListRemoveClicked(View v, int position) {
         //Toast.makeText(getContext(), " "+position, Toast.LENGTH_SHORT).show();
         dbAdapter = new RemindDBAdapter(context);
-        dbAdapter.removeItem(adapter.getTitle(position));
+        dbAdapter.removeItem(datas.get(position).getId());
         adapter.setData(dbAdapter.getAllItems(1, null));
         adapter.notifyDataSetChanged();
     }
@@ -156,18 +154,6 @@ public class TodayFragment extends AbstractTabFragment implements RemindItemClic
             }
         });
         popup.show();
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        Log.i("ONPAUSETODAY", "OnPauseToday");
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        Log.i("ONSTOPTODAY", "OnStopToday");
     }
 
     @Override

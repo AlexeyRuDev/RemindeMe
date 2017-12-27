@@ -1,16 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
-    android:layout_height="440dp"
+    android:layout_height="470dp"
     android:orientation="vertical">
 
     <TextView
         android:id="@+id/titleCalItemDialog"
         android:layout_width="match_parent"
-        android:layout_height="25dp"
+        android:layout_height="60dp"
         android:background="@color/colorPrimary"
+        android:paddingBottom="20dp"
+        android:paddingEnd="24dp"
+        android:paddingStart="24dp"
+        android:paddingTop="20dp"
         android:text="Add item to calendar"
-        android:textColor="@color/cardview_light_background" />
+        android:textColor="@color/cardview_light_background"
+        android:textSize="17sp" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recyclerViewCalItems"
@@ -21,6 +26,8 @@
         android:id="@+id/addCalItem"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/add_cal_item" />
+        android:text="@string/add_cal_item"
+        android:textColor="@color/cardview_light_background"
+        android:background="@color/colorPrimary"/>
 
 </LinearLayout>

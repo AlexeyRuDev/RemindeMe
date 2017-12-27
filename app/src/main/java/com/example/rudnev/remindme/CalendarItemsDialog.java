@@ -1,8 +1,11 @@
 package com.example.rudnev.remindme;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
@@ -12,8 +15,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ListView;
-import android.widget.Toast;
 
 import com.example.rudnev.remindme.adapter.CalendarItemsListAdapter;
 import com.example.rudnev.remindme.dto.RemindDTO;
@@ -21,6 +22,7 @@ import com.example.rudnev.remindme.sql.RemindDBAdapter;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -33,9 +35,12 @@ public class CalendarItemsDialog extends DialogFragment implements RemindItemCli
     private RecyclerView listViewItems;
     private Button addItem;
     private Date date;
+    Calendar calendar;
     private CalendarItemsListAdapter adapter;
     private RemindDBAdapter dbAdapter;
     private Context context;
+    private long mItemID;
+    private Date mItemDate;
 
     public static CalendarItemsDialog getInstance(Context context, Date date){
         Bundle args = new Bundle();
@@ -53,6 +58,8 @@ public class CalendarItemsDialog extends DialogFragment implements RemindItemCli
         addItem = view.findViewById(R.id.addCalItem);
         listViewItems = view.findViewById(R.id.recyclerViewCalItems);
         listViewItems.setLayoutManager(new LinearLayoutManager(context));
+        calendar = Calendar.getInstance();
+        calendar.setTime(date);
         dbAdapter = new RemindDBAdapter(context);
         datas = new ArrayList<>();
         datas = dbAdapter.getAllItems(1, date);
@@ -63,6 +70,7 @@ public class CalendarItemsDialog extends DialogFragment implements RemindItemCli
             @Override
             public void onClick(View view) {
                 CreateItemDialog createItemDialog = new CreateItemDialog();
+                createItemDialog.setDateField(calendar);
                 createItemDialog.setTargetFragment(CalendarItemsDialog.this, REQUEST_CALENDAR_DIALOG);
                 createItemDialog.show(getFragmentManager(), "create_item");
             }
@@ -83,7 +91,7 @@ public class CalendarItemsDialog extends DialogFragment implements RemindItemCli
     @Override
     public void remindListRemoveClicked(View v, int position) {
         dbAdapter = new RemindDBAdapter(context);
-        dbAdapter.removeItem(adapter.getTitle(position));
+        dbAdapter.removeItem(datas.get(position).getId());
         adapter.setData(dbAdapter.getAllItems(1, date));
         adapter.notifyDataSetChanged();
         ((CalendarItemsUpdateListener)getTargetFragment()).onCloseDialog();
@@ -91,7 +99,22 @@ public class CalendarItemsDialog extends DialogFragment implements RemindItemCli
 
     @Override
     public void remindListUpdateClicked(View v, int position) {
-
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(datas.get(position).getDate());
+        FragmentManager fm = getActivity().getSupportFragmentManager();
+        CreateItemDialog createItemDialog = new CreateItemDialog();
+        createItemDialog.setTargetFragment(this, REQUEST_CALENDAR_DIALOG);
+        createItemDialog.setDateField(calendar);
+        Bundle args = new Bundle();
+        mItemID = datas.get(position).getId();
+        mItemDate = datas.get(position).getDate();
+        args.putString("title", datas.get(position).getTitle());
+        args.putString("note", datas.get(position).getNote());
+        //args.putString("date", data.get(position).getDate());
+        //args.putLong("itemID", datas.get(position).getId());
+        createItemDialog.setArguments(args);
+        createItemDialog.show(fm, "create_item_dialog");
+        adapter.notifyDataSetChanged();
     }
 
     @Override
@@ -132,6 +155,19 @@ public class CalendarItemsDialog extends DialogFragment implements RemindItemCli
 
     public void setData(List<RemindDTO> data) {
         this.datas = data;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == Activity.RESULT_OK) {
+            String title = data.getStringExtra("title");
+            String note = data.getStringExtra("note");
+            Date date = new Date();
+            date.setTime(data.getLongExtra("date", 0));
+            onFinishEditDialog(mItemID, title, note, date, true);
+            //int weight = data.getIntExtra(WeightDialogFragment.TAG_WEIGHT_SELECTED, -1);
+        }
     }
 
     @Override
