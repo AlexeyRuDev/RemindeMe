@@ -93,7 +93,8 @@ public class TodayFragment extends AbstractTabFragment implements RemindItemClic
         //Toast.makeText(getContext(), " "+position, Toast.LENGTH_SHORT).show();
         dbAdapter = new RemindDBAdapter(context);
         dbAdapter.removeItem(datas.get(position).getId());
-        adapter.setData(dbAdapter.getAllItems(1, null));
+        datas = dbAdapter.getAllItems(1, null);
+        adapter.setData(datas);
         adapter.notifyDataSetChanged();
     }
 

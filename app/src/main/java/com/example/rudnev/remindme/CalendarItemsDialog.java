@@ -92,7 +92,8 @@ public class CalendarItemsDialog extends DialogFragment implements RemindItemCli
     public void remindListRemoveClicked(View v, int position) {
         dbAdapter = new RemindDBAdapter(context);
         dbAdapter.removeItem(datas.get(position).getId());
-        adapter.setData(dbAdapter.getAllItems(1, date));
+        datas = dbAdapter.getAllItems(1, date);
+        adapter.setData(datas);
         adapter.notifyDataSetChanged();
         ((CalendarItemsUpdateListener)getTargetFragment()).onCloseDialog();
     }
@@ -179,7 +180,8 @@ public class CalendarItemsDialog extends DialogFragment implements RemindItemCli
         }else{
             dbAdapter.addItem(inputText, note, sdf.format(date));
         }
-        adapter.setData(dbAdapter.getAllItems(1, date));
+        datas = dbAdapter.getAllItems(1, date);
+        adapter.setData(datas);
         CalendarItemsUpdateListener calendarItemsUpdateListener = (CalendarItemsUpdateListener) getTargetFragment();
         calendarItemsUpdateListener.onCloseDialog();
         adapter.notifyDataSetChanged();

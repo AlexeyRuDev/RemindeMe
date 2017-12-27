@@ -89,7 +89,8 @@ public class ArchiveFragment extends AbstractTabFragment implements CreateItemDi
         //Toast.makeText(getContext(), " "+position, Toast.LENGTH_SHORT).show();
         dbAdapter = new RemindDBAdapter(context);
         dbAdapter.removeItem(datas.get(position).getId());
-        adapter.setData(dbAdapter.getAllItems(3, null));
+        datas = dbAdapter.getAllItems(3, null);
+        adapter.setData(datas);
         adapter.notifyDataSetChanged();
     }
 
@@ -174,7 +175,8 @@ public class ArchiveFragment extends AbstractTabFragment implements CreateItemDi
         }else{
             dbAdapter.addItem(inputText, note, sdf.format(date));
         }
-        adapter.setData(dbAdapter.getAllItems(3, date));
+        datas = dbAdapter.getAllItems(3, date);
+        adapter.setData(datas);
         adapter.notifyDataSetChanged();
         //new RemindMeTask().execute();
     }
