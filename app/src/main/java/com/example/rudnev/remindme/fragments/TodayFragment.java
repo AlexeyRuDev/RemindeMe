@@ -14,6 +14,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.rudnev.remindme.CreateItemDialog;
 import com.example.rudnev.remindme.R;
@@ -51,12 +52,19 @@ public class TodayFragment extends AbstractTabFragment implements RemindItemClic
         return todayFragment;
     }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        dbAdapter = new RemindDBAdapter(context);
+        updateFragmentLists();
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         view = inflater.inflate(LAYOUT, container, false);
-        dbAdapter = new RemindDBAdapter(context);
+
         //datas = dbAdapter.getAllItems(1, null);
         rv = (RecyclerView)view.findViewById(R.id.recyclerView);
         rv.setLayoutManager(new LinearLayoutManager(context));
@@ -161,11 +169,16 @@ public class TodayFragment extends AbstractTabFragment implements RemindItemClic
     public void onFragmentBecomesCurrent(boolean current) {
         //Analog onResume
         dbAdapter = new RemindDBAdapter(context);
-        datas = dbAdapter.getAllItems(1, null);
+        //datas = dbAdapter.getAllItems(1, null);
         setData(datas);
         if(adapter!=null){
             adapter.setData(datas);
             adapter.notifyDataSetChanged();
         }
+    }
+
+    @Override
+    public void updateFragmentLists() {
+        datas = dbAdapter.getAllItems(1, null);
     }
 }

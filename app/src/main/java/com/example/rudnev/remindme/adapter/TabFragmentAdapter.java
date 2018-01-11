@@ -15,6 +15,7 @@ import com.example.rudnev.remindme.fragments.NotesFragment;
 import com.example.rudnev.remindme.fragments.TodayFragment;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -40,7 +41,6 @@ public class TabFragmentAdapter extends FragmentStatePagerAdapter implements Tab
 
     @Override
     public Fragment getItem(int position) {
-        Log.i("GETITEM", " " + position);
         return tabs.get(position);
     }
 
@@ -73,6 +73,12 @@ public class TabFragmentAdapter extends FragmentStatePagerAdapter implements Tab
 
     public List<RemindDTO> getDatas() {
         return datas;
+    }
+
+    public void updateFragmentLists() {
+        for (AbstractTabFragment f : tabs.values()) {
+            f.updateFragmentLists();
+        }
     }
 
 

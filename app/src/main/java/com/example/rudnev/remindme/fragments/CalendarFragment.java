@@ -35,7 +35,6 @@ public class CalendarFragment extends AbstractTabFragment implements TabFragment
     private List<RemindDTO> datas;
 
 
-
     public static CalendarFragment getInstance(Context context){
         Bundle args = new Bundle();
         CalendarFragment calendarFragment = new CalendarFragment();
@@ -45,17 +44,22 @@ public class CalendarFragment extends AbstractTabFragment implements TabFragment
         return calendarFragment;
     }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        Log.i("ONCREATECALENDAR", "OnCreateCalendar");
         view = inflater.inflate(LAYOUT, container, false);
         calendarView = view.findViewById(R.id.calendarView);
         calendarView.setPagingEnabled(false);
-        dates = new HashSet<>();
         dbAdapter = new RemindDBAdapter(context);
+        dates = new HashSet<>();
         datas = new ArrayList<>();
         //datas = dbAdapter.getAllItems(2, null);
+        updateFragmentLists();
         Calendar cal = Calendar.getInstance();
         updateCalendar(datas);
 
@@ -81,7 +85,6 @@ public class CalendarFragment extends AbstractTabFragment implements TabFragment
 
     @Override
     public void onFragmentBecomesCurrent(boolean current) {
-        datas = dbAdapter.getAllItems(2, null);
         updateCalendar(datas);
     }
 
@@ -96,7 +99,12 @@ public class CalendarFragment extends AbstractTabFragment implements TabFragment
 
     @Override
     public void onCloseDialog() {
-        datas = dbAdapter.getAllItems(2, null);
+        //datas = dbAdapter.getAllItems(2, null);
         updateCalendar(datas);
+    }
+
+    @Override
+    public void updateFragmentLists() {
+        datas = dbAdapter.getAllItems(2, null);
     }
 }

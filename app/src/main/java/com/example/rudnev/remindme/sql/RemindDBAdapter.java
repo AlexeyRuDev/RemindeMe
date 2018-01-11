@@ -5,6 +5,8 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.example.rudnev.remindme.MainActivity;
+import com.example.rudnev.remindme.adapter.TabFragmentAdapter;
 import com.example.rudnev.remindme.dto.RemindDTO;
 
 import java.text.ParseException;
@@ -35,23 +37,31 @@ public class RemindDBAdapter {
 
     public long addItemForNotes(String title, String note, String date) {
         ContentValues cv = new ContentValues();
+        long rowID;
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         cv.put("title", title);
         cv.put("note", note);
         cv.put("date", date);
-        long rowID = db.insert("remindnotestable", null, cv);
-        dbHelper.close();
+        try {
+            rowID = db.insert("remindnotestable", null, cv);
+        }finally {
+            dbHelper.close();
+        }
         return rowID;
     }
 
     public long addItem(String title, String note, String date) {
         ContentValues cv = new ContentValues();
+        long rowID;
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         cv.put("title", title);
         cv.put("note", note);
         cv.put("date", date);
-        long rowID = db.insert("remindtable", null, cv);
-        dbHelper.close();
+        try {
+            rowID = db.insert("remindtable", null, cv);
+        }finally {
+            dbHelper.close();
+        }
         return rowID;
     }
 
@@ -59,29 +69,32 @@ public class RemindDBAdapter {
         List<RemindDTO> datas = new ArrayList<>();
         Calendar cal = Calendar.getInstance();
         SQLiteDatabase db = dbHelper.getWritableDatabase();
-        Cursor c = db.query("remindnotestable", null, null, null, null, null, null);
-        if (c.moveToFirst()) {
+        try {
+            Cursor c = db.query("remindnotestable", null, null, null, null, null, null);
+            if (c.moveToFirst()) {
 
-            // определяем номера столбцов по имени в выборке
-            int idColIndex = c.getColumnIndex("id");
-            int titleColIndex = c.getColumnIndex("title");
-            int noteColIndex = c.getColumnIndex("note");
-            int dateColIndex = c.getColumnIndex("date");
+                // определяем номера столбцов по имени в выборке
+                int idColIndex = c.getColumnIndex("id");
+                int titleColIndex = c.getColumnIndex("title");
+                int noteColIndex = c.getColumnIndex("note");
+                int dateColIndex = c.getColumnIndex("date");
 
-            do {
-                //SimpleDateFormat sdf = new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy", Locale.ENGLISH);
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
-                try {
-                    cal.setTime(sdf.parse(c.getString(dateColIndex)));
-                    datas.add(new RemindDTO(c.getLong(idColIndex), c.getString(titleColIndex), c.getString(noteColIndex), cal.getTime()));
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
+                do {
+                    //SimpleDateFormat sdf = new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy", Locale.ENGLISH);
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+                    try {
+                        cal.setTime(sdf.parse(c.getString(dateColIndex)));
+                        datas.add(new RemindDTO(c.getLong(idColIndex), c.getString(titleColIndex), c.getString(noteColIndex), cal.getTime()));
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
 
-            } while (c.moveToNext());
-        } else
-            c.close();
-        dbHelper.close();
+                } while (c.moveToNext());
+            } else
+                c.close();
+        }finally {
+            dbHelper.close();
+        }
         return datas;
     }
 
@@ -109,29 +122,32 @@ public class RemindDBAdapter {
         selectionArgs = new String[] { tadayFormstDate };
         //selectionArgs = new String[] { CalendarDay.today().toString() };
         SQLiteDatabase db = dbHelper.getWritableDatabase();
-        Cursor c = db.query("remindtable", null, selection, selectionArgs, null, null, null);
-        if (c.moveToFirst()) {
+        try {
+            Cursor c = db.query("remindtable", null, selection, selectionArgs, null, null, null);
+            if (c.moveToFirst()) {
 
-            // определяем номера столбцов по имени в выборке
-            int idColIndex = c.getColumnIndex("id");
-            int titleColIndex = c.getColumnIndex("title");
-            int noteColIndex = c.getColumnIndex("note");
-            int dateColIndex = c.getColumnIndex("date");
+                // определяем номера столбцов по имени в выборке
+                int idColIndex = c.getColumnIndex("id");
+                int titleColIndex = c.getColumnIndex("title");
+                int noteColIndex = c.getColumnIndex("note");
+                int dateColIndex = c.getColumnIndex("date");
 
-            do {
-                //SimpleDateFormat sdf = new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy", Locale.ENGLISH);
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
-                try {
-                    cal.setTime(sdf.parse(c.getString(dateColIndex)));
-                    datas.add(new RemindDTO(c.getLong(idColIndex), c.getString(titleColIndex), c.getString(noteColIndex), cal.getTime()));
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
+                do {
+                    //SimpleDateFormat sdf = new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy", Locale.ENGLISH);
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+                    try {
+                        cal.setTime(sdf.parse(c.getString(dateColIndex)));
+                        datas.add(new RemindDTO(c.getLong(idColIndex), c.getString(titleColIndex), c.getString(noteColIndex), cal.getTime()));
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
 
-            } while (c.moveToNext());
-        } else
-            c.close();
-        dbHelper.close();
+                } while (c.moveToNext());
+            } else
+                c.close();
+        }finally {
+            dbHelper.close();
+        }
         return datas;
     }
 
@@ -141,8 +157,11 @@ public class RemindDBAdapter {
         cv.put("title", title);
         cv.put("note", note);
         cv.put("date", date);
-        db.update("remindnotestable", cv, "id = " + "\"" + itemID + "\"", null);
-        dbHelper.close();
+        try {
+            db.update("remindnotestable", cv, "id = " + "\"" + itemID + "\"", null);
+        }finally {
+            dbHelper.close();
+        }
     }
 
     public void updateItem(long itemID, String title, String note, String date) {
@@ -151,20 +170,29 @@ public class RemindDBAdapter {
         cv.put("title", title);
         cv.put("note", note);
         cv.put("date", date);
-        db.update("remindtable", cv, "id = " + "\"" + itemID + "\"", null);
-        dbHelper.close();
+        try {
+            db.update("remindtable", cv, "id = " + "\"" + itemID + "\"", null);
+        }finally {
+            dbHelper.close();
+        }
     }
 
     public void removeItemForNotes(String title) {
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
-        db.delete("remindnotestable", "title = " + "\"" + title + "\"", null);
-        dbHelper.close();
+        try {
+            SQLiteDatabase db = dbHelper.getWritableDatabase();
+            db.delete("remindnotestable", "title = " + "\"" + title + "\"", null);
+        }finally {
+            dbHelper.close();
+        }
     }
 
     public void removeItem(long id) {
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
-        db.delete("remindtable", "id = " + "\"" + id + "\"", null);
-        dbHelper.close();
+        try {
+            SQLiteDatabase db = dbHelper.getWritableDatabase();
+            db.delete("remindtable", "id = " + "\"" + id + "\"", null);
+        }finally {
+            dbHelper.close();
+        }
     }
 
    /* public static String formatDateTime(Context context, String timeToFormat) {

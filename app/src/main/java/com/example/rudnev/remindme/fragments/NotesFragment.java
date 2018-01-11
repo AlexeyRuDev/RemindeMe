@@ -68,4 +68,8 @@ public class NotesFragment extends AbstractTabFragment implements RemindItemClic
     public void onFragmentBecomesCurrent(boolean current) {
 
     }
+
+    @Override
+    public void updateFragmentLists() {
+    }
 }

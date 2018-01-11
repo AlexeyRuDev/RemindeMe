@@ -53,12 +53,18 @@ public class ArchiveFragment extends AbstractTabFragment implements CreateItemDi
         return archiveFragment;
     }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        dbAdapter = new RemindDBAdapter(context);
+        updateFragmentLists();
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         Log.i("ONCREATEARCHIVE", "OnCreateArchive");
         view = inflater.inflate(LAYOUT, container, false);
-        dbAdapter = new RemindDBAdapter(context);
         //datas = dbAdapter.getAllItems(3, null);
         rv = (RecyclerView)view.findViewById(R.id.recyclerViewArchive);
         rv.setLayoutManager(new LinearLayoutManager(context));
@@ -146,7 +152,7 @@ public class ArchiveFragment extends AbstractTabFragment implements CreateItemDi
     public void onFragmentBecomesCurrent(boolean current) {
         //Analog onResume
         dbAdapter = new RemindDBAdapter(context);
-        datas = dbAdapter.getAllItems(3, null);
+        //datas = dbAdapter.getAllItems(3, null);
         setData(datas);
         if(adapter!=null){
             adapter.setData(datas);
@@ -170,14 +176,21 @@ public class ArchiveFragment extends AbstractTabFragment implements CreateItemDi
     @Override
     public void onFinishEditDialog(long itemID, String inputText, String note, Date date, boolean fromEditDialog) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+        mItemDate = date;
         if(fromEditDialog){
             dbAdapter.updateItem(itemID, inputText, note, sdf.format(date));
         }else{
             dbAdapter.addItem(inputText, note, sdf.format(date));
         }
-        datas = dbAdapter.getAllItems(3, date);
+        updateFragmentLists();
+        //datas = dbAdapter.getAllItems(3, date);
         adapter.setData(datas);
         adapter.notifyDataSetChanged();
         //new RemindMeTask().execute();
+    }
+
+    @Override
+    public void updateFragmentLists() {
+        datas = dbAdapter.getAllItems(3, mItemDate);
     }
 }
