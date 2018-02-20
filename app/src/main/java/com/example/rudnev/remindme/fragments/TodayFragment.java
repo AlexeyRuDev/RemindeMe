@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.example.rudnev.remindme.CreateItemDialog;
+import com.example.rudnev.remindme.MainActivity;
 import com.example.rudnev.remindme.R;
 import com.example.rudnev.remindme.RemindItemClickListener;
 import com.example.rudnev.remindme.adapter.RemindListAdapter;
@@ -63,8 +64,7 @@ public class TodayFragment extends AbstractTabFragment implements RemindItemClic
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         view = inflater.inflate(LAYOUT, container, false);
-        //update();
-        //datas = dbAdapter.getAllItems(1, null);
+
         rv = (RecyclerView)view.findViewById(R.id.recyclerView);
         rv.setLayoutManager(new LinearLayoutManager(context));
         adapter = new RemindListAdapter(datas, this);
@@ -87,23 +87,14 @@ public class TodayFragment extends AbstractTabFragment implements RemindItemClic
         adapter.notifyDataSetChanged();
     }
 
-    /*@Override
-    public void onResume() {
-        Log.i("ONRESUMEHISTORY", "OnResume");
-        refreshData(data);
-        adapter.notifyDataSetChanged();
-        super.onResume();
-    }*/
-
     @Override
     public void remindListRemoveClicked(View v, int position) {
         //Toast.makeText(getContext(), " "+position, Toast.LENGTH_SHORT).show();
         dbAdapter = new RemindDBAdapter(context);
         dbAdapter.removeItem(datas.get(position).getId());
         update();
-        /*datas = dbAdapter.getAllItems(1, null);
-        adapter.setData(datas);
-        adapter.notifyDataSetChanged();*/
+        ((MainActivity)getActivity()).updateTabFragmentList();
+
     }
 
     @Override

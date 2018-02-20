@@ -65,8 +65,6 @@ public class ArchiveFragment extends AbstractTabFragment implements CreateItemDi
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         Log.i("ONCREATEARCHIVE", "OnCreateArchive");
         view = inflater.inflate(LAYOUT, container, false);
-        //update();
-        //datas = dbAdapter.getAllItems(3, null);
         rv = (RecyclerView)view.findViewById(R.id.recyclerViewArchive);
         rv.setLayoutManager(new LinearLayoutManager(context));
         adapter = new ArchiveListAdapter(datas, this);
@@ -85,8 +83,6 @@ public class ArchiveFragment extends AbstractTabFragment implements CreateItemDi
     }
 
     public void refreshData(List<RemindDTO>data){
-        //adapter = new RemindListAdapter(data);
-        //FIX NULL WHEN ADD FUTURE ITEM
         adapter.setData(data);
         adapter.notifyDataSetChanged();
     }

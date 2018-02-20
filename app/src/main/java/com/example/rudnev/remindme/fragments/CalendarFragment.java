@@ -57,8 +57,6 @@ public class CalendarFragment extends AbstractTabFragment implements TabFragment
         calendarView.setPagingEnabled(false);
         dbAdapter = new RemindDBAdapter(context);
         dates = new HashSet<>();
-        //datas = new ArrayList<>();
-        //datas = dbAdapter.getAllItems(2, null);
         Calendar cal = Calendar.getInstance();
         updateCalendar(datas);
 
@@ -85,7 +83,7 @@ public class CalendarFragment extends AbstractTabFragment implements TabFragment
     @Override
     public void onFragmentBecomesCurrent(boolean current) {
 
-        updateCalendar(datas);
+        //updateCalendar(datas);
     }
 
     private void updateCalendar(List<RemindDTO>datas){
@@ -107,6 +105,7 @@ public class CalendarFragment extends AbstractTabFragment implements TabFragment
     public void update() {
         dbAdapter = new RemindDBAdapter(context);
         datas = dbAdapter.getAllItems(2, null);
-
+        if(calendarView != null || dates !=null)
+            updateCalendar(datas);
     }
 }
