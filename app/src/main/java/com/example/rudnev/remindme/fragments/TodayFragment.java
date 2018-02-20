@@ -28,7 +28,7 @@ import java.util.Date;
 import java.util.List;
 
 
-public class TodayFragment extends AbstractTabFragment implements RemindItemClickListener, TabFragmentAdapter.TabSelectedListener{
+public class TodayFragment extends AbstractTabFragment implements RemindItemClickListener, TabFragmentAdapter.TabSelectedListener, AbstractTabFragment.UpdateFragmentsLists{
 
     private static final int LAYOUT = R.layout.today_fragment;
     private static final int REQUEST_TODAY = 1;
@@ -56,7 +56,6 @@ public class TodayFragment extends AbstractTabFragment implements RemindItemClic
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         dbAdapter = new RemindDBAdapter(context);
-        updateFragmentLists();
     }
 
     @Nullable
@@ -64,7 +63,7 @@ public class TodayFragment extends AbstractTabFragment implements RemindItemClic
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         view = inflater.inflate(LAYOUT, container, false);
-
+        //update();
         //datas = dbAdapter.getAllItems(1, null);
         rv = (RecyclerView)view.findViewById(R.id.recyclerView);
         rv.setLayoutManager(new LinearLayoutManager(context));
@@ -101,9 +100,10 @@ public class TodayFragment extends AbstractTabFragment implements RemindItemClic
         //Toast.makeText(getContext(), " "+position, Toast.LENGTH_SHORT).show();
         dbAdapter = new RemindDBAdapter(context);
         dbAdapter.removeItem(datas.get(position).getId());
-        datas = dbAdapter.getAllItems(1, null);
+        update();
+        /*datas = dbAdapter.getAllItems(1, null);
         adapter.setData(datas);
-        adapter.notifyDataSetChanged();
+        adapter.notifyDataSetChanged();*/
     }
 
     @Override
@@ -167,18 +167,25 @@ public class TodayFragment extends AbstractTabFragment implements RemindItemClic
 
     @Override
     public void onFragmentBecomesCurrent(boolean current) {
-        //Analog onResume
-        dbAdapter = new RemindDBAdapter(context);
-        //datas = dbAdapter.getAllItems(1, null);
-        setData(datas);
+
         if(adapter!=null){
             adapter.setData(datas);
             adapter.notifyDataSetChanged();
         }
+
     }
 
     @Override
-    public void updateFragmentLists() {
+    public void update() {
+        dbAdapter = new RemindDBAdapter(context);
         datas = dbAdapter.getAllItems(1, null);
+        setData(datas);
+        if(adapter!=null){
+            adapter.setData(datas);
+            adapter.notifyDataSetChanged();
+        }else{
+            adapter = new RemindListAdapter(datas, this);
+            adapter.notifyDataSetChanged();
+        }
     }
 }

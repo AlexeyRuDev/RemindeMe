@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.example.rudnev.remindme.adapter.CalendarItemsListAdapter;
+import com.example.rudnev.remindme.adapter.TabFragmentAdapter;
 import com.example.rudnev.remindme.dto.RemindDTO;
 import com.example.rudnev.remindme.sql.RemindDBAdapter;
 
@@ -184,6 +185,7 @@ public class CalendarItemsDialog extends DialogFragment implements RemindItemCli
         adapter.setData(datas);
         CalendarItemsUpdateListener calendarItemsUpdateListener = (CalendarItemsUpdateListener) getTargetFragment();
         calendarItemsUpdateListener.onCloseDialog();
+        ((MainActivity)getActivity()).updateTabFragmentList();
         adapter.notifyDataSetChanged();
     }
 

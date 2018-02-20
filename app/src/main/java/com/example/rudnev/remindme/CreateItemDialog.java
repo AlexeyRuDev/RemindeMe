@@ -19,6 +19,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
+import com.example.rudnev.remindme.adapter.TabFragmentAdapter;
+
 import java.util.Calendar;
 import java.util.Date;
 

@@ -25,7 +25,7 @@ import java.util.HashSet;
 import java.util.List;
 
 
-public class CalendarFragment extends AbstractTabFragment implements TabFragmentAdapter.TabSelectedListener, CalendarItemsDialog.CalendarItemsUpdateListener {
+public class CalendarFragment extends AbstractTabFragment implements TabFragmentAdapter.TabSelectedListener, CalendarItemsDialog.CalendarItemsUpdateListener, AbstractTabFragment.UpdateFragmentsLists {
 
     private static final int LAYOUT = R.layout.calendar_fragment;
     private static final int CALENDARFRAGMENT = 1;
@@ -57,9 +57,8 @@ public class CalendarFragment extends AbstractTabFragment implements TabFragment
         calendarView.setPagingEnabled(false);
         dbAdapter = new RemindDBAdapter(context);
         dates = new HashSet<>();
-        datas = new ArrayList<>();
+        //datas = new ArrayList<>();
         //datas = dbAdapter.getAllItems(2, null);
-        updateFragmentLists();
         Calendar cal = Calendar.getInstance();
         updateCalendar(datas);
 
@@ -85,6 +84,7 @@ public class CalendarFragment extends AbstractTabFragment implements TabFragment
 
     @Override
     public void onFragmentBecomesCurrent(boolean current) {
+
         updateCalendar(datas);
     }
 
@@ -99,12 +99,14 @@ public class CalendarFragment extends AbstractTabFragment implements TabFragment
 
     @Override
     public void onCloseDialog() {
-        //datas = dbAdapter.getAllItems(2, null);
+        datas = dbAdapter.getAllItems(2, null);
         updateCalendar(datas);
     }
 
     @Override
-    public void updateFragmentLists() {
+    public void update() {
+        dbAdapter = new RemindDBAdapter(context);
         datas = dbAdapter.getAllItems(2, null);
+
     }
 }

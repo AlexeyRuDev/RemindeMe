@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.rudnev.remindme.CreateItemDialog;
+import com.example.rudnev.remindme.MainActivity;
 import com.example.rudnev.remindme.R;
 import com.example.rudnev.remindme.RemindItemClickListener;
 import com.example.rudnev.remindme.adapter.ArchiveListAdapter;
@@ -31,7 +32,7 @@ import java.util.List;
 import java.util.Locale;
 
 
-public class ArchiveFragment extends AbstractTabFragment implements CreateItemDialog.EditNameDialogListener, RemindItemClickListener, TabFragmentAdapter.TabSelectedListener{
+public class ArchiveFragment extends AbstractTabFragment implements CreateItemDialog.EditNameDialogListener, RemindItemClickListener, TabFragmentAdapter.TabSelectedListener, AbstractTabFragment.UpdateFragmentsLists{
 
     private static final int LAYOUT = R.layout.archive_fragment;
     private static final int REQUEST_ARCHIVE = 3;
@@ -57,7 +58,6 @@ public class ArchiveFragment extends AbstractTabFragment implements CreateItemDi
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         dbAdapter = new RemindDBAdapter(context);
-        updateFragmentLists();
     }
 
     @Nullable
@@ -65,6 +65,7 @@ public class ArchiveFragment extends AbstractTabFragment implements CreateItemDi
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         Log.i("ONCREATEARCHIVE", "OnCreateArchive");
         view = inflater.inflate(LAYOUT, container, false);
+        //update();
         //datas = dbAdapter.getAllItems(3, null);
         rv = (RecyclerView)view.findViewById(R.id.recyclerViewArchive);
         rv.setLayoutManager(new LinearLayoutManager(context));
@@ -151,13 +152,15 @@ public class ArchiveFragment extends AbstractTabFragment implements CreateItemDi
     @Override
     public void onFragmentBecomesCurrent(boolean current) {
         //Analog onResume
-        dbAdapter = new RemindDBAdapter(context);
-        //datas = dbAdapter.getAllItems(3, null);
+        /*dbAdapter = new RemindDBAdapter(context);
+        datas = dbAdapter.getAllItems(3, null);
         setData(datas);
         if(adapter!=null){
             adapter.setData(datas);
             adapter.notifyDataSetChanged();
-        }
+        }*/
+        if(adapter!=null)
+            adapter.notifyDataSetChanged();
     }
 
     @Override
@@ -182,15 +185,22 @@ public class ArchiveFragment extends AbstractTabFragment implements CreateItemDi
         }else{
             dbAdapter.addItem(inputText, note, sdf.format(date));
         }
-        updateFragmentLists();
-        //datas = dbAdapter.getAllItems(3, date);
+        datas = dbAdapter.getAllItems(3, date);
         adapter.setData(datas);
         adapter.notifyDataSetChanged();
+        ((MainActivity)getActivity()).updateTabFragmentList();
         //new RemindMeTask().execute();
     }
 
     @Override
-    public void updateFragmentLists() {
-        datas = dbAdapter.getAllItems(3, mItemDate);
+    public void update() {
+        dbAdapter = new RemindDBAdapter(context);
+        datas = dbAdapter.getAllItems(3, null);
+        setData(datas);
+        if(adapter!=null){
+            adapter.setData(datas);
+            adapter.notifyDataSetChanged();
+        }
+
     }
 }

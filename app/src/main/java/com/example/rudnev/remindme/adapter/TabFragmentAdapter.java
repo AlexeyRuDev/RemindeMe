@@ -62,6 +62,7 @@ public class TabFragmentAdapter extends FragmentStatePagerAdapter implements Tab
         tabs.put(1, CalendarFragment.getInstance(context));
         tabs.put(2, archiveFragment);
         tabs.put(3, NotesFragment.getInstance(context));
+        updateFragmentList();
     }
 
     public void setDatas(List<RemindDTO> datas) {
@@ -75,11 +76,6 @@ public class TabFragmentAdapter extends FragmentStatePagerAdapter implements Tab
         return datas;
     }
 
-    public void updateFragmentLists() {
-        for (AbstractTabFragment f : tabs.values()) {
-            f.updateFragmentLists();
-        }
-    }
 
 
     @Override
@@ -100,6 +96,12 @@ public class TabFragmentAdapter extends FragmentStatePagerAdapter implements Tab
         final Fragment fragment = tabs.get(pos);
         if (fragment != null && fragment instanceof TabSelectedListener) {
             ((TabSelectedListener) fragment).onFragmentBecomesCurrent(current);
+        }
+    }
+
+    public void updateFragmentList(){
+        for(Fragment f : tabs.values()){
+            ((AbstractTabFragment.UpdateFragmentsLists)f).update();
         }
     }
 

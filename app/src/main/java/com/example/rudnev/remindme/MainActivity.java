@@ -78,7 +78,7 @@ public class MainActivity extends AppCompatActivity implements CreateItemDialog.
     }
 
     private void initNavigationView() {
-        drawerLayout = (DrawerLayout)findViewById(R.id.drawer);
+       /* drawerLayout = (DrawerLayout)findViewById(R.id.drawer);
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.view_navigation_open,
                 R.string.view_navigation_close);
@@ -95,7 +95,7 @@ public class MainActivity extends AppCompatActivity implements CreateItemDialog.
                 }
                 return true;
             }
-        });
+        });*/
     }
 
 
@@ -130,6 +130,9 @@ public class MainActivity extends AppCompatActivity implements CreateItemDialog.
         tabLayout.setupWithViewPager(viewPager);
     }
 
+    public void updateTabFragmentList(){
+        adapter.updateFragmentList();
+    }
 
     private void showCalendarTab(){
         viewPager.setCurrentItem(Constants.TAB_CALENDAR);
@@ -144,8 +147,8 @@ public class MainActivity extends AppCompatActivity implements CreateItemDialog.
             dbAdapter.addItem(inputText, note, sdf.format(date));
         }
         //adapter.setDatas(dbAdapter.getAllItems(1, date));
-        adapter.updateFragmentLists();
-        adapter.notifyDataSetChanged();
+        adapter.updateFragmentList();
+        //adapter.notifyDataSetChanged();
     }
 
 
