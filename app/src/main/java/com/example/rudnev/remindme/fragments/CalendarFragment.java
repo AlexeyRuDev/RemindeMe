@@ -21,6 +21,7 @@ import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 
@@ -63,10 +64,12 @@ public class CalendarFragment extends AbstractTabFragment implements TabFragment
         calendarView.setOnDateChangedListener(new OnDateSelectedListener() {
             @Override
             public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
-                //Toast.makeText(context, date.toString(), Toast.LENGTH_SHORT).show();
-                //dates.add(date);
+                Calendar calendar = Calendar.getInstance();
+                calendar.set(Calendar.YEAR, date.getYear());
+                calendar.set(Calendar.MONTH, date.getMonth());
+                calendar.set(Calendar.DATE, date.getDay());
                 widget.addDecorator(new EventDecorator(R.color.colorPrimary, dates, context));
-                CalendarItemsDialog calendarItemsDialog = CalendarItemsDialog.getInstance(context, date.getDate());
+                CalendarItemsDialog calendarItemsDialog = CalendarItemsDialog.getInstance(context, calendar.getTime());
                 calendarItemsDialog.setTargetFragment(CalendarFragment.this, CALENDARFRAGMENT);
                 calendarItemsDialog.show(getFragmentManager(), "add_calendar_item");
 
