@@ -95,6 +95,7 @@ public class CalendarItemsDialog extends DialogFragment implements RemindItemCli
         adapter.setData(datas);
         adapter.notifyDataSetChanged();
         ((CalendarItemsUpdateListener)getTargetFragment()).onCloseDialog();
+        ((MainActivity)getActivity()).updateTabFragmentList();
     }
 
     @Override
@@ -113,6 +114,7 @@ public class CalendarItemsDialog extends DialogFragment implements RemindItemCli
         //args.putLong("itemID", datas.get(position).getId());
         createItemDialog.setArguments(args);
         createItemDialog.show(fm, "create_item_dialog");
+        ((MainActivity)getActivity()).updateTabFragmentList();
         adapter.notifyDataSetChanged();
     }
 

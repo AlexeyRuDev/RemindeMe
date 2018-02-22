@@ -89,6 +89,7 @@ public class ArchiveFragment extends AbstractTabFragment implements CreateItemDi
         datas = dbAdapter.getAllItems(3, null);
         adapter.setData(datas);
         adapter.notifyDataSetChanged();
+        ((MainActivity)getActivity()).updateTabFragmentList();
     }
 
     @Override
@@ -107,6 +108,7 @@ public class ArchiveFragment extends AbstractTabFragment implements CreateItemDi
         //args.putLong("itemID", datas.get(position).getId());
         createItemDialog.setArguments(args);
         createItemDialog.show(fm, "create_item_dialog");
+        ((MainActivity)getActivity()).updateTabFragmentList();
         adapter.notifyDataSetChanged();
     }
 
