@@ -4,7 +4,6 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,9 +18,7 @@ import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
 
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 
@@ -58,7 +55,6 @@ public class CalendarFragment extends AbstractTabFragment implements TabFragment
         calendarView.setPagingEnabled(false);
         dbAdapter = new RemindDBAdapter(context);
         dates = new HashSet<>();
-        Calendar cal = Calendar.getInstance();
         updateCalendar(datas);
 
         calendarView.setOnDateChangedListener(new OnDateSelectedListener() {

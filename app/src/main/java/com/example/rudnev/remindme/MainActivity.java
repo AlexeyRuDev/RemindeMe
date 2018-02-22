@@ -1,19 +1,15 @@
 package com.example.rudnev.remindme;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 
@@ -98,8 +94,6 @@ public class MainActivity extends AppCompatActivity implements CreateItemDialog.
         });*/
     }
 
-
-
     private void initTabs() {
         viewPager = (ViewPager)findViewById(R.id.viewPager);
         adapter = new TabFragmentAdapter(this, getSupportFragmentManager());
@@ -134,9 +128,9 @@ public class MainActivity extends AppCompatActivity implements CreateItemDialog.
         adapter.updateFragmentList();
     }
 
-    private void showCalendarTab(){
+    /*private void showCalendarTab(){
         viewPager.setCurrentItem(Constants.TAB_CALENDAR);
-    }
+    }*/
 
     @Override
     public void onFinishEditDialog(long itemID, String inputText, String note, Date date, boolean fromEditDialog) {

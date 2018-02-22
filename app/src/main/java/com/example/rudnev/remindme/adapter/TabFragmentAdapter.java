@@ -5,7 +5,6 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
-import android.util.Log;
 
 import com.example.rudnev.remindme.dto.RemindDTO;
 import com.example.rudnev.remindme.fragments.AbstractTabFragment;
@@ -15,7 +14,6 @@ import com.example.rudnev.remindme.fragments.NotesFragment;
 import com.example.rudnev.remindme.fragments.TodayFragment;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -64,18 +62,6 @@ public class TabFragmentAdapter extends FragmentStatePagerAdapter implements Tab
         tabs.put(3, NotesFragment.getInstance(context));
         updateFragmentList();
     }
-
-    public void setDatas(List<RemindDTO> datas) {
-        this.datas = datas;
-        todayFragment.refreshData(datas);
-        //archiveFragment.refreshData(datas);
-    }
-
-
-    public List<RemindDTO> getDatas() {
-        return datas;
-    }
-
 
 
     @Override

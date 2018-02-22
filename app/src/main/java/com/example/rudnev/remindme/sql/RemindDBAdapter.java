@@ -5,8 +5,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.example.rudnev.remindme.MainActivity;
-import com.example.rudnev.remindme.adapter.TabFragmentAdapter;
 import com.example.rudnev.remindme.dto.RemindDTO;
 
 import java.text.ParseException;
@@ -118,8 +116,8 @@ public class RemindDBAdapter {
                 selection = "date(date) < ?";
                 break;
         }
-        String tadayFormstDate = sdfCal.format(cal.getTime());
-        selectionArgs = new String[] { tadayFormstDate };
+        String todayFormatDate = sdfCal.format(cal.getTime());
+        selectionArgs = new String[] { todayFormatDate };
         //selectionArgs = new String[] { CalendarDay.today().toString() };
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         try {

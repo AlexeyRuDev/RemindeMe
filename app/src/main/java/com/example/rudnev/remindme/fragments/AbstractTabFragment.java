@@ -4,11 +4,6 @@ import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.view.View;
 
-import com.example.rudnev.remindme.dto.RemindDTO;
-import com.example.rudnev.remindme.sql.RemindDBAdapter;
-
-import java.util.List;
-
 
 public class AbstractTabFragment extends Fragment {
 

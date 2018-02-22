@@ -17,7 +17,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.example.rudnev.remindme.adapter.CalendarItemsListAdapter;
-import com.example.rudnev.remindme.adapter.TabFragmentAdapter;
 import com.example.rudnev.remindme.dto.RemindDTO;
 import com.example.rudnev.remindme.sql.RemindDBAdapter;
 
@@ -41,7 +40,6 @@ public class CalendarItemsDialog extends DialogFragment implements RemindItemCli
     private RemindDBAdapter dbAdapter;
     private Context context;
     private long mItemID;
-    private Date mItemDate;
 
     public static CalendarItemsDialog getInstance(Context context, Date date){
         Bundle args = new Bundle();
@@ -109,7 +107,6 @@ public class CalendarItemsDialog extends DialogFragment implements RemindItemCli
         createItemDialog.setDateField(calendar);
         Bundle args = new Bundle();
         mItemID = datas.get(position).getId();
-        mItemDate = datas.get(position).getDate();
         args.putString("title", datas.get(position).getTitle());
         args.putString("note", datas.get(position).getNote());
         //args.putString("date", data.get(position).getDate());

@@ -42,7 +42,6 @@ public class ArchiveFragment extends AbstractTabFragment implements CreateItemDi
     RecyclerView rv;
     private RemindDBAdapter dbAdapter;
     private long mItemID;
-    private Date mItemDate;
 
     public static ArchiveFragment getInstance(Context context, List<RemindDTO> datas){
         Bundle args = new Bundle();
@@ -82,14 +81,9 @@ public class ArchiveFragment extends AbstractTabFragment implements CreateItemDi
         this.datas = data;
     }
 
-    public void refreshData(List<RemindDTO>data){
-        adapter.setData(data);
-        adapter.notifyDataSetChanged();
-    }
 
     @Override
     public void remindListRemoveClicked(View v, int position) {
-        //Toast.makeText(getContext(), " "+position, Toast.LENGTH_SHORT).show();
         dbAdapter = new RemindDBAdapter(context);
         dbAdapter.removeItem(datas.get(position).getId());
         datas = dbAdapter.getAllItems(3, null);
@@ -107,7 +101,6 @@ public class ArchiveFragment extends AbstractTabFragment implements CreateItemDi
         createItemDialog.setDateField(calendar);
         Bundle args = new Bundle();
         mItemID = datas.get(position).getId();
-        mItemDate = datas.get(position).getDate();
         args.putString("title", datas.get(position).getTitle());
         args.putString("note", datas.get(position).getNote());
         //args.putString("date", data.get(position).getDate());
@@ -147,14 +140,6 @@ public class ArchiveFragment extends AbstractTabFragment implements CreateItemDi
 
     @Override
     public void onFragmentBecomesCurrent(boolean current) {
-        //Analog onResume
-        /*dbAdapter = new RemindDBAdapter(context);
-        datas = dbAdapter.getAllItems(3, null);
-        setData(datas);
-        if(adapter!=null){
-            adapter.setData(datas);
-            adapter.notifyDataSetChanged();
-        }*/
         if(adapter!=null)
             adapter.notifyDataSetChanged();
     }
@@ -175,7 +160,6 @@ public class ArchiveFragment extends AbstractTabFragment implements CreateItemDi
     @Override
     public void onFinishEditDialog(long itemID, String inputText, String note, Date date, boolean fromEditDialog) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
-        mItemDate = date;
         if(fromEditDialog){
             dbAdapter.updateItem(itemID, inputText, note, sdf.format(date));
         }else{
@@ -185,7 +169,6 @@ public class ArchiveFragment extends AbstractTabFragment implements CreateItemDi
         adapter.setData(datas);
         adapter.notifyDataSetChanged();
         ((MainActivity)getActivity()).updateTabFragmentList();
-        //new RemindMeTask().execute();
     }
 
     @Override

@@ -14,7 +14,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.example.rudnev.remindme.CreateItemDialog;
 import com.example.rudnev.remindme.MainActivity;
@@ -40,7 +39,6 @@ public class TodayFragment extends AbstractTabFragment implements RemindItemClic
     RecyclerView rv;
     private RemindDBAdapter dbAdapter;
     private long mItemID;
-    private Date mItemDate;
 
     public static TodayFragment getInstance(Context context, List<RemindDTO> datas){
 
@@ -81,15 +79,9 @@ public class TodayFragment extends AbstractTabFragment implements RemindItemClic
         this.datas = data;
     }
 
-    public void refreshData(List<RemindDTO>data){
-        //adapter = new RemindListAdapter(data);
-        adapter.setData(data);
-        adapter.notifyDataSetChanged();
-    }
 
     @Override
     public void remindListRemoveClicked(View v, int position) {
-        //Toast.makeText(getContext(), " "+position, Toast.LENGTH_SHORT).show();
         dbAdapter = new RemindDBAdapter(context);
         dbAdapter.removeItem(datas.get(position).getId());
         update();
@@ -104,7 +96,6 @@ public class TodayFragment extends AbstractTabFragment implements RemindItemClic
         createItemDialog.setTargetFragment(this, REQUEST_TODAY);
         Bundle args = new Bundle();
         mItemID = datas.get(position).getId();
-        mItemDate = datas.get(position).getDate();
         args.putString("title", datas.get(position).getTitle());
         args.putString("note", datas.get(position).getNote());
         //args.putString("date", data.get(position).getDate());

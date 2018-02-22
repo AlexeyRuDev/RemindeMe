@@ -19,8 +19,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
-import com.example.rudnev.remindme.adapter.TabFragmentAdapter;
-
 import java.util.Calendar;
 import java.util.Date;
 
@@ -176,13 +174,13 @@ public class CreateItemDialog extends DialogFragment implements TextView.OnEdito
 
     @Override
     public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
-        long pseudoID = 0;
+        long itemID = 0;
         if (EditorInfo.IME_ACTION_DONE == i) {
             EditNameDialogListener activity = (EditNameDialogListener) getActivity();
             if(getArguments()!=null){
-                pseudoID = getArguments().getLong("itemID");
+                itemID = getArguments().getLong("itemID");
             }
-            activity.onFinishEditDialog(pseudoID, mEditTextTitle.getText().toString(), mEditTextNote.getText().toString(), formatDate, fromEditDialog);
+            activity.onFinishEditDialog(itemID, mEditTextTitle.getText().toString(), mEditTextNote.getText().toString(), formatDate, fromEditDialog);
             this.dismiss();
             return true;
         }
