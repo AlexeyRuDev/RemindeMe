@@ -45,7 +45,6 @@ public class NotificationReceiver extends BroadcastReceiver {
                         .setSmallIcon(R.mipmap.ic_launcher)
                         .setContentIntent(pendingIntent).build();
 
-
                 NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
                 notificationManager.notify(0, notification);
             }
