@@ -35,5 +35,6 @@ dependencies {
     compile 'com.android.support:cardview-v7:26.0.0-alpha1'
     compile 'com.android.support:recyclerview-v7:26.0.0-alpha1'
     compile 'com.prolificinteractive:material-calendarview:1.4.3'
+    testCompile 'org.robolectric:robolectric:3.0'
     testCompile 'junit:junit:4.12'
 }

@@ -1,5 +1,8 @@
 package com.example.rudnev.remindme;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -17,6 +20,7 @@ import com.example.rudnev.remindme.adapter.TabFragmentAdapter;
 import com.example.rudnev.remindme.sql.RemindDBAdapter;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
@@ -42,6 +46,15 @@ public class MainActivity extends AppCompatActivity implements CreateItemDialog.
         initNavigationView();
         initTabs();
         initFAB();
+
+        //Notification
+        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.SECOND, 10);
+        Intent intent = new Intent("doot.remind.action.DISPLAY_NOTIFICATION");
+        PendingIntent broadCast = PendingIntent.getBroadcast(this, 100, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), broadCast);
     }
 
 

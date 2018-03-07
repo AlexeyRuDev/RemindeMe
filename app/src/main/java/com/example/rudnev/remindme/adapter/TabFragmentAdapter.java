@@ -23,7 +23,7 @@ public class TabFragmentAdapter extends FragmentStatePagerAdapter implements Tab
 
     private Map<Integer, AbstractTabFragment> tabs;
     private Context context;
-    private final static int NUM_SIZE = 4;
+    private final static int NUM_SIZE = 3;
 
     private TodayFragment todayFragment;
     private ArchiveFragment archiveFragment;
@@ -59,7 +59,7 @@ public class TabFragmentAdapter extends FragmentStatePagerAdapter implements Tab
         tabs.put(0, todayFragment);
         tabs.put(1, CalendarFragment.getInstance(context));
         tabs.put(2, archiveFragment);
-        tabs.put(3, NotesFragment.getInstance(context));
+        //tabs.put(3, NotesFragment.getInstance(context));
         updateFragmentList();
     }
 
