@@ -19,11 +19,16 @@ import java.util.List;
 public class RemindListAdapter extends RecyclerView.Adapter<RemindListAdapter.RemindViewHolder> {
 
     private List<RemindDTO> data;
+    //private Cursor cursor;
+    //private DataSetObserver mDataSetObserver;
     private static RemindItemClickListener itemClickListener;
 
-    public RemindListAdapter(List<RemindDTO> data, RemindItemClickListener remindItemClickListener){
+    public RemindListAdapter(List<RemindDTO> data, RemindItemClickListener remindItemClickListener/*,Cursor cursor*/){
         this.data = data;
         itemClickListener = remindItemClickListener;
+        //this.cursor = cursor;
+        //mDataSetObserver = new NotifyingDataSetObserver(this);
+        /*if(cursor!=null){cursor.registerDataSetObserver(mDataSetObserver)}*/
     }
 
     @Override
@@ -39,6 +44,12 @@ public class RemindListAdapter extends RecyclerView.Adapter<RemindListAdapter.Re
         holder.note.setText(data.get(position).getNote());
         holder.date.setText(data.get(position).getDate().toString());
     }
+
+    //public Cursor getCursor(){return cursor;}
+    /*@Override
+    public void setHasStableIds(boolean hasStableIds) {
+        super.setHasStableIds(true);
+    }*/
 
     @Override
     public int getItemCount() {
@@ -92,4 +103,66 @@ public class RemindListAdapter extends RecyclerView.Adapter<RemindListAdapter.Re
 
         return data.get(position).getDate();
     }
+
+    /*public void changeCursor(Cursor cursor) {
+        Cursor old = swapCursor(cursor);
+        if (old != null) {
+            old.close();
+        }
+    }*/
+
+    /**
+     * Swap in a new Cursor, returning the old Cursor.  Unlike
+     * {@link #changeCursor(Cursor)}, the returned old Cursor is <em>not</em>
+     * closed.
+     */
+/*    public Cursor swapCursor(Cursor newCursor) {
+        if (newCursor == mCursor) {
+            return null;
+        }
+        final Cursor oldCursor = mCursor;
+        if (oldCursor != null && mDataSetObserver != null) {
+            oldCursor.unregisterDataSetObserver(mDataSetObserver);
+        }
+        mCursor = newCursor;
+        if (mCursor != null) {
+            if (mDataSetObserver != null) {
+                mCursor.registerDataSetObserver(mDataSetObserver);
+            }
+            mRowIdColumn = newCursor.getColumnIndexOrThrow("_id");
+            mDataValid = true;
+            notifyDataSetChanged();
+        } else {
+            mRowIdColumn = -1;
+            mDataValid = false;
+            notifyDataSetChanged();
+            //There is no notifyDataSetInvalidated() method in RecyclerView.Adapter
+        }
+        return oldCursor;
+    }
+
+    public void setDataValid(boolean mDataValid) {
+        this.mDataValid = mDataValid;
+    }
+
+    private class NotifyingDataSetObserver extends DataSetObserver {
+        private RecyclerView.Adapter adapter;
+
+        public NotifyingDataSetObserver(RecyclerView.Adapter adapter) {
+            this.adapter = adapter;
+        }
+
+        @Override
+        public void onChanged() {
+            super.onChanged();
+            ((CursorRecyclerViewAdapter) adapter).setDataValid(true);
+            adapter.notifyDataSetChanged();
+        }
+
+        @Override
+        public void onInvalidated() {
+            super.onInvalidated();
+            ((CursorRecyclerViewAdapter) adapter).setDataValid(false);
+        }
+    }*/
 }

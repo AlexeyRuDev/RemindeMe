@@ -42,6 +42,7 @@ public class MainActivity extends AppCompatActivity implements CreateItemDialog.
         super.onCreate(savedInstanceState);
         setContentView(LAYOUT);
         initToolbar();
+
         dbAdapter = new RemindDBAdapter(this);
         initNavigationView();
         initTabs();
