@@ -25,14 +25,12 @@ import java.util.Date;
 import java.util.Locale;
 
 
-public class MainActivity extends AppCompatActivity implements CreateItemDialog.EditNameDialogListener {
+public class MainActivity extends AppCompatActivity {
 
     private static final int LAYOUT = R.layout.activity_main;
     private Toolbar toolbar;
     private DrawerLayout drawerLayout;
     private ViewPager viewPager;
-    private FloatingActionButton fab;
-    private RemindDBAdapter dbAdapter;
 
     private TabFragmentAdapter adapter;
 
@@ -43,10 +41,8 @@ public class MainActivity extends AppCompatActivity implements CreateItemDialog.
         setContentView(LAYOUT);
         initToolbar();
 
-        dbAdapter = new RemindDBAdapter(this);
         initNavigationView();
         initTabs();
-        initFAB();
 
         //Notification
         AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
@@ -58,22 +54,6 @@ public class MainActivity extends AppCompatActivity implements CreateItemDialog.
         alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), broadCast);
     }
 
-
-    private void initFAB() {
-        fab = (FloatingActionButton)findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showEditDialog();
-            }
-        });
-    }
-
-    private void showEditDialog() {
-        FragmentManager fm = getSupportFragmentManager();
-        CreateItemDialog createItemDialog = new CreateItemDialog();
-        createItemDialog.show(fm, "create_item_dialog");
-    }
 
     private void initToolbar() {
         toolbar = (Toolbar)findViewById(R.id.toolbar);
@@ -121,11 +101,7 @@ public class MainActivity extends AppCompatActivity implements CreateItemDialog.
             @Override
             public void onPageSelected(int position) {
                 Log.i("PageSelected position ", " " + position);
-                if(position == Constants.TAB_TODAY){
-                    fab.show();
-                }else{
-                    fab.hide();
-                }
+
             }
 
             @Override
@@ -146,18 +122,7 @@ public class MainActivity extends AppCompatActivity implements CreateItemDialog.
         viewPager.setCurrentItem(Constants.TAB_CALENDAR);
     }*/
 
-    @Override
-    public void onFinishEditDialog(long itemID, String inputText, String note, Date date, boolean fromEditDialog) {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
-        if(fromEditDialog){
-            dbAdapter.updateItem(itemID, inputText, note, sdf.format(date));
-        }else{
-            dbAdapter.addItem(inputText, note, sdf.format(date));
-        }
-        //adapter.setDatas(dbAdapter.getAllItems(1, date));
-        adapter.updateFragmentList();
-        //adapter.notifyDataSetChanged();
-    }
+
 
 
 }

@@ -7,6 +7,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
@@ -26,16 +27,21 @@ import com.example.rudnev.remindme.adapter.TabFragmentAdapter;
 import com.example.rudnev.remindme.dto.RemindDTO;
 import com.example.rudnev.remindme.sql.RemindDBAdapter;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 
-public class TodayFragment extends AbstractTabFragment implements RemindItemClickListener, TabFragmentAdapter.TabSelectedListener, AbstractTabFragment.UpdateFragmentsLists{
+public class TodayFragment extends AbstractTabFragment implements RemindItemClickListener,
+        TabFragmentAdapter.TabSelectedListener, AbstractTabFragment.UpdateFragmentsLists,
+        CreateItemDialog.EditNameDialogListener{
 
     private static final int LAYOUT = R.layout.today_fragment;
     private static final int REQUEST_TODAY = 1;
 
 
+    private FloatingActionButton fab;
     private List<RemindDTO> datas;
     private RemindListAdapter adapter;
     RecyclerView rv;
@@ -65,6 +71,7 @@ public class TodayFragment extends AbstractTabFragment implements RemindItemClic
 
         view = inflater.inflate(LAYOUT, container, false);
 
+        initFAB(view);
         rv = (RecyclerView)view.findViewById(R.id.recyclerView);
         rv.setLayoutManager(new LinearLayoutManager(context));
         adapter = new RemindListAdapter(datas, this);
@@ -81,6 +88,22 @@ public class TodayFragment extends AbstractTabFragment implements RemindItemClic
         this.datas = data;
     }
 
+    private void initFAB(View view) {
+        fab = (FloatingActionButton)view.findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showEditDialog();
+            }
+        });
+    }
+
+    private void showEditDialog() {
+        FragmentManager fm = getFragmentManager();
+        CreateItemDialog createItemDialog = new CreateItemDialog();
+        createItemDialog.setTargetFragment(TodayFragment.this, REQUEST_TODAY);
+        createItemDialog.show(fm, "create_item_dialog");
+    }
 
     @Override
     public void remindListRemoveClicked(View v, int position) {
@@ -171,5 +194,18 @@ public class TodayFragment extends AbstractTabFragment implements RemindItemClic
             adapter = new RemindListAdapter(datas, this);
             adapter.notifyDataSetChanged();
         }
+    }
+
+    @Override
+    public void onFinishEditDialog(long itemID, String inputText, String note, Date date, boolean fromEditDialog) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+        if(fromEditDialog){
+            dbAdapter.updateItem(itemID, inputText, note, sdf.format(date));
+        }else{
+            dbAdapter.addItem(inputText, note, sdf.format(date));
+        }
+        //adapter.setDatas(dbAdapter.getAllItems(1, date));
+        ((MainActivity)getActivity()).updateTabFragmentList();
+        adapter.notifyDataSetChanged();
     }
 }
