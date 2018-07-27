@@ -31,6 +31,11 @@ public class RemindListAdapter extends RecyclerView.Adapter<RemindListAdapter.Re
         /*if(cursor!=null){cursor.registerDataSetObserver(mDataSetObserver)}*/
     }
 
+    public RemindListAdapter(RemindItemClickListener remindItemClickListener){
+        itemClickListener = remindItemClickListener;
+
+    }
+
     @Override
     public RemindViewHolder onCreateViewHolder(final ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.remind_item, parent, false);

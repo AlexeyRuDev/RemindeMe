@@ -177,11 +177,11 @@ public class CreateItemDialog extends DialogFragment implements TextView.OnEdito
     public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
         long itemID = 0;
         if (EditorInfo.IME_ACTION_DONE == i) {
-            EditNameDialogListener activity = (EditNameDialogListener) getActivity();
+            EditNameDialogListener fragment = (EditNameDialogListener) getTargetFragment();
             if(getArguments()!=null){
                 itemID = getArguments().getLong("itemID");
             }
-            activity.onFinishEditDialog(itemID, mEditTextTitle.getText().toString(), mEditTextNote.getText().toString(), formatDate, fromEditDialog);
+            fragment.onFinishEditDialog(itemID, mEditTextTitle.getText().toString(), mEditTextNote.getText().toString(), formatDate, fromEditDialog);
             this.dismiss();
             return true;
         }
