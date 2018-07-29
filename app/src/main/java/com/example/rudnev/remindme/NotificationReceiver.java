@@ -21,7 +21,7 @@ public class NotificationReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
 
-        RemindDBAdapter dbAdapter = new RemindDBAdapter(context);
+        /*RemindDBAdapter dbAdapter = new RemindDBAdapter(context);
         List<RemindDTO> mRemindItems = dbAdapter.getAllItems(1, null);
         Calendar currentTime = Calendar.getInstance();
         Calendar itemTime = Calendar.getInstance();
@@ -48,7 +48,7 @@ public class NotificationReceiver extends BroadcastReceiver {
                 NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
                 notificationManager.notify(0, notification);
             }
-        }
+        }*/
 
     }
 }

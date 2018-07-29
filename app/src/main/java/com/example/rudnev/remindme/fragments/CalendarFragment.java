@@ -1,5 +1,7 @@
 package com.example.rudnev.remindme.fragments;
 
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -14,6 +16,7 @@ import com.example.rudnev.remindme.R;
 import com.example.rudnev.remindme.adapter.TabFragmentAdapter;
 import com.example.rudnev.remindme.dto.RemindDTO;
 import com.example.rudnev.remindme.sql.RemindDBAdapter;
+import com.example.rudnev.remindme.viewmodels.CalendarViewModel;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
@@ -23,17 +26,18 @@ import java.util.HashSet;
 import java.util.List;
 
 
-public class CalendarFragment extends AbstractTabFragment implements TabFragmentAdapter.TabSelectedListener, CalendarItemsDialog.CalendarItemsUpdateListener, AbstractTabFragment.UpdateFragmentsLists {
+public class CalendarFragment extends AbstractTabFragment implements TabFragmentAdapter.TabSelectedListener,
+        CalendarItemsDialog.CalendarItemsUpdateListener {
 
     private static final int LAYOUT = R.layout.calendar_fragment;
     private static final int CALENDARFRAGMENT = 1;
     private MaterialCalendarView calendarView;
     HashSet<CalendarDay> dates;
-    private RemindDBAdapter dbAdapter;
-    private List<RemindDTO> datas;
+    List<RemindDTO> datas;
+    private CalendarViewModel mCalendarViewModel;
 
 
-    public static CalendarFragment getInstance(Context context){
+    public static CalendarFragment getInstance(Context context) {
         Bundle args = new Bundle();
         CalendarFragment calendarFragment = new CalendarFragment();
         calendarFragment.setArguments(args);
@@ -45,6 +49,14 @@ public class CalendarFragment extends AbstractTabFragment implements TabFragment
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mCalendarViewModel = ViewModelProviders.of(this).get(CalendarViewModel.class);
+        mCalendarViewModel.getAllReminds().observe(this, new Observer<List<RemindDTO>>() {
+            @Override
+            public void onChanged(@Nullable final List<RemindDTO> reminds) {
+                datas = reminds;
+                updateCalendar(datas);
+            }
+        });
     }
 
     @Nullable
@@ -53,9 +65,8 @@ public class CalendarFragment extends AbstractTabFragment implements TabFragment
         view = inflater.inflate(LAYOUT, container, false);
         calendarView = view.findViewById(R.id.calendarView);
         calendarView.setPagingEnabled(false);
-        dbAdapter = new RemindDBAdapter(context);
-        dates = new HashSet<>();
-        updateCalendar(datas);
+        if(datas != null)
+            updateCalendar(datas);
 
         calendarView.setOnDateChangedListener(new OnDateSelectedListener() {
             @Override
@@ -82,29 +93,21 @@ public class CalendarFragment extends AbstractTabFragment implements TabFragment
     @Override
     public void onFragmentBecomesCurrent(boolean current) {
 
-        //updateCalendar(datas);
+        if (datas!=null && (calendarView != null || dates != null))
+            updateCalendar(datas);
     }
 
-    private void updateCalendar(List<RemindDTO>datas){
+    private void updateCalendar(List<RemindDTO> datas) {
         dates.clear();
         calendarView.removeDecorators();
-        for(RemindDTO s : datas){
-            dates.add(CalendarDay.from(s.getDate()));
-            calendarView.addDecorator(new EventDecorator(R.color.colorPrimary, dates, context));
-        }
+        dates = mCalendarViewModel.updateCalendar(datas);
+        calendarView.addDecorator(new EventDecorator(R.color.colorPrimary, dates, context));
     }
 
     @Override
     public void onCloseDialog() {
-        datas = dbAdapter.getAllItems(2, null);
-        updateCalendar(datas);
-    }
-
-    @Override
-    public void update() {
-        dbAdapter = new RemindDBAdapter(context);
-        datas = dbAdapter.getAllItems(2, null);
-        if(calendarView != null || dates !=null)
+        if(datas != null)
             updateCalendar(datas);
     }
+
 }

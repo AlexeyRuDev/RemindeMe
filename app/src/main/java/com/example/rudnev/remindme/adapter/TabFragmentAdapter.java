@@ -60,7 +60,6 @@ public class TabFragmentAdapter extends FragmentStatePagerAdapter implements Tab
         tabs.put(1, CalendarFragment.getInstance(context));
         tabs.put(2, archiveFragment);
         //tabs.put(3, NotesFragment.getInstance(context));
-        updateFragmentList();
     }
 
 
@@ -82,12 +81,6 @@ public class TabFragmentAdapter extends FragmentStatePagerAdapter implements Tab
         final Fragment fragment = tabs.get(pos);
         if (fragment != null && fragment instanceof TabSelectedListener) {
             ((TabSelectedListener) fragment).onFragmentBecomesCurrent(current);
-        }
-    }
-
-    public void updateFragmentList(){
-        for(Fragment f : tabs.values()){
-            ((AbstractTabFragment.UpdateFragmentsLists)f).update();
         }
     }
 

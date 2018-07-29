@@ -19,8 +19,4 @@ public class AbstractTabFragment extends Fragment {
         this.title = title;
     }
 
-    public interface UpdateFragmentsLists{
-        void update();
-    }
-
 }

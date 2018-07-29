@@ -1,9 +1,10 @@
 package com.example.rudnev.remindme;
 
-import android.app.Activity;
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -19,14 +20,15 @@ import android.widget.Button;
 import com.example.rudnev.remindme.adapter.CalendarItemsListAdapter;
 import com.example.rudnev.remindme.dto.RemindDTO;
 import com.example.rudnev.remindme.sql.RemindDBAdapter;
+import com.example.rudnev.remindme.viewmodels.CalendarItemsViewModel;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import java.util.TimeZone;
 
 public class CalendarItemsDialog extends DialogFragment implements RemindItemClickListener, CreateItemDialog.EditNameDialogListener{
 
@@ -40,6 +42,8 @@ public class CalendarItemsDialog extends DialogFragment implements RemindItemCli
     private RemindDBAdapter dbAdapter;
     private Context context;
     private long mItemID;
+
+    private CalendarItemsViewModel mCalendarItemsViewModel;
 
     public static CalendarItemsDialog getInstance(Context context, Date date){
         Bundle args = new Bundle();
@@ -59,10 +63,7 @@ public class CalendarItemsDialog extends DialogFragment implements RemindItemCli
         listViewItems.setLayoutManager(new LinearLayoutManager(context));
         calendar = Calendar.getInstance();
         calendar.setTime(date);
-        dbAdapter = new RemindDBAdapter(context);
-        datas = new ArrayList<>();
-        datas = dbAdapter.getAllItems(1, date);
-        adapter = new CalendarItemsListAdapter(datas, this);
+        adapter = new CalendarItemsListAdapter(this);
         listViewItems.setAdapter(adapter);
 
         addItem.setOnClickListener(new View.OnClickListener() {
@@ -81,7 +82,20 @@ public class CalendarItemsDialog extends DialogFragment implements RemindItemCli
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setStyle(DialogFragment.STYLE_NO_TITLE, 0);
+        mCalendarItemsViewModel = ViewModelProviders.of(this).get(CalendarItemsViewModel.class);
+        //date bellow will be null
+        mCalendarItemsViewModel.getAllReminds().observe(this, new Observer<List<RemindDTO>>() {
+            @Override
+            public void onChanged(@Nullable final List<RemindDTO> reminds) {
+                // Update the cached copy of the words in the adapter.
+                adapter.setData(reminds);
+                datas = reminds;
+            }
+        });
     }
+
+
+
 
     public void setContext(Context context) {
         this.context = context;
@@ -89,32 +103,24 @@ public class CalendarItemsDialog extends DialogFragment implements RemindItemCli
 
     @Override
     public void remindListRemoveClicked(View v, int position) {
-        dbAdapter = new RemindDBAdapter(context);
-        dbAdapter.removeItem(datas.get(position).getId());
-        datas = dbAdapter.getAllItems(1, date);
-        adapter.setData(datas);
-        adapter.notifyDataSetChanged();
-        ((CalendarItemsUpdateListener)getTargetFragment()).onCloseDialog();
-        ((MainActivity)getActivity()).updateTabFragmentList();
+        mCalendarItemsViewModel.delete(datas.get(position));
     }
 
     @Override
     public void remindListUpdateClicked(View v, int position) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
         Calendar calendar = Calendar.getInstance();
-        calendar.setTime(datas.get(position).getDate());
+        try {
+            calendar.setTime(sdf.parse(datas.get(position).getDate()));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         FragmentManager fm = getActivity().getSupportFragmentManager();
         CreateItemDialog createItemDialog = new CreateItemDialog();
         createItemDialog.setTargetFragment(this, REQUEST_CALENDAR_DIALOG);
         createItemDialog.setDateField(calendar);
-        Bundle args = new Bundle();
-        mItemID = datas.get(position).getId();
-        args.putString("title", datas.get(position).getTitle());
-        args.putString("note", datas.get(position).getNote());
-        //args.putString("date", data.get(position).getDate());
-        //args.putLong("itemID", datas.get(position).getId());
-        createItemDialog.setArguments(args);
+        createItemDialog.setmUpdateRemindItem(datas.get(position));
         createItemDialog.show(fm, "create_item_dialog");
-        ((MainActivity)getActivity()).updateTabFragmentList();
         adapter.notifyDataSetChanged();
     }
 
@@ -158,34 +164,14 @@ public class CalendarItemsDialog extends DialogFragment implements RemindItemCli
         this.datas = data;
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == Activity.RESULT_OK) {
-            String title = data.getStringExtra("title");
-            String note = data.getStringExtra("note");
-            Date date = new Date();
-            date.setTime(data.getLongExtra("date", 0));
-            onFinishEditDialog(mItemID, title, note, date, true);
-            //int weight = data.getIntExtra(WeightDialogFragment.TAG_WEIGHT_SELECTED, -1);
-        }
-    }
 
     @Override
-    public void onFinishEditDialog(long itemID, String inputText, String note, Date date, boolean fromEditDialog) {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
-        sdf.setTimeZone(TimeZone.getTimeZone("RU"));
+    public void onFinishEditDialog(RemindDTO remindItem, boolean fromEditDialog) {
         if(fromEditDialog){
-            dbAdapter.updateItem(itemID, inputText, note, sdf.format(date));
+            mCalendarItemsViewModel.update(remindItem);
         }else{
-            dbAdapter.addItem(inputText, note, sdf.format(date));
+            mCalendarItemsViewModel.insert(remindItem);
         }
-        datas = dbAdapter.getAllItems(1, date);
-        adapter.setData(datas);
-        CalendarItemsUpdateListener calendarItemsUpdateListener = (CalendarItemsUpdateListener) getTargetFragment();
-        calendarItemsUpdateListener.onCloseDialog();
-        ((MainActivity)getActivity()).updateTabFragmentList();
-        adapter.notifyDataSetChanged();
     }
 
     public interface CalendarItemsUpdateListener {

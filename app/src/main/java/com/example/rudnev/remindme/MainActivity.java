@@ -114,9 +114,6 @@ public class MainActivity extends AppCompatActivity {
         tabLayout.setupWithViewPager(viewPager);
     }
 
-    public void updateTabFragmentList(){
-        adapter.updateFragmentList();
-    }
 
     /*private void showCalendarTab(){
         viewPager.setCurrentItem(Constants.TAB_CALENDAR);

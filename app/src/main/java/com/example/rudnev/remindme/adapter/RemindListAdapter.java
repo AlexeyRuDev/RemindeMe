@@ -104,7 +104,7 @@ public class RemindListAdapter extends RecyclerView.Adapter<RemindListAdapter.Re
 
         return data.get(position).getNote();
     }
-    public Date getDate(int position){
+    public String getDate(int position){
 
         return data.get(position).getDate();
     }

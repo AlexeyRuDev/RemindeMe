@@ -18,7 +18,8 @@ import com.example.rudnev.remindme.sql.RemindDBAdapter;
 import java.util.List;
 
 
-public class NotesFragment extends AbstractTabFragment implements RemindItemClickListener, TabFragmentAdapter.TabSelectedListener, AbstractTabFragment.UpdateFragmentsLists{
+public class NotesFragment extends AbstractTabFragment implements RemindItemClickListener,
+        TabFragmentAdapter.TabSelectedListener{
 
     private static final int LAYOUT = R.layout.notes_fragment;
 
@@ -69,8 +70,4 @@ public class NotesFragment extends AbstractTabFragment implements RemindItemClic
 
     }
 
-    @Override
-    public void update() {
-
-    }
 }

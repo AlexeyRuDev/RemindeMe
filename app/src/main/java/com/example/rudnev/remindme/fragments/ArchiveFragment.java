@@ -1,6 +1,8 @@
 package com.example.rudnev.remindme.fragments;
 
 import android.app.Activity;
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -23,8 +25,10 @@ import com.example.rudnev.remindme.RemindItemClickListener;
 import com.example.rudnev.remindme.adapter.ArchiveListAdapter;
 import com.example.rudnev.remindme.adapter.TabFragmentAdapter;
 import com.example.rudnev.remindme.dto.RemindDTO;
+import com.example.rudnev.remindme.viewmodels.ArchiveViewModel;
 import com.example.rudnev.remindme.sql.RemindDBAdapter;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -32,7 +36,8 @@ import java.util.List;
 import java.util.Locale;
 
 
-public class ArchiveFragment extends AbstractTabFragment implements CreateItemDialog.EditNameDialogListener, RemindItemClickListener, TabFragmentAdapter.TabSelectedListener, AbstractTabFragment.UpdateFragmentsLists{
+public class ArchiveFragment extends AbstractTabFragment implements CreateItemDialog.EditNameDialogListener,
+        RemindItemClickListener, TabFragmentAdapter.TabSelectedListener{
 
     private static final int LAYOUT = R.layout.archive_fragment;
     private static final int REQUEST_ARCHIVE = 3;
@@ -40,8 +45,9 @@ public class ArchiveFragment extends AbstractTabFragment implements CreateItemDi
     private List<RemindDTO> datas;
     private ArchiveListAdapter adapter;
     RecyclerView rv;
-    private RemindDBAdapter dbAdapter;
-    private long mItemID;
+
+
+    private ArchiveViewModel mArchiveViewModel;
 
     public static ArchiveFragment getInstance(Context context, List<RemindDTO> datas){
         Bundle args = new Bundle();
@@ -56,13 +62,21 @@ public class ArchiveFragment extends AbstractTabFragment implements CreateItemDi
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        dbAdapter = new RemindDBAdapter(context);
+        mArchiveViewModel = ViewModelProviders.of(this).get(ArchiveViewModel.class);
+        mArchiveViewModel.getAllReminds().observe(this, new Observer<List<RemindDTO>>() {
+            @Override
+            public void onChanged(@Nullable final List<RemindDTO> reminds) {
+                // Update the cached copy of the words in the adapter.
+                adapter.setData(reminds);
+                datas = reminds;
+            }
+        });
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        Log.i("ONCREATEARCHIVE", "OnCreateArchive");
+
         view = inflater.inflate(LAYOUT, container, false);
         rv = (RecyclerView)view.findViewById(R.id.recyclerViewArchive);
         rv.setLayoutManager(new LinearLayoutManager(context));
@@ -84,32 +98,25 @@ public class ArchiveFragment extends AbstractTabFragment implements CreateItemDi
 
     @Override
     public void remindListRemoveClicked(View v, int position) {
-        dbAdapter = new RemindDBAdapter(context);
-        dbAdapter.removeItem(datas.get(position).getId());
-        datas = dbAdapter.getAllItems(3, null);
-        adapter.setData(datas);
-        adapter.notifyDataSetChanged();
-        ((MainActivity)getActivity()).updateTabFragmentList();
+        mArchiveViewModel.delete(datas.get(position));
     }
 
     @Override
     public void remindListUpdateClicked(View v, int position) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
         Calendar calendar = Calendar.getInstance();
-        calendar.setTime(datas.get(position).getDate());
+        try {
+            calendar.setTime(sdf.parse(datas.get(position).getDate()));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         FragmentManager fm = getActivity().getSupportFragmentManager();
         CreateItemDialog createItemDialog = new CreateItemDialog();
         createItemDialog.setTargetFragment(this, REQUEST_ARCHIVE);
         createItemDialog.setDateField(calendar);
-        Bundle args = new Bundle();
-        mItemID = datas.get(position).getId();
-        args.putString("title", datas.get(position).getTitle());
-        args.putString("note", datas.get(position).getNote());
-        //args.putString("date", data.get(position).getDate());
-        //args.putLong("itemID", datas.get(position).getId());
-        createItemDialog.setArguments(args);
+        createItemDialog.setmUpdateRemindItem(datas.get(position));
         createItemDialog.show(fm, "create_item_dialog");
-        ((MainActivity)getActivity()).updateTabFragmentList();
-        adapter.notifyDataSetChanged();
+
     }
 
     @Override
@@ -147,41 +154,13 @@ public class ArchiveFragment extends AbstractTabFragment implements CreateItemDi
     }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == Activity.RESULT_OK) {
-            String title = data.getStringExtra("title");
-            String note = data.getStringExtra("note");
-            Date date = new Date();
-            date.setTime(data.getLongExtra("date", 0));
-            onFinishEditDialog(mItemID, title, note, date, true);
-            //int weight = data.getIntExtra(WeightDialogFragment.TAG_WEIGHT_SELECTED, -1);
-        }
-    }
-
-    @Override
-    public void onFinishEditDialog(long itemID, String inputText, String note, Date date, boolean fromEditDialog) {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+    public void onFinishEditDialog(RemindDTO remindItem, boolean fromEditDialog) {
         if(fromEditDialog){
-            dbAdapter.updateItem(itemID, inputText, note, sdf.format(date));
+            mArchiveViewModel.update(remindItem);
         }else{
-            dbAdapter.addItem(inputText, note, sdf.format(date));
+            mArchiveViewModel.insert(remindItem);
         }
-        datas = dbAdapter.getAllItems(3, date);
-        adapter.setData(datas);
-        adapter.notifyDataSetChanged();
-        ((MainActivity)getActivity()).updateTabFragmentList();
     }
 
-    @Override
-    public void update() {
-        dbAdapter = new RemindDBAdapter(context);
-        datas = dbAdapter.getAllItems(3, null);
-        setData(datas);
-        if(adapter!=null){
-            adapter.setData(datas);
-            adapter.notifyDataSetChanged();
-        }
 
-    }
 }

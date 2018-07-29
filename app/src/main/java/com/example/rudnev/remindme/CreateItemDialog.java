@@ -19,8 +19,12 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
+import com.example.rudnev.remindme.dto.RemindDTO;
+
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 public class CreateItemDialog extends DialogFragment implements TextView.OnEditorActionListener {
 
@@ -35,9 +39,11 @@ public class CreateItemDialog extends DialogFragment implements TextView.OnEdito
     private Date formatDate;
     private long itemID;
     private boolean fromEditDialog;
+    private RemindDTO mUpdateRemindItem;
+
 
     public interface EditNameDialogListener {
-        void onFinishEditDialog(long itemID, String inputText, String note, Date date, boolean fromEditDialog);
+        void onFinishEditDialog(RemindDTO remindItem, boolean fromEditDialog);
     }
 
     @Override
@@ -60,9 +66,9 @@ public class CreateItemDialog extends DialogFragment implements TextView.OnEdito
         mEditTextTitle.setBackgroundResource(R.drawable.edit_text_bg);
         mEditTextNote.setBackgroundResource(R.drawable.edit_text_bg);
         //if open edit dialog
-        if(getArguments()!=null){
-            mEditTextTitle.setText(getArguments().getString("title"));
-            mEditTextNote.setText(getArguments().getString("note"));
+        if(mUpdateRemindItem!=null){
+            mEditTextTitle.setText(mUpdateRemindItem.getTitle());
+            mEditTextNote.setText(mUpdateRemindItem.getNote());
             //formatDate = getArguments().getString("date");
             //itemID = getArguments().getLong("itemID");
             fromEditDialog = true;
@@ -88,20 +94,23 @@ public class CreateItemDialog extends DialogFragment implements TextView.OnEdito
         mOkBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(getArguments()!=null) {
-                    Intent intent = new Intent();
-                    intent.putExtra("title", mEditTextTitle.getText().toString());
-                    intent.putExtra("note", mEditTextNote.getText().toString());
-                    intent.putExtra("date", date.getTimeInMillis());
-                    getTargetFragment().onActivityResult(getTargetRequestCode(), Activity.RESULT_OK, intent);
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+                //edit item clicked
+                if(mUpdateRemindItem!=null) {
+                    mUpdateRemindItem.setTitle(mEditTextTitle.getText().toString());
+                    mUpdateRemindItem.setNote(mEditTextNote.getText().toString());
+                    mUpdateRemindItem.setDate(date.getTime().toString());
+                    EditNameDialogListener fragment = (EditNameDialogListener) getTargetFragment();
+                    fragment.onFinishEditDialog(mUpdateRemindItem, fromEditDialog);
                 }else{
-                    //Need to remove activity from here
                     if(getTargetRequestCode() == 2){
                         EditNameDialogListener dialog = (EditNameDialogListener) getTargetFragment();
-                        dialog.onFinishEditDialog(itemID, mEditTextTitle.getText().toString(), mEditTextNote.getText().toString(), formatDate, fromEditDialog);
+                        RemindDTO mNewRemindItem = new RemindDTO(mEditTextTitle.getText().toString(), mEditTextNote.getText().toString(), formatDate.toString());
+                        dialog.onFinishEditDialog(mNewRemindItem, fromEditDialog);
                     }else{
                         EditNameDialogListener fragment = (EditNameDialogListener) getTargetFragment();
-                        fragment.onFinishEditDialog(itemID, mEditTextTitle.getText().toString(), mEditTextNote.getText().toString(), formatDate, fromEditDialog);
+                        RemindDTO mNewRemindItem = new RemindDTO(mEditTextTitle.getText().toString(), mEditTextNote.getText().toString(), formatDate.toString());
+                        fragment.onFinishEditDialog(mNewRemindItem, fromEditDialog);
                     }
 
                 }
@@ -179,12 +188,17 @@ public class CreateItemDialog extends DialogFragment implements TextView.OnEdito
         if (EditorInfo.IME_ACTION_DONE == i) {
             EditNameDialogListener fragment = (EditNameDialogListener) getTargetFragment();
             if(getArguments()!=null){
-                itemID = getArguments().getLong("itemID");
+                itemID = mUpdateRemindItem.getId();
             }
-            fragment.onFinishEditDialog(itemID, mEditTextTitle.getText().toString(), mEditTextNote.getText().toString(), formatDate, fromEditDialog);
+            RemindDTO remindItem = new RemindDTO(mEditTextTitle.getText().toString(), mEditTextNote.getText().toString(), formatDate.toString());
+            fragment.onFinishEditDialog(remindItem, fromEditDialog);
             this.dismiss();
             return true;
         }
         return false;
+    }
+
+    public void setmUpdateRemindItem(RemindDTO mUpdateRemindItem) {
+        this.mUpdateRemindItem = mUpdateRemindItem;
     }
 }

@@ -25,6 +25,10 @@ public class CalendarItemsListAdapter extends RecyclerView.Adapter<CalendarItems
         calItemClickListener = remindItemClickListener;
     }
 
+    public CalendarItemsListAdapter(RemindItemClickListener remindItemClickListener){
+        calItemClickListener = remindItemClickListener;
+    }
+
     @Override
     public CalendarItemsListAdapter.RemindViewHolder onCreateViewHolder(final ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.remind_item, parent, false);
@@ -87,7 +91,7 @@ public class CalendarItemsListAdapter extends RecyclerView.Adapter<CalendarItems
 
         return data.get(position).getNote();
     }
-    public Date getDate(int position){
+    public String getDate(int position){
 
         return data.get(position).getDate();
     }

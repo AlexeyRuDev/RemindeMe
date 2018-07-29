@@ -82,7 +82,7 @@ public class RemindDBAdapter {
                     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
                     try {
                         cal.setTime(sdf.parse(c.getString(dateColIndex)));
-                        datas.add(new RemindDTO(c.getLong(idColIndex), c.getString(titleColIndex), c.getString(noteColIndex), cal.getTime()));
+                        datas.add(new RemindDTO(c.getLong(idColIndex), c.getString(titleColIndex), c.getString(noteColIndex), cal.getTime().toString()));
                     } catch (ParseException e) {
                         e.printStackTrace();
                     }
@@ -135,7 +135,7 @@ public class RemindDBAdapter {
                     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
                     try {
                         cal.setTime(sdf.parse(c.getString(dateColIndex)));
-                        datas.add(new RemindDTO(c.getLong(idColIndex), c.getString(titleColIndex), c.getString(noteColIndex), cal.getTime()));
+                        datas.add(new RemindDTO(c.getLong(idColIndex), c.getString(titleColIndex), c.getString(noteColIndex), cal.getTime().toString()));
                     } catch (ParseException e) {
                         e.printStackTrace();
                     }
