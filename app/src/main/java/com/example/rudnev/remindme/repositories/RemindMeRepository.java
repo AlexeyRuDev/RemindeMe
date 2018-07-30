@@ -29,9 +29,9 @@ public class RemindMeRepository {
         String date = sdf.format(calendar.getTime());
         remindMeDAO = db.remindMeDAO();
         mAllReminds = remindMeDAO.getAllReminds();
-        mRemindsForToday = remindMeDAO.getRemindsForTodayFragment(date);
-        mRemindsForArchive = remindMeDAO.getRemindsForArchiveFragment(date);
-        mRemindsForCalendar = remindMeDAO.getRemindsForCalendarFragment(date);
+        mRemindsForToday = remindMeDAO.getRemindsForTodayFragment(calendar.getTime());
+        mRemindsForArchive = remindMeDAO.getRemindsForArchiveFragment(calendar.getTime());
+        mRemindsForCalendar = remindMeDAO.getRemindsForCalendarFragment(calendar.getTime());
     }
 
     public LiveData<List<RemindDTO>> getAllReminds() {

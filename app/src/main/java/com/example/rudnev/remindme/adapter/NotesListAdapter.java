@@ -90,7 +90,7 @@ public class NotesListAdapter extends RecyclerView.Adapter<NotesListAdapter.Remi
 
         return data.get(position).getNote();
     }
-    public String getDate(int position){
+    public Date getDate(int position){
 
         return data.get(position).getDate();
     }

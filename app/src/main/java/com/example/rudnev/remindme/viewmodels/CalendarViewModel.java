@@ -35,16 +35,12 @@ public class CalendarViewModel extends AndroidViewModel {
     }
 
 
-    public HashSet<CalendarDay> updateCalendar(List<RemindDTO>datas) {
+    public HashSet<CalendarDay> updateCalendar(List<RemindDTO> datas) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
         dates.clear();
         if (datas != null)
             for (RemindDTO s : datas) {
-                try {
-                    dates.add(CalendarDay.from(sdf.parse(s.getDate())));
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
+                dates.add(CalendarDay.from(s.getDate()));
             }
         return dates;
     }

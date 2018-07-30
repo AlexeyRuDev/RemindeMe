@@ -25,16 +25,16 @@ public class RemindDTO {
 
     @NonNull
     @ColumnInfo(name = "date")
-    private String date;
+    private Date date;
 
-    public RemindDTO(long id, @NonNull String title, @NonNull String note, @NonNull String date) {
+    public RemindDTO(long id, @NonNull String title, @NonNull String note, @NonNull Date date) {
         this.id = id;
         this.title = title;
         this.note = note;
         this.date = date;
     }
 
-    public RemindDTO(@NonNull String title, @NonNull String note, @NonNull String date) {
+    public RemindDTO(@NonNull String title, @NonNull String note, @NonNull Date date) {
         this.title = title;
         this.note = note;
         this.date = date;
@@ -62,11 +62,11 @@ public class RemindDTO {
     }
 
     @NonNull
-    public String getDate() {
+    public Date getDate() {
         return date;
     }
 
-    public void setDate(@NonNull String date) {
+    public void setDate(@NonNull Date date) {
         this.date = date;
     }
 

@@ -4,7 +4,7 @@ import android.arch.persistence.db.SupportSQLiteDatabase;
 import android.arch.persistence.room.Database;
 import android.arch.persistence.room.Room;
 import android.arch.persistence.room.RoomDatabase;
-import android.arch.persistence.room.migration.Migration;
+import android.arch.persistence.room.TypeConverters;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
@@ -12,7 +12,8 @@ import android.support.annotation.NonNull;
 import com.example.rudnev.remindme.dao.RemindMeDAO;
 import com.example.rudnev.remindme.dto.RemindDTO;
 
-@Database(entities = {RemindDTO.class}, version = 2)
+@Database(entities = {RemindDTO.class}, version = 3)
+@TypeConverters({DateTypeConverter.class})
 public abstract class RemindRoomDataBase extends RoomDatabase {
 
     private static RemindRoomDataBase INSTANCE;
@@ -62,4 +63,6 @@ public abstract class RemindRoomDataBase extends RoomDatabase {
             return null;
         }
     }
+
 }
+

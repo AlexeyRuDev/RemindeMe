@@ -11,6 +11,7 @@ import android.arch.persistence.room.Update;
 
 import com.example.rudnev.remindme.dto.RemindDTO;
 
+import java.util.Date;
 import java.util.List;
 
 @Dao
@@ -32,11 +33,11 @@ public interface RemindMeDAO {
     LiveData<List<RemindDTO>> getAllReminds();
 
     @Query("SELECT * from remindtable WHERE date = :date")
-    LiveData<List<RemindDTO>> getRemindsForTodayFragment(String date);
+    LiveData<List<RemindDTO>> getRemindsForTodayFragment(Date date);
 
     @Query("SELECT * from remindtable WHERE date >= :date")
-    LiveData<List<RemindDTO>> getRemindsForCalendarFragment(String date);
+    LiveData<List<RemindDTO>> getRemindsForCalendarFragment(Date date);
 
     @Query("SELECT * from remindtable WHERE date < :date")
-    LiveData<List<RemindDTO>> getRemindsForArchiveFragment(String date);
+    LiveData<List<RemindDTO>> getRemindsForArchiveFragment(Date date);
 }

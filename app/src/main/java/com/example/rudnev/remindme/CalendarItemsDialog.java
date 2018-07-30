@@ -30,7 +30,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-public class CalendarItemsDialog extends DialogFragment implements RemindItemClickListener, CreateItemDialog.EditNameDialogListener{
+public class CalendarItemsDialog extends DialogFragment implements RemindItemClickListener, CreateItemDialog.EditNameDialogListener {
 
     private static final int REQUEST_CALENDAR_DIALOG = 2;
     private List<RemindDTO> datas;
@@ -45,7 +45,7 @@ public class CalendarItemsDialog extends DialogFragment implements RemindItemCli
 
     private CalendarItemsViewModel mCalendarItemsViewModel;
 
-    public static CalendarItemsDialog getInstance(Context context, Date date){
+    public static CalendarItemsDialog getInstance(Context context, Date date) {
         Bundle args = new Bundle();
         CalendarItemsDialog calendarFragment = new CalendarItemsDialog();
         calendarFragment.setArguments(args);
@@ -95,8 +95,6 @@ public class CalendarItemsDialog extends DialogFragment implements RemindItemCli
     }
 
 
-
-
     public void setContext(Context context) {
         this.context = context;
     }
@@ -110,11 +108,7 @@ public class CalendarItemsDialog extends DialogFragment implements RemindItemCli
     public void remindListUpdateClicked(View v, int position) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
         Calendar calendar = Calendar.getInstance();
-        try {
-            calendar.setTime(sdf.parse(datas.get(position).getDate()));
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+        calendar.setTime(datas.get(position).getDate());
         FragmentManager fm = getActivity().getSupportFragmentManager();
         CreateItemDialog createItemDialog = new CreateItemDialog();
         createItemDialog.setTargetFragment(this, REQUEST_CALENDAR_DIALOG);
@@ -167,9 +161,9 @@ public class CalendarItemsDialog extends DialogFragment implements RemindItemCli
 
     @Override
     public void onFinishEditDialog(RemindDTO remindItem, boolean fromEditDialog) {
-        if(fromEditDialog){
+        if (fromEditDialog) {
             mCalendarItemsViewModel.update(remindItem);
-        }else{
+        } else {
             mCalendarItemsViewModel.insert(remindItem);
         }
     }

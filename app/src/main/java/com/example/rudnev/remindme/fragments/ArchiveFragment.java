@@ -1,17 +1,14 @@
 package com.example.rudnev.remindme.fragments;
 
-import android.app.Activity;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -19,25 +16,21 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.rudnev.remindme.CreateItemDialog;
-import com.example.rudnev.remindme.MainActivity;
 import com.example.rudnev.remindme.R;
 import com.example.rudnev.remindme.RemindItemClickListener;
 import com.example.rudnev.remindme.adapter.ArchiveListAdapter;
 import com.example.rudnev.remindme.adapter.TabFragmentAdapter;
 import com.example.rudnev.remindme.dto.RemindDTO;
 import com.example.rudnev.remindme.viewmodels.ArchiveViewModel;
-import com.example.rudnev.remindme.sql.RemindDBAdapter;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
 
 public class ArchiveFragment extends AbstractTabFragment implements CreateItemDialog.EditNameDialogListener,
-        RemindItemClickListener, TabFragmentAdapter.TabSelectedListener{
+        RemindItemClickListener, TabFragmentAdapter.TabSelectedListener {
 
     private static final int LAYOUT = R.layout.archive_fragment;
     private static final int REQUEST_ARCHIVE = 3;
@@ -49,7 +42,7 @@ public class ArchiveFragment extends AbstractTabFragment implements CreateItemDi
 
     private ArchiveViewModel mArchiveViewModel;
 
-    public static ArchiveFragment getInstance(Context context, List<RemindDTO> datas){
+    public static ArchiveFragment getInstance(Context context, List<RemindDTO> datas) {
         Bundle args = new Bundle();
         ArchiveFragment archiveFragment = new ArchiveFragment();
         archiveFragment.setArguments(args);
@@ -78,7 +71,7 @@ public class ArchiveFragment extends AbstractTabFragment implements CreateItemDi
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         view = inflater.inflate(LAYOUT, container, false);
-        rv = (RecyclerView)view.findViewById(R.id.recyclerViewArchive);
+        rv = (RecyclerView) view.findViewById(R.id.recyclerViewArchive);
         rv.setLayoutManager(new LinearLayoutManager(context));
         adapter = new ArchiveListAdapter(datas, this);
         rv.setAdapter(adapter);
@@ -105,11 +98,7 @@ public class ArchiveFragment extends AbstractTabFragment implements CreateItemDi
     public void remindListUpdateClicked(View v, int position) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
         Calendar calendar = Calendar.getInstance();
-        try {
-            calendar.setTime(sdf.parse(datas.get(position).getDate()));
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+        calendar.setTime(datas.get(position).getDate());
         FragmentManager fm = getActivity().getSupportFragmentManager();
         CreateItemDialog createItemDialog = new CreateItemDialog();
         createItemDialog.setTargetFragment(this, REQUEST_ARCHIVE);
@@ -149,15 +138,15 @@ public class ArchiveFragment extends AbstractTabFragment implements CreateItemDi
 
     @Override
     public void onFragmentBecomesCurrent(boolean current) {
-        if(adapter!=null)
+        if (adapter != null)
             adapter.notifyDataSetChanged();
     }
 
     @Override
     public void onFinishEditDialog(RemindDTO remindItem, boolean fromEditDialog) {
-        if(fromEditDialog){
+        if (fromEditDialog) {
             mArchiveViewModel.update(remindItem);
-        }else{
+        } else {
             mArchiveViewModel.insert(remindItem);
         }
     }

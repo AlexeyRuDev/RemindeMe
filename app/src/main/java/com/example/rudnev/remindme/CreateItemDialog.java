@@ -99,17 +99,17 @@ public class CreateItemDialog extends DialogFragment implements TextView.OnEdito
                 if(mUpdateRemindItem!=null) {
                     mUpdateRemindItem.setTitle(mEditTextTitle.getText().toString());
                     mUpdateRemindItem.setNote(mEditTextNote.getText().toString());
-                    mUpdateRemindItem.setDate(date.getTime().toString());
+                    mUpdateRemindItem.setDate(date.getTime());
                     EditNameDialogListener fragment = (EditNameDialogListener) getTargetFragment();
                     fragment.onFinishEditDialog(mUpdateRemindItem, fromEditDialog);
                 }else{
                     if(getTargetRequestCode() == 2){
                         EditNameDialogListener dialog = (EditNameDialogListener) getTargetFragment();
-                        RemindDTO mNewRemindItem = new RemindDTO(mEditTextTitle.getText().toString(), mEditTextNote.getText().toString(), formatDate.toString());
+                        RemindDTO mNewRemindItem = new RemindDTO(mEditTextTitle.getText().toString(), mEditTextNote.getText().toString(), formatDate);
                         dialog.onFinishEditDialog(mNewRemindItem, fromEditDialog);
                     }else{
                         EditNameDialogListener fragment = (EditNameDialogListener) getTargetFragment();
-                        RemindDTO mNewRemindItem = new RemindDTO(mEditTextTitle.getText().toString(), mEditTextNote.getText().toString(), formatDate.toString());
+                        RemindDTO mNewRemindItem = new RemindDTO(mEditTextTitle.getText().toString(), mEditTextNote.getText().toString(), formatDate);
                         fragment.onFinishEditDialog(mNewRemindItem, fromEditDialog);
                     }
 
@@ -190,7 +190,7 @@ public class CreateItemDialog extends DialogFragment implements TextView.OnEdito
             if(getArguments()!=null){
                 itemID = mUpdateRemindItem.getId();
             }
-            RemindDTO remindItem = new RemindDTO(mEditTextTitle.getText().toString(), mEditTextNote.getText().toString(), formatDate.toString());
+            RemindDTO remindItem = new RemindDTO(mEditTextTitle.getText().toString(), mEditTextNote.getText().toString(), formatDate);
             fragment.onFinishEditDialog(remindItem, fromEditDialog);
             this.dismiss();
             return true;

@@ -90,7 +90,7 @@ public class ArchiveListAdapter extends RecyclerView.Adapter<ArchiveListAdapter.
 
         return data.get(position).getNote();
     }
-    public String getDate(int position){
+    public Date getDate(int position){
 
         return data.get(position).getDate();
     }

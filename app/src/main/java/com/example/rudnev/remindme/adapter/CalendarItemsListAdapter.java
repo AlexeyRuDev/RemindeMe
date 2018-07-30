@@ -94,7 +94,7 @@ public class CalendarItemsListAdapter extends RecyclerView.Adapter<CalendarItems
 
         return data.get(position).getNote();
     }
-    public String getDate(int position){
+    public Date getDate(int position){
 
         return data.get(position).getDate();
     }
