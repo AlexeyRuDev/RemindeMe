@@ -65,6 +65,7 @@ public class CalendarFragment extends AbstractTabFragment implements TabFragment
         view = inflater.inflate(LAYOUT, container, false);
         calendarView = view.findViewById(R.id.calendarView);
         calendarView.setPagingEnabled(false);
+        dates = new HashSet<CalendarDay>();
         if(datas != null)
             updateCalendar(datas);
 
@@ -98,6 +99,7 @@ public class CalendarFragment extends AbstractTabFragment implements TabFragment
     }
 
     private void updateCalendar(List<RemindDTO> datas) {
+
         dates.clear();
         calendarView.removeDecorators();
         dates = mCalendarViewModel.updateCalendar(datas);

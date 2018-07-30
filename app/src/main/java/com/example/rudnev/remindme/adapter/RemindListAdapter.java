@@ -58,7 +58,10 @@ public class RemindListAdapter extends RecyclerView.Adapter<RemindListAdapter.Re
 
     @Override
     public int getItemCount() {
-        return data.size();
+        if(data!=null)
+            return data.size();
+        else
+            return 0;
     }
 
     public static class RemindViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
