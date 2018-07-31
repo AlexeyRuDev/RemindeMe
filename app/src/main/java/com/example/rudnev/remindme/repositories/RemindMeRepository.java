@@ -9,6 +9,8 @@ import com.example.rudnev.remindme.dao.RemindMeDAO;
 import com.example.rudnev.remindme.dto.RemindDTO;
 import com.example.rudnev.remindme.roomdatabase.RemindRoomDataBase;
 
+import org.joda.time.LocalDate;
+
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -26,12 +28,13 @@ public class RemindMeRepository {
         RemindRoomDataBase db = RemindRoomDataBase.getDatabase(application);
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
         Calendar calendar = Calendar.getInstance();
+        LocalDate localDate = LocalDate.now();
         String date = sdf.format(calendar.getTime());
         remindMeDAO = db.remindMeDAO();
         mAllReminds = remindMeDAO.getAllReminds();
-        mRemindsForToday = remindMeDAO.getRemindsForTodayFragment(calendar.getTime());
-        mRemindsForArchive = remindMeDAO.getRemindsForArchiveFragment(calendar.getTime());
-        mRemindsForCalendar = remindMeDAO.getRemindsForCalendarFragment(calendar.getTime());
+        mRemindsForToday = mAllReminds;//remindMeDAO.getRemindsForTodayFragment(localDate.toDate());
+        mRemindsForArchive = mAllReminds;//remindMeDAO.getRemindsForArchiveFragment(calendar.getTime());
+        mRemindsForCalendar = mAllReminds;//remindMeDAO.getRemindsForCalendarFragment(calendar.getTime());
     }
 
     public LiveData<List<RemindDTO>> getAllReminds() {

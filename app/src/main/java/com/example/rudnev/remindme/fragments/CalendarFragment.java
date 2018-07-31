@@ -21,6 +21,10 @@ import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
 
+import org.joda.time.DateTimeComparator;
+import org.joda.time.LocalDate;
+
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashSet;
 import java.util.List;
@@ -53,7 +57,7 @@ public class CalendarFragment extends AbstractTabFragment implements TabFragment
         mCalendarViewModel.getAllReminds().observe(this, new Observer<List<RemindDTO>>() {
             @Override
             public void onChanged(@Nullable final List<RemindDTO> reminds) {
-                datas = reminds;
+                filterListReminds(reminds);
                 updateCalendar(datas);
             }
         });
@@ -86,6 +90,24 @@ public class CalendarFragment extends AbstractTabFragment implements TabFragment
         return view;
     }
 
+
+    private void filterListReminds(List<RemindDTO> reminds) {
+        DateTimeComparator dateTimeComparator = DateTimeComparator.getDateOnlyInstance();
+        LocalDate localDate = LocalDate.now();
+        if(datas == null){
+            datas = new ArrayList<>();
+        }else{
+            datas.clear();
+        }
+        if (reminds != null) {
+            for (RemindDTO item : reminds) {
+                LocalDate itemLocalDate = LocalDate.fromDateFields(item.getDate());
+                if (dateTimeComparator.compare(itemLocalDate.toDate(), localDate.toDate()) >= 0) {
+                    datas.add(item);
+                }
+            }
+        }
+    }
 
     public void setContext(Context context) {
         this.context = context;

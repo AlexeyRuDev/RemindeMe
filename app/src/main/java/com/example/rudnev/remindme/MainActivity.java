@@ -19,6 +19,8 @@ import android.view.View;
 import com.example.rudnev.remindme.adapter.TabFragmentAdapter;
 import com.example.rudnev.remindme.sql.RemindDBAdapter;
 
+import net.danlew.android.joda.JodaTimeAndroid;
+
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -41,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(LAYOUT);
         initToolbar();
-
+        JodaTimeAndroid.init(this);
         initNavigationView();
         initTabs();
 

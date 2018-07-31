@@ -25,11 +25,15 @@ import com.example.rudnev.remindme.dto.RemindDTO;
 import com.example.rudnev.remindme.sql.RemindDBAdapter;
 import com.example.rudnev.remindme.viewmodels.TodayFragmentViewModel;
 
+import org.joda.time.DateTimeComparator;
+import org.joda.time.LocalDate;
+
+import java.util.ArrayList;
 import java.util.List;
 
 
 public class TodayFragment extends AbstractTabFragment implements RemindItemClickListener,
-        TabFragmentAdapter.TabSelectedListener, CreateItemDialog.EditNameDialogListener{
+        TabFragmentAdapter.TabSelectedListener, CreateItemDialog.EditNameDialogListener {
 
     private static final int LAYOUT = R.layout.today_fragment;
     private static final int REQUEST_TODAY = 1;
@@ -42,7 +46,7 @@ public class TodayFragment extends AbstractTabFragment implements RemindItemClic
     private RemindListAdapter adapter;
     RecyclerView rv;
 
-    public static TodayFragment getInstance(Context context, List<RemindDTO> datas){
+    public static TodayFragment getInstance(Context context, List<RemindDTO> datas) {
 
         Bundle args = new Bundle();
         TodayFragment todayFragment = new TodayFragment();
@@ -64,7 +68,7 @@ public class TodayFragment extends AbstractTabFragment implements RemindItemClic
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(LAYOUT, container, false);
         initFAB(view);
-        rv = (RecyclerView)view.findViewById(R.id.recyclerView);
+        rv = (RecyclerView) view.findViewById(R.id.recyclerView);
         rv.setLayoutManager(new LinearLayoutManager(context));
         adapter = new RemindListAdapter(this);
         rv.setAdapter(adapter);
@@ -73,11 +77,30 @@ public class TodayFragment extends AbstractTabFragment implements RemindItemClic
             @Override
             public void onChanged(@Nullable final List<RemindDTO> reminds) {
                 // Update the cached copy of the words in the adapter.
-                adapter.setData(reminds);
-                datas = reminds;
+                filterListReminds(reminds);
+                adapter.setData(datas);
+
             }
         });
         return view;
+    }
+
+    private void filterListReminds(List<RemindDTO> reminds) {
+        DateTimeComparator dateTimeComparator = DateTimeComparator.getDateOnlyInstance();
+        LocalDate localDate = LocalDate.now();
+        if(datas == null){
+            datas = new ArrayList<>();
+        }else{
+            datas.clear();
+        }
+        if (reminds != null) {
+            for (RemindDTO item : reminds) {
+                LocalDate itemLocalDate = LocalDate.fromDateFields(item.getDate());
+                if (dateTimeComparator.compare(itemLocalDate.toDate(), localDate.toDate()) == 0) {
+                    datas.add(item);
+                }
+            }
+        }
     }
 
     public void setContext(Context context) {
@@ -90,7 +113,7 @@ public class TodayFragment extends AbstractTabFragment implements RemindItemClic
     }
 
     private void initFAB(View view) {
-        fab = (FloatingActionButton)view.findViewById(R.id.fab);
+        fab = (FloatingActionButton) view.findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -157,9 +180,9 @@ public class TodayFragment extends AbstractTabFragment implements RemindItemClic
     @Override
     public void onFinishEditDialog(RemindDTO remindItem, boolean fromEditDialog) {
         //SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
-        if(fromEditDialog){
+        if (fromEditDialog) {
             mTodayFragmentViewModel.update(remindItem);
-        }else{
+        } else {
             mTodayFragmentViewModel.insert(remindItem);
         }
     }
