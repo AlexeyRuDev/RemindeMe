@@ -55,15 +55,7 @@ public class ArchiveFragment extends AbstractTabFragment implements CreateItemDi
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mArchiveViewModel = ViewModelProviders.of(this).get(ArchiveViewModel.class);
-        mArchiveViewModel.getAllReminds().observe(this, new Observer<List<RemindDTO>>() {
-            @Override
-            public void onChanged(@Nullable final List<RemindDTO> reminds) {
-                // Update the cached copy of the words in the adapter.
-                adapter.setData(reminds);
-                datas = reminds;
-            }
-        });
+
     }
 
     @Nullable
@@ -75,6 +67,15 @@ public class ArchiveFragment extends AbstractTabFragment implements CreateItemDi
         rv.setLayoutManager(new LinearLayoutManager(context));
         adapter = new ArchiveListAdapter(datas, this);
         rv.setAdapter(adapter);
+        mArchiveViewModel = ViewModelProviders.of(this).get(ArchiveViewModel.class);
+        mArchiveViewModel.getAllReminds().observe(this, new Observer<List<RemindDTO>>() {
+            @Override
+            public void onChanged(@Nullable final List<RemindDTO> reminds) {
+                // Update the cached copy of the words in the adapter.
+                adapter.setData(reminds);
+                datas = reminds;
+            }
+        });
         return view;
     }
 
@@ -138,8 +139,7 @@ public class ArchiveFragment extends AbstractTabFragment implements CreateItemDi
 
     @Override
     public void onFragmentBecomesCurrent(boolean current) {
-        if (adapter != null)
-            adapter.notifyDataSetChanged();
+
     }
 
     @Override

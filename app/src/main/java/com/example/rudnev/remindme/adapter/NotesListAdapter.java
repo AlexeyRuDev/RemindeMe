@@ -80,6 +80,7 @@ public class NotesListAdapter extends RecyclerView.Adapter<NotesListAdapter.Remi
 
     public void setData(List<RemindDTO> data) {
         this.data = data;
+        notifyDataSetChanged();
     }
 
     public String getTitle(int position){

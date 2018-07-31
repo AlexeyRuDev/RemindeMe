@@ -56,6 +56,18 @@ public class TodayFragment extends AbstractTabFragment implements RemindItemClic
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+    }
+
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        view = inflater.inflate(LAYOUT, container, false);
+        initFAB(view);
+        rv = (RecyclerView)view.findViewById(R.id.recyclerView);
+        rv.setLayoutManager(new LinearLayoutManager(context));
+        adapter = new RemindListAdapter(this);
+        rv.setAdapter(adapter);
         mTodayFragmentViewModel = ViewModelProviders.of(this).get(TodayFragmentViewModel.class);
         mTodayFragmentViewModel.getAllReminds().observe(this, new Observer<List<RemindDTO>>() {
             @Override
@@ -65,18 +77,6 @@ public class TodayFragment extends AbstractTabFragment implements RemindItemClic
                 datas = reminds;
             }
         });
-    }
-
-    @Nullable
-    @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
-        view = inflater.inflate(LAYOUT, container, false);
-        initFAB(view);
-        rv = (RecyclerView)view.findViewById(R.id.recyclerView);
-        rv.setLayoutManager(new LinearLayoutManager(context));
-        adapter = new RemindListAdapter(this);
-        rv.setAdapter(adapter);
         return view;
     }
 
@@ -151,11 +151,6 @@ public class TodayFragment extends AbstractTabFragment implements RemindItemClic
 
     @Override
     public void onFragmentBecomesCurrent(boolean current) {
-
-        if(adapter!=null){
-            adapter.setData(datas);
-            adapter.notifyDataSetChanged();
-        }
 
     }
 

@@ -97,6 +97,7 @@ public class RemindListAdapter extends RecyclerView.Adapter<RemindListAdapter.Re
 
     public void setData(List<RemindDTO> data) {
         this.data = data;
+        notifyDataSetChanged();
     }
 
     public String getTitle(int position){

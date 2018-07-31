@@ -80,6 +80,7 @@ public class ArchiveListAdapter extends RecyclerView.Adapter<ArchiveListAdapter.
 
     public void setData(List<RemindDTO> data) {
         this.data = data;
+        notifyDataSetChanged();
     }
 
     public String getTitle(int position){

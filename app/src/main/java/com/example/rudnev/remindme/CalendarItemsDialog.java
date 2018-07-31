@@ -66,6 +66,16 @@ public class CalendarItemsDialog extends DialogFragment implements RemindItemCli
         adapter = new CalendarItemsListAdapter(this);
         listViewItems.setAdapter(adapter);
 
+        mCalendarItemsViewModel = ViewModelProviders.of(this).get(CalendarItemsViewModel.class);
+        mCalendarItemsViewModel.getAllReminds().observe(this, new Observer<List<RemindDTO>>() {
+            @Override
+            public void onChanged(@Nullable final List<RemindDTO> reminds) {
+                // Update the cached copy of the words in the adapter.
+                adapter.setData(reminds);
+                datas = reminds;
+            }
+        });
+
         addItem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -82,16 +92,7 @@ public class CalendarItemsDialog extends DialogFragment implements RemindItemCli
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setStyle(DialogFragment.STYLE_NO_TITLE, 0);
-        mCalendarItemsViewModel = ViewModelProviders.of(this).get(CalendarItemsViewModel.class);
-        //date bellow will be null
-        mCalendarItemsViewModel.getAllReminds().observe(this, new Observer<List<RemindDTO>>() {
-            @Override
-            public void onChanged(@Nullable final List<RemindDTO> reminds) {
-                // Update the cached copy of the words in the adapter.
-                adapter.setData(reminds);
-                datas = reminds;
-            }
-        });
+
     }
 
 
