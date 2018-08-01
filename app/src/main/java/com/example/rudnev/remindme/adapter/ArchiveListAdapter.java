@@ -25,6 +25,10 @@ public class ArchiveListAdapter extends RecyclerView.Adapter<ArchiveListAdapter.
         itemClickListener = remindItemClickListener;
     }
 
+    public ArchiveListAdapter(RemindItemClickListener remindItemClickListener){
+        itemClickListener = remindItemClickListener;
+    }
+
     @Override
     public ArchiveListAdapter.RemindViewHolder onCreateViewHolder(final ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.remind_item, parent, false);
@@ -81,6 +85,10 @@ public class ArchiveListAdapter extends RecyclerView.Adapter<ArchiveListAdapter.
     public void setData(List<RemindDTO> data) {
         this.data = data;
         notifyDataSetChanged();
+    }
+
+    public RemindDTO getItemById(int id){
+        return data.get(id);
     }
 
     public String getTitle(int position){

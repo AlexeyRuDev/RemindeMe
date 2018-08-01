@@ -1,5 +1,6 @@
 package com.example.rudnev.remindme.fragments;
 
+import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
@@ -38,23 +39,22 @@ public class TodayFragment extends AbstractTabFragment implements RemindItemClic
 
     private static final int LAYOUT = R.layout.today_fragment;
     private static final int REQUEST_TODAY = 1;
+    Observer<List<RemindDTO>> observer;
 
     private static final String TAG = "TODAY_FRAGMENT";
 
-    private TodayFragmentViewModel mTodayFragmentViewModel;
 
 
     private FloatingActionButton fab;
-    private List<RemindDTO> datas;
+
     private RemindListAdapter adapter;
     RecyclerView rv;
 
-    public static TodayFragment getInstance(Context context, List<RemindDTO> datas) {
+    public static TodayFragment getInstance(Context context) {
 
         Bundle args = new Bundle();
         TodayFragment todayFragment = new TodayFragment();
         todayFragment.setArguments(args);
-        todayFragment.setData(datas);
         todayFragment.setContext(context);
         todayFragment.setTitle(context.getString(R.string.today_tab));
         return todayFragment;
@@ -76,14 +76,24 @@ public class TodayFragment extends AbstractTabFragment implements RemindItemClic
         rv.setLayoutManager(new LinearLayoutManager(context));
         adapter = new RemindListAdapter(this);
         rv.setAdapter(adapter);
-        mTodayFragmentViewModel = ViewModelProviders.of(this).get(TodayFragmentViewModel.class);
-        mTodayFragmentViewModel.getAllReminds().observe(this, new Observer<List<RemindDTO>>() {
+        /*observer = new Observer<List<RemindDTO>>() {
+            @Override
+            public void onChanged(@Nullable List<RemindDTO> remindDTOS) {
+                Log.d(TAG, "OnChanged ");
+                if(remindDTOS!=null) {
+                    filterListReminds(remindDTOS);
+                    //adapter.setData(datas);
+                }
+            }
+        };
+        mViewModel.getAllReminds().observeForever(observer);*/
+        mViewModel.getAllReminds().observe(this, new Observer<List<RemindDTO>>() {
             @Override
             public void onChanged(@Nullable final List<RemindDTO> reminds) {
                 // Update the cached copy of the words in the adapter.
                 Log.d(TAG, "OnChanged ");
                 filterListReminds(reminds);
-                adapter.setData(datas);
+                //adapter.setData(datas);
 
             }
         });
@@ -93,11 +103,7 @@ public class TodayFragment extends AbstractTabFragment implements RemindItemClic
     private void filterListReminds(List<RemindDTO> reminds) {
         DateTimeComparator dateTimeComparator = DateTimeComparator.getDateOnlyInstance();
         LocalDate localDate = LocalDate.now();
-        if(datas == null){
-            datas = new ArrayList<>();
-        }else{
-            datas.clear();
-        }
+        List<RemindDTO>datas = new ArrayList<>();
         if (reminds != null) {
             for (RemindDTO item : reminds) {
                 LocalDate itemLocalDate = LocalDate.fromDateFields(item.getDate());
@@ -106,16 +112,13 @@ public class TodayFragment extends AbstractTabFragment implements RemindItemClic
                 }
             }
         }
+        adapter.setData(datas);
     }
 
     public void setContext(Context context) {
         this.context = context;
     }
 
-
-    public void setData(List<RemindDTO> data) {
-        this.datas = data;
-    }
 
     private void initFAB(View view) {
         fab = (FloatingActionButton) view.findViewById(R.id.fab);
@@ -136,7 +139,7 @@ public class TodayFragment extends AbstractTabFragment implements RemindItemClic
 
     @Override
     public void remindListRemoveClicked(View v, int position) {
-        mTodayFragmentViewModel.delete(datas.get(position));
+        mViewModel.delete(adapter.getItemById(position));
     }
 
     @Override
@@ -144,14 +147,19 @@ public class TodayFragment extends AbstractTabFragment implements RemindItemClic
         FragmentManager fm = getActivity().getSupportFragmentManager();
         CreateItemDialog createItemDialog = new CreateItemDialog();
         createItemDialog.setTargetFragment(this, REQUEST_TODAY);
-        createItemDialog.setmUpdateRemindItem(datas.get(position));
+        createItemDialog.setmUpdateRemindItem(adapter.getItemById(position));
 
         createItemDialog.show(fm, "create_item_dialog");
     }
 
+    /*@Override
+    public void onDestroy() {
+        super.onDestroy();
+        mViewModel.getAllReminds().removeObserver(observer);
+    }*/
+
     @Override
     public void popupMenuItemClicked(final View view, final int position) {
-        // pass the imageview id
         View menuItemView = view.findViewById(R.id.ib_popup_menu);
         PopupMenu popup = new PopupMenu(view.getContext(), menuItemView);
         MenuInflater inflate = popup.getMenuInflater();
@@ -186,9 +194,9 @@ public class TodayFragment extends AbstractTabFragment implements RemindItemClic
     public void onFinishEditDialog(RemindDTO remindItem, boolean fromEditDialog) {
         //SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
         if (fromEditDialog) {
-            mTodayFragmentViewModel.update(remindItem);
+            mViewModel.update(remindItem);
         } else {
-            mTodayFragmentViewModel.insert(remindItem);
+            mViewModel.insert(remindItem);
         }
     }
 }

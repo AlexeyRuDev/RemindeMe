@@ -1,8 +1,16 @@
 package com.example.rudnev.remindme.fragments;
 
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.View;
+
+import com.example.rudnev.remindme.dto.RemindDTO;
+import com.example.rudnev.remindme.viewmodels.TodayFragmentViewModel;
+
+import java.util.List;
 
 
 public class AbstractTabFragment extends Fragment {
@@ -10,6 +18,7 @@ public class AbstractTabFragment extends Fragment {
     private String title;
     protected View view;
     protected Context context;
+    protected TodayFragmentViewModel mViewModel;
 
     public String getTitle() {
         return title;
@@ -19,4 +28,9 @@ public class AbstractTabFragment extends Fragment {
         this.title = title;
     }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mViewModel = ViewModelProviders.of(this).get(TodayFragmentViewModel.class);
+    }
 }

@@ -54,8 +54,8 @@ public class TabFragmentAdapter extends FragmentStatePagerAdapter implements Tab
 
     private void initTabsMap(Context context){
         tabs = new TreeMap<>();
-        todayFragment = TodayFragment.getInstance(context, datas);
-        archiveFragment = ArchiveFragment.getInstance(context, datas);
+        todayFragment = TodayFragment.getInstance(context);
+        archiveFragment = ArchiveFragment.getInstance(context);
         tabs.put(0, todayFragment);
         tabs.put(1, CalendarFragment.getInstance(context));
         tabs.put(2, archiveFragment);

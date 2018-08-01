@@ -83,6 +83,10 @@ public class NotesListAdapter extends RecyclerView.Adapter<NotesListAdapter.Remi
         notifyDataSetChanged();
     }
 
+    public RemindDTO getItemById(int id){
+        return data.get(id);
+    }
+
     public String getTitle(int position){
 
         return data.get(position).getTitle();

@@ -18,6 +18,7 @@ import com.example.rudnev.remindme.adapter.TabFragmentAdapter;
 import com.example.rudnev.remindme.dto.RemindDTO;
 import com.example.rudnev.remindme.sql.RemindDBAdapter;
 import com.example.rudnev.remindme.viewmodels.CalendarViewModel;
+import com.example.rudnev.remindme.viewmodels.TodayFragmentViewModel;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
@@ -40,8 +41,8 @@ public class CalendarFragment extends AbstractTabFragment implements TabFragment
     private static final int CALENDARFRAGMENT = 1;
     private MaterialCalendarView calendarView;
     HashSet<CalendarDay> dates;
-    List<RemindDTO> datas;
-    private CalendarViewModel mCalendarViewModel;
+    private List<RemindDTO> datas;
+    Observer<List<RemindDTO>> observer;
 
 
     public static CalendarFragment getInstance(Context context) {
@@ -69,14 +70,22 @@ public class CalendarFragment extends AbstractTabFragment implements TabFragment
         calendarView.setPagingEnabled(false);
 
         dates = new HashSet<CalendarDay>();
-        mCalendarViewModel = ViewModelProviders.of(this).get(CalendarViewModel.class);
-        mCalendarViewModel.getAllReminds().observe(this, new Observer<List<RemindDTO>>() {
+        /*observer = new Observer<List<RemindDTO>>() {
+            @Override
+            public void onChanged(@Nullable List<RemindDTO> remindDTOS) {
+                Log.d(TAG, "OnChanged ");
+                if(remindDTOS!=null) {
+                    filterListReminds(remindDTOS);
+                    //updateCalendar(datas);
+                }
+            }
+        };
+        mViewModel.getAllReminds().observeForever(observer);*/
+        mViewModel.getAllReminds().observe(this, new Observer<List<RemindDTO>>() {
             @Override
             public void onChanged(@Nullable final List<RemindDTO> reminds) {
                 Log.d(TAG, "OnChanged ");
                 filterListReminds(reminds);
-                if(datas != null)
-                    updateCalendar(datas);
             }
         });
 
@@ -88,7 +97,7 @@ public class CalendarFragment extends AbstractTabFragment implements TabFragment
                 calendar.set(Calendar.MONTH, date.getMonth());
                 calendar.set(Calendar.DATE, date.getDay());
                 widget.addDecorator(new EventDecorator(R.color.colorPrimary, dates, context));
-                CalendarItemsDialog calendarItemsDialog = CalendarItemsDialog.getInstance(context, calendar.getTime());
+                CalendarItemsDialog calendarItemsDialog = CalendarItemsDialog.getInstance(context, calendar.getTime(), mViewModel);
                 calendarItemsDialog.setTargetFragment(CalendarFragment.this, CALENDARFRAGMENT);
                 calendarItemsDialog.show(getFragmentManager(), "add_calendar_item");
 
@@ -101,11 +110,7 @@ public class CalendarFragment extends AbstractTabFragment implements TabFragment
     private void filterListReminds(List<RemindDTO> reminds) {
         DateTimeComparator dateTimeComparator = DateTimeComparator.getDateOnlyInstance();
         LocalDate localDate = LocalDate.now();
-        if(datas == null){
-            datas = new ArrayList<>();
-        }else{
-            datas.clear();
-        }
+        datas = new ArrayList<>();
         if (reminds != null) {
             for (RemindDTO item : reminds) {
                 LocalDate itemLocalDate = LocalDate.fromDateFields(item.getDate());
@@ -114,6 +119,7 @@ public class CalendarFragment extends AbstractTabFragment implements TabFragment
                 }
             }
         }
+        updateCalendar(datas);
     }
 
     public void setContext(Context context) {
@@ -123,15 +129,15 @@ public class CalendarFragment extends AbstractTabFragment implements TabFragment
     @Override
     public void onFragmentBecomesCurrent(boolean current) {
 
-        if (datas!=null && (calendarView != null || dates != null))
-            updateCalendar(datas);
+       /* if (datas!=null && (calendarView != null || dates != null))
+            updateCalendar(datas);*/
     }
 
     private void updateCalendar(List<RemindDTO> datas) {
 
         dates.clear();
         calendarView.removeDecorators();
-        dates = mCalendarViewModel.updateCalendar(datas);
+        dates = mViewModel.updateCalendar(datas);
         calendarView.addDecorator(new EventDecorator(R.color.colorPrimary, dates, context));
     }
 
@@ -140,5 +146,11 @@ public class CalendarFragment extends AbstractTabFragment implements TabFragment
         if(datas != null)
             updateCalendar(datas);
     }
+
+    /*@Override
+    public void onDestroy() {
+        super.onDestroy();
+        mViewModel.getAllReminds().removeObserver(observer);
+    }*/
 
 }

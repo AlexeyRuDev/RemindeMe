@@ -23,6 +23,7 @@ import com.example.rudnev.remindme.adapter.ArchiveListAdapter;
 import com.example.rudnev.remindme.adapter.TabFragmentAdapter;
 import com.example.rudnev.remindme.dto.RemindDTO;
 import com.example.rudnev.remindme.viewmodels.ArchiveViewModel;
+import com.example.rudnev.remindme.viewmodels.TodayFragmentViewModel;
 
 import org.joda.time.DateTimeComparator;
 import org.joda.time.LocalDate;
@@ -41,18 +42,15 @@ public class ArchiveFragment extends AbstractTabFragment implements CreateItemDi
     private static final int REQUEST_ARCHIVE = 3;
     private static final String TAG = "ARCHIVE_FRAGMENT";
 
-    private List<RemindDTO> datas;
     private ArchiveListAdapter adapter;
     RecyclerView rv;
+    Observer<List<RemindDTO>> observer;
 
 
-    private ArchiveViewModel mArchiveViewModel;
-
-    public static ArchiveFragment getInstance(Context context, List<RemindDTO> datas) {
+    public static ArchiveFragment getInstance(Context context) {
         Bundle args = new Bundle();
         ArchiveFragment archiveFragment = new ArchiveFragment();
         archiveFragment.setArguments(args);
-        archiveFragment.setData(datas);
         archiveFragment.setContext(context);
         archiveFragment.setTitle(context.getString(R.string.archive_tab));
         return archiveFragment;
@@ -71,16 +69,25 @@ public class ArchiveFragment extends AbstractTabFragment implements CreateItemDi
         view = inflater.inflate(LAYOUT, container, false);
         rv = (RecyclerView) view.findViewById(R.id.recyclerViewArchive);
         rv.setLayoutManager(new LinearLayoutManager(context));
-        adapter = new ArchiveListAdapter(datas, this);
+        adapter = new ArchiveListAdapter( this);
         rv.setAdapter(adapter);
-        mArchiveViewModel = ViewModelProviders.of(this).get(ArchiveViewModel.class);
-        mArchiveViewModel.getAllReminds().observe(this, new Observer<List<RemindDTO>>() {
+        /*observer = new Observer<List<RemindDTO>>() {
+            @Override
+            public void onChanged(@Nullable List<RemindDTO> remindDTOS) {
+                Log.d(TAG, "OnChanged ");
+                if(remindDTOS!=null) {
+                    filterListReminds(remindDTOS);
+                    //adapter.setData(datas);
+                }
+            }
+        };
+        mViewModel.getAllReminds().observeForever(observer);*/
+        mViewModel.getAllReminds().observe(this, new Observer<List<RemindDTO>>() {
             @Override
             public void onChanged(@Nullable final List<RemindDTO> reminds) {
                 // Update the cached copy of the words in the adapter.
                 Log.d(TAG, "OnChanged ");
                 filterListReminds(reminds);
-                adapter.setData(datas);
             }
         });
         return view;
@@ -89,11 +96,8 @@ public class ArchiveFragment extends AbstractTabFragment implements CreateItemDi
     private void filterListReminds(List<RemindDTO> reminds) {
         DateTimeComparator dateTimeComparator = DateTimeComparator.getDateOnlyInstance();
         LocalDate localDate = LocalDate.now();
-        if(datas == null){
-            datas = new ArrayList<>();
-        }else{
-            datas.clear();
-        }
+        List<RemindDTO>datas = new ArrayList<>();
+
         if (reminds != null) {
             for (RemindDTO item : reminds) {
                 LocalDate itemLocalDate = LocalDate.fromDateFields(item.getDate());
@@ -102,6 +106,7 @@ public class ArchiveFragment extends AbstractTabFragment implements CreateItemDi
                 }
             }
         }
+        adapter.setData(datas);
     }
 
     public void setContext(Context context) {
@@ -109,26 +114,23 @@ public class ArchiveFragment extends AbstractTabFragment implements CreateItemDi
     }
 
 
-    public void setData(List<RemindDTO> data) {
-        this.datas = data;
-    }
 
 
     @Override
     public void remindListRemoveClicked(View v, int position) {
-        mArchiveViewModel.delete(datas.get(position));
+        mViewModel.delete(adapter.getItemById(position));
     }
 
     @Override
     public void remindListUpdateClicked(View v, int position) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
         Calendar calendar = Calendar.getInstance();
-        calendar.setTime(datas.get(position).getDate());
+        calendar.setTime(adapter.getItemById(position).getDate());
         FragmentManager fm = getActivity().getSupportFragmentManager();
         CreateItemDialog createItemDialog = new CreateItemDialog();
         createItemDialog.setTargetFragment(this, REQUEST_ARCHIVE);
         createItemDialog.setDateField(calendar);
-        createItemDialog.setmUpdateRemindItem(datas.get(position));
+        createItemDialog.setmUpdateRemindItem(adapter.getItemById(position));
         createItemDialog.show(fm, "create_item_dialog");
 
     }
@@ -169,11 +171,17 @@ public class ArchiveFragment extends AbstractTabFragment implements CreateItemDi
     @Override
     public void onFinishEditDialog(RemindDTO remindItem, boolean fromEditDialog) {
         if (fromEditDialog) {
-            mArchiveViewModel.update(remindItem);
+            mViewModel.update(remindItem);
         } else {
-            mArchiveViewModel.insert(remindItem);
+            mViewModel.insert(remindItem);
         }
     }
+
+   /* @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mViewModel.getAllReminds().removeObserver(observer);
+    }*/
 
 
 }

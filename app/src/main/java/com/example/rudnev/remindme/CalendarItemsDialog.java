@@ -22,6 +22,7 @@ import com.example.rudnev.remindme.adapter.CalendarItemsListAdapter;
 import com.example.rudnev.remindme.dto.RemindDTO;
 import com.example.rudnev.remindme.sql.RemindDBAdapter;
 import com.example.rudnev.remindme.viewmodels.CalendarItemsViewModel;
+import com.example.rudnev.remindme.viewmodels.TodayFragmentViewModel;
 
 import org.joda.time.DateTimeComparator;
 import org.joda.time.LocalDate;
@@ -47,15 +48,17 @@ public class CalendarItemsDialog extends DialogFragment implements RemindItemCli
     private RemindDBAdapter dbAdapter;
     private Context context;
     private long mItemID;
+    private TodayFragmentViewModel mViewModel;
+    Observer<List<RemindDTO>> observer;
 
-    private CalendarItemsViewModel mCalendarItemsViewModel;
 
-    public static CalendarItemsDialog getInstance(Context context, Date date) {
+    public static CalendarItemsDialog getInstance(Context context, Date date, TodayFragmentViewModel mViewModel) {
         Bundle args = new Bundle();
         CalendarItemsDialog calendarFragment = new CalendarItemsDialog();
         calendarFragment.setArguments(args);
         calendarFragment.setContext(context);
         calendarFragment.setDate(date);
+        calendarFragment.setViewModel(mViewModel);
         return calendarFragment;
     }
 
@@ -72,8 +75,17 @@ public class CalendarItemsDialog extends DialogFragment implements RemindItemCli
         adapter = new CalendarItemsListAdapter(this);
         listViewItems.setAdapter(adapter);
 
-        mCalendarItemsViewModel = ViewModelProviders.of(this).get(CalendarItemsViewModel.class);
-        mCalendarItemsViewModel.getAllReminds().observe(this, new Observer<List<RemindDTO>>() {
+        observer = new Observer<List<RemindDTO>>() {
+            @Override
+            public void onChanged(@Nullable List<RemindDTO> remindDTOS) {
+                Log.d(TAG, "OnChanged ");
+                if(remindDTOS!=null) {
+                    filterListReminds(remindDTOS);
+                }
+            }
+        };
+        mViewModel.getAllReminds().observeForever(observer);
+        /*mViewModel.getAllReminds().observe(this, new Observer<List<RemindDTO>>() {
             @Override
             public void onChanged(@Nullable final List<RemindDTO> reminds) {
                 // Update the cached copy of the words in the adapter.
@@ -82,7 +94,7 @@ public class CalendarItemsDialog extends DialogFragment implements RemindItemCli
                 adapter.setData(datas);
 
             }
-        });
+        });*/
 
         addItem.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -108,9 +120,9 @@ public class CalendarItemsDialog extends DialogFragment implements RemindItemCli
     private void filterListReminds(List<RemindDTO> reminds) {
         DateTimeComparator dateTimeComparator = DateTimeComparator.getDateOnlyInstance();
         LocalDate localDate = LocalDate.fromDateFields(date);
-        if(datas == null){
+        if (datas == null) {
             datas = new ArrayList<>();
-        }else{
+        } else {
             datas.clear();
         }
         if (reminds != null) {
@@ -121,6 +133,7 @@ public class CalendarItemsDialog extends DialogFragment implements RemindItemCli
                 }
             }
         }
+        adapter.setData(datas);
     }
 
     public void setContext(Context context) {
@@ -129,7 +142,7 @@ public class CalendarItemsDialog extends DialogFragment implements RemindItemCli
 
     @Override
     public void remindListRemoveClicked(View v, int position) {
-        mCalendarItemsViewModel.delete(datas.get(position));
+        mViewModel.delete(datas.get(position));
     }
 
     @Override
@@ -186,13 +199,23 @@ public class CalendarItemsDialog extends DialogFragment implements RemindItemCli
         this.datas = data;
     }
 
+    public void setViewModel(TodayFragmentViewModel viewModel){
+        this.mViewModel = viewModel;
+    }
+
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mViewModel.getAllReminds().removeObserver(observer);
+    }
 
     @Override
     public void onFinishEditDialog(RemindDTO remindItem, boolean fromEditDialog) {
         if (fromEditDialog) {
-            mCalendarItemsViewModel.update(remindItem);
+            mViewModel.update(remindItem);
         } else {
-            mCalendarItemsViewModel.insert(remindItem);
+            mViewModel.insert(remindItem);
         }
     }
 

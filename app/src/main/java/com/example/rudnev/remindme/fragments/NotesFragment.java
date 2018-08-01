@@ -23,7 +23,7 @@ public class NotesFragment extends AbstractTabFragment implements RemindItemClic
 
     private static final int LAYOUT = R.layout.notes_fragment;
 
-    private List<RemindDTO> datas;
+    //private List<RemindDTO> datas;
     private ArchiveListAdapter adapter;
     RecyclerView rv;
     private RemindDBAdapter dbAdapter;

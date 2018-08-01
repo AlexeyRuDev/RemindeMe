@@ -87,6 +87,10 @@ public class CalendarItemsListAdapter extends RecyclerView.Adapter<CalendarItems
         notifyDataSetChanged();
     }
 
+    public RemindDTO getItemById(int id){
+        return data.get(id);
+    }
+
     public String getTitle(int position){
 
         return data.get(position).getTitle();
