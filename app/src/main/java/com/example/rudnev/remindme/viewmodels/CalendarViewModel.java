@@ -26,7 +26,7 @@ public class CalendarViewModel extends AndroidViewModel {
     public CalendarViewModel(Application application) {
         super(application);
         mRepository = new RemindMeRepository(application);
-        mAllReminds = mRepository.getRemindsForCalendar();
+        mAllReminds = mRepository.getAllReminds();
         dates = new HashSet<>();
     }
 

@@ -22,7 +22,7 @@ public class CalendarItemsViewModel extends AndroidViewModel {
     public CalendarItemsViewModel(Application application) {
         super(application);
         mRepository = new RemindMeRepository(application);
-        mAllReminds = mRepository.getRemindsForCalendar();
+        mAllReminds = mRepository.getAllReminds();
     }
 
     public LiveData<List<RemindDTO>> getAllReminds() {

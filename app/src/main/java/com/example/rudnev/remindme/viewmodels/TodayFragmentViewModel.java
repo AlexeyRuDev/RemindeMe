@@ -18,7 +18,7 @@ public class TodayFragmentViewModel extends AndroidViewModel {
     public TodayFragmentViewModel (Application application) {
         super(application);
         mRepository = new RemindMeRepository(application);
-        mAllReminds = mRepository.getRemindsForToday();
+        mAllReminds = mRepository.getAllReminds();
     }
 
     public LiveData<List<RemindDTO>> getAllReminds() { return mAllReminds; }

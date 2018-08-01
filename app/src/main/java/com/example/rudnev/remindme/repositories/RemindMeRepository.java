@@ -32,9 +32,9 @@ public class RemindMeRepository {
         String date = sdf.format(calendar.getTime());
         remindMeDAO = db.remindMeDAO();
         mAllReminds = remindMeDAO.getAllReminds();
-        mRemindsForToday = mAllReminds;//remindMeDAO.getRemindsForTodayFragment(localDate.toDate());
-        mRemindsForArchive = mAllReminds;//remindMeDAO.getRemindsForArchiveFragment(calendar.getTime());
-        mRemindsForCalendar = mAllReminds;//remindMeDAO.getRemindsForCalendarFragment(calendar.getTime());
+        //mRemindsForToday = mAllReminds;//remindMeDAO.getRemindsForTodayFragment(localDate.toDate());
+        //mRemindsForArchive = mAllReminds;//remindMeDAO.getRemindsForArchiveFragment(calendar.getTime());
+        //mRemindsForCalendar = mAllReminds;//remindMeDAO.getRemindsForCalendarFragment(calendar.getTime());
     }
 
     public LiveData<List<RemindDTO>> getAllReminds() {

@@ -9,6 +9,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -38,6 +39,7 @@ public class ArchiveFragment extends AbstractTabFragment implements CreateItemDi
 
     private static final int LAYOUT = R.layout.archive_fragment;
     private static final int REQUEST_ARCHIVE = 3;
+    private static final String TAG = "ARCHIVE_FRAGMENT";
 
     private List<RemindDTO> datas;
     private ArchiveListAdapter adapter;
@@ -59,13 +61,13 @@ public class ArchiveFragment extends AbstractTabFragment implements CreateItemDi
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        Log.d(TAG, "OnCreate ");
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
+        Log.d(TAG, "OnCreateView ");
         view = inflater.inflate(LAYOUT, container, false);
         rv = (RecyclerView) view.findViewById(R.id.recyclerViewArchive);
         rv.setLayoutManager(new LinearLayoutManager(context));
@@ -76,6 +78,7 @@ public class ArchiveFragment extends AbstractTabFragment implements CreateItemDi
             @Override
             public void onChanged(@Nullable final List<RemindDTO> reminds) {
                 // Update the cached copy of the words in the adapter.
+                Log.d(TAG, "OnChanged ");
                 filterListReminds(reminds);
                 adapter.setData(datas);
             }

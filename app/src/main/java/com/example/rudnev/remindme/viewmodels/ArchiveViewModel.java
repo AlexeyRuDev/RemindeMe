@@ -18,7 +18,7 @@ public class ArchiveViewModel extends AndroidViewModel {
     public ArchiveViewModel (Application application) {
         super(application);
         mRepository = new RemindMeRepository(application);
-        mAllReminds = mRepository.getRemindsForArchive();
+        mAllReminds = mRepository.getAllReminds();
     }
 
     public LiveData<List<RemindDTO>> getAllReminds() { return mAllReminds; }

@@ -6,6 +6,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,6 +34,8 @@ import java.util.List;
 public class CalendarFragment extends AbstractTabFragment implements TabFragmentAdapter.TabSelectedListener,
         CalendarItemsDialog.CalendarItemsUpdateListener {
 
+
+    private static final String TAG = "CALENDAR_FRAGMENT";
     private static final int LAYOUT = R.layout.calendar_fragment;
     private static final int CALENDARFRAGMENT = 1;
     private MaterialCalendarView calendarView;
@@ -53,25 +56,29 @@ public class CalendarFragment extends AbstractTabFragment implements TabFragment
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mCalendarViewModel = ViewModelProviders.of(this).get(CalendarViewModel.class);
-        mCalendarViewModel.getAllReminds().observe(this, new Observer<List<RemindDTO>>() {
-            @Override
-            public void onChanged(@Nullable final List<RemindDTO> reminds) {
-                filterListReminds(reminds);
-                updateCalendar(datas);
-            }
-        });
+        Log.d(TAG, "OnCreate ");
+
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        Log.d(TAG, "OnCreateView ");
         view = inflater.inflate(LAYOUT, container, false);
         calendarView = view.findViewById(R.id.calendarView);
         calendarView.setPagingEnabled(false);
+
         dates = new HashSet<CalendarDay>();
-        if(datas != null)
-            updateCalendar(datas);
+        mCalendarViewModel = ViewModelProviders.of(this).get(CalendarViewModel.class);
+        mCalendarViewModel.getAllReminds().observe(this, new Observer<List<RemindDTO>>() {
+            @Override
+            public void onChanged(@Nullable final List<RemindDTO> reminds) {
+                Log.d(TAG, "OnChanged ");
+                filterListReminds(reminds);
+                if(datas != null)
+                    updateCalendar(datas);
+            }
+        });
 
         calendarView.setOnDateChangedListener(new OnDateSelectedListener() {
             @Override

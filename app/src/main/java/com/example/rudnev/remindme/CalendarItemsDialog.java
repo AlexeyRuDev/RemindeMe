@@ -10,6 +10,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -35,6 +36,7 @@ import java.util.Locale;
 
 public class CalendarItemsDialog extends DialogFragment implements RemindItemClickListener, CreateItemDialog.EditNameDialogListener {
 
+    private static final String TAG = "CALENDAR_ITEMS_DIALOG";
     private static final int REQUEST_CALENDAR_DIALOG = 2;
     private List<RemindDTO> datas;
     private RecyclerView listViewItems;
@@ -60,6 +62,7 @@ public class CalendarItemsDialog extends DialogFragment implements RemindItemCli
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        Log.d(TAG, "OnCreateView ");
         View view = inflater.inflate(R.layout.calendar_items_dialog, container);
         addItem = view.findViewById(R.id.addCalItem);
         listViewItems = view.findViewById(R.id.recyclerViewCalItems);
@@ -74,6 +77,7 @@ public class CalendarItemsDialog extends DialogFragment implements RemindItemCli
             @Override
             public void onChanged(@Nullable final List<RemindDTO> reminds) {
                 // Update the cached copy of the words in the adapter.
+                Log.d(TAG, "OnChange ");
                 filterListReminds(reminds);
                 adapter.setData(datas);
 
@@ -95,6 +99,7 @@ public class CalendarItemsDialog extends DialogFragment implements RemindItemCli
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.d(TAG, "OnCreate ");
         setStyle(DialogFragment.STYLE_NO_TITLE, 0);
 
     }

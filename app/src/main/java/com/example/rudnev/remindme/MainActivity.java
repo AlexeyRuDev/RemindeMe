@@ -103,7 +103,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onPageSelected(int position) {
-                Log.i("PageSelected position ", " " + position);
+                //Log.i("PageSelected position ", " " + position);
 
             }
 
