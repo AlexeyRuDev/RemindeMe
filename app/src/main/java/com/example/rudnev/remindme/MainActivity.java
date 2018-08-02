@@ -34,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private DrawerLayout drawerLayout;
     private ViewPager viewPager;
+    private FloatingActionButton fab;
 
     private TabFragmentAdapter adapter;
 
@@ -46,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
         JodaTimeAndroid.init(this);
         initNavigationView();
         initTabs();
+        initFAB();
 
         //Notification
         AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
@@ -57,6 +59,17 @@ public class MainActivity extends AppCompatActivity {
         Objects.requireNonNull(alarmManager).setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), broadCast);
     }
 
+
+    private void initFAB() {
+        fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(adapter!=null && viewPager!=null && viewPager.getCurrentItem()==0)
+                    adapter.showEditDialog();
+            }
+        });
+    }
 
     private void initToolbar() {
         toolbar = (Toolbar)findViewById(R.id.toolbar);
@@ -104,7 +117,11 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onPageSelected(int position) {
                 //Log.i("PageSelected position ", " " + position);
-
+                if(position == Constants.TAB_TODAY){
+                    fab.show();
+                }else{
+                    fab.hide();
+                }
             }
 
             @Override

@@ -1,7 +1,6 @@
 package com.example.rudnev.remindme;
 
 import android.arch.lifecycle.Observer;
-import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -21,13 +20,11 @@ import android.widget.Button;
 import com.example.rudnev.remindme.adapter.CalendarItemsListAdapter;
 import com.example.rudnev.remindme.dto.RemindDTO;
 import com.example.rudnev.remindme.sql.RemindDBAdapter;
-import com.example.rudnev.remindme.viewmodels.CalendarItemsViewModel;
 import com.example.rudnev.remindme.viewmodels.TodayFragmentViewModel;
 
 import org.joda.time.DateTimeComparator;
 import org.joda.time.LocalDate;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -49,7 +46,6 @@ public class CalendarItemsDialog extends DialogFragment implements RemindItemCli
     private Context context;
     private long mItemID;
     private TodayFragmentViewModel mViewModel;
-    Observer<List<RemindDTO>> observer;
 
 
     public static CalendarItemsDialog getInstance(Context context, Date date, TodayFragmentViewModel mViewModel) {
@@ -65,7 +61,6 @@ public class CalendarItemsDialog extends DialogFragment implements RemindItemCli
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        Log.d(TAG, "OnCreateView ");
         View view = inflater.inflate(R.layout.calendar_items_dialog, container);
         addItem = view.findViewById(R.id.addCalItem);
         listViewItems = view.findViewById(R.id.recyclerViewCalItems);
@@ -75,26 +70,13 @@ public class CalendarItemsDialog extends DialogFragment implements RemindItemCli
         adapter = new CalendarItemsListAdapter(this);
         listViewItems.setAdapter(adapter);
 
-        observer = new Observer<List<RemindDTO>>() {
-            @Override
-            public void onChanged(@Nullable List<RemindDTO> remindDTOS) {
-                Log.d(TAG, "OnChanged ");
-                if(remindDTOS!=null) {
-                    filterListReminds(remindDTOS);
-                }
-            }
-        };
-        mViewModel.getAllReminds().observeForever(observer);
-        /*mViewModel.getAllReminds().observe(this, new Observer<List<RemindDTO>>() {
+        mViewModel.getAllReminds().observe(this, new Observer<List<RemindDTO>>() {
             @Override
             public void onChanged(@Nullable final List<RemindDTO> reminds) {
-                // Update the cached copy of the words in the adapter.
-                Log.d(TAG, "OnChange ");
                 filterListReminds(reminds);
-                adapter.setData(datas);
 
             }
-        });*/
+        });
 
         addItem.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -111,7 +93,6 @@ public class CalendarItemsDialog extends DialogFragment implements RemindItemCli
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.d(TAG, "OnCreate ");
         setStyle(DialogFragment.STYLE_NO_TITLE, 0);
 
     }
@@ -203,12 +184,6 @@ public class CalendarItemsDialog extends DialogFragment implements RemindItemCli
         this.mViewModel = viewModel;
     }
 
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        mViewModel.getAllReminds().removeObserver(observer);
-    }
 
     @Override
     public void onFinishEditDialog(RemindDTO remindItem, boolean fromEditDialog) {

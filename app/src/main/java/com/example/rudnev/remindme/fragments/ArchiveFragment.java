@@ -1,7 +1,6 @@
 package com.example.rudnev.remindme.fragments;
 
 import android.arch.lifecycle.Observer;
-import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -22,8 +21,6 @@ import com.example.rudnev.remindme.RemindItemClickListener;
 import com.example.rudnev.remindme.adapter.ArchiveListAdapter;
 import com.example.rudnev.remindme.adapter.TabFragmentAdapter;
 import com.example.rudnev.remindme.dto.RemindDTO;
-import com.example.rudnev.remindme.viewmodels.ArchiveViewModel;
-import com.example.rudnev.remindme.viewmodels.TodayFragmentViewModel;
 
 import org.joda.time.DateTimeComparator;
 import org.joda.time.LocalDate;
@@ -44,7 +41,6 @@ public class ArchiveFragment extends AbstractTabFragment implements CreateItemDi
 
     private ArchiveListAdapter adapter;
     RecyclerView rv;
-    Observer<List<RemindDTO>> observer;
 
 
     public static ArchiveFragment getInstance(Context context) {
@@ -59,34 +55,20 @@ public class ArchiveFragment extends AbstractTabFragment implements CreateItemDi
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.d(TAG, "OnCreate ");
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        Log.d(TAG, "OnCreateView ");
         view = inflater.inflate(LAYOUT, container, false);
         rv = (RecyclerView) view.findViewById(R.id.recyclerViewArchive);
         rv.setLayoutManager(new LinearLayoutManager(context));
         adapter = new ArchiveListAdapter( this);
         rv.setAdapter(adapter);
-        /*observer = new Observer<List<RemindDTO>>() {
-            @Override
-            public void onChanged(@Nullable List<RemindDTO> remindDTOS) {
-                Log.d(TAG, "OnChanged ");
-                if(remindDTOS!=null) {
-                    filterListReminds(remindDTOS);
-                    //adapter.setData(datas);
-                }
-            }
-        };
-        mViewModel.getAllReminds().observeForever(observer);*/
+
         mViewModel.getAllReminds().observe(this, new Observer<List<RemindDTO>>() {
             @Override
             public void onChanged(@Nullable final List<RemindDTO> reminds) {
-                // Update the cached copy of the words in the adapter.
-                Log.d(TAG, "OnChanged ");
                 filterListReminds(reminds);
             }
         });
@@ -176,12 +158,5 @@ public class ArchiveFragment extends AbstractTabFragment implements CreateItemDi
             mViewModel.insert(remindItem);
         }
     }
-
-   /* @Override
-    public void onDestroy() {
-        super.onDestroy();
-        mViewModel.getAllReminds().removeObserver(observer);
-    }*/
-
 
 }

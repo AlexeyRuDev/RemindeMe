@@ -1,7 +1,6 @@
 package com.example.rudnev.remindme.fragments;
 
 import android.arch.lifecycle.Observer;
-import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -16,9 +15,6 @@ import com.example.rudnev.remindme.EventDecorator;
 import com.example.rudnev.remindme.R;
 import com.example.rudnev.remindme.adapter.TabFragmentAdapter;
 import com.example.rudnev.remindme.dto.RemindDTO;
-import com.example.rudnev.remindme.sql.RemindDBAdapter;
-import com.example.rudnev.remindme.viewmodels.CalendarViewModel;
-import com.example.rudnev.remindme.viewmodels.TodayFragmentViewModel;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
@@ -42,7 +38,6 @@ public class CalendarFragment extends AbstractTabFragment implements TabFragment
     private MaterialCalendarView calendarView;
     HashSet<CalendarDay> dates;
     private List<RemindDTO> datas;
-    Observer<List<RemindDTO>> observer;
 
 
     public static CalendarFragment getInstance(Context context) {
@@ -57,34 +52,20 @@ public class CalendarFragment extends AbstractTabFragment implements TabFragment
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.d(TAG, "OnCreate ");
-
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        Log.d(TAG, "OnCreateView ");
         view = inflater.inflate(LAYOUT, container, false);
         calendarView = view.findViewById(R.id.calendarView);
         calendarView.setPagingEnabled(false);
 
         dates = new HashSet<CalendarDay>();
-        /*observer = new Observer<List<RemindDTO>>() {
-            @Override
-            public void onChanged(@Nullable List<RemindDTO> remindDTOS) {
-                Log.d(TAG, "OnChanged ");
-                if(remindDTOS!=null) {
-                    filterListReminds(remindDTOS);
-                    //updateCalendar(datas);
-                }
-            }
-        };
-        mViewModel.getAllReminds().observeForever(observer);*/
+
         mViewModel.getAllReminds().observe(this, new Observer<List<RemindDTO>>() {
             @Override
             public void onChanged(@Nullable final List<RemindDTO> reminds) {
-                Log.d(TAG, "OnChanged ");
                 filterListReminds(reminds);
             }
         });
@@ -129,8 +110,6 @@ public class CalendarFragment extends AbstractTabFragment implements TabFragment
     @Override
     public void onFragmentBecomesCurrent(boolean current) {
 
-       /* if (datas!=null && (calendarView != null || dates != null))
-            updateCalendar(datas);*/
     }
 
     private void updateCalendar(List<RemindDTO> datas) {
@@ -147,10 +126,5 @@ public class CalendarFragment extends AbstractTabFragment implements TabFragment
             updateCalendar(datas);
     }
 
-    /*@Override
-    public void onDestroy() {
-        super.onDestroy();
-        mViewModel.getAllReminds().removeObserver(observer);
-    }*/
 
 }

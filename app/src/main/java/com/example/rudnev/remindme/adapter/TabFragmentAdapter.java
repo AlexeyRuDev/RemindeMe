@@ -87,4 +87,8 @@ public class TabFragmentAdapter extends FragmentStatePagerAdapter implements Tab
    public interface TabSelectedListener {
         void onFragmentBecomesCurrent(boolean current);
     }
+
+    public void showEditDialog(){
+        ((TodayFragment)tabs.get(0)).showEditDialog();
+    }
 }

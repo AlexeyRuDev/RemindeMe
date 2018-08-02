@@ -1,8 +1,6 @@
 package com.example.rudnev.remindme.fragments;
 
-import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.Observer;
-import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -24,8 +22,6 @@ import com.example.rudnev.remindme.RemindItemClickListener;
 import com.example.rudnev.remindme.adapter.RemindListAdapter;
 import com.example.rudnev.remindme.adapter.TabFragmentAdapter;
 import com.example.rudnev.remindme.dto.RemindDTO;
-import com.example.rudnev.remindme.sql.RemindDBAdapter;
-import com.example.rudnev.remindme.viewmodels.TodayFragmentViewModel;
 
 import org.joda.time.DateTimeComparator;
 import org.joda.time.LocalDate;
@@ -39,13 +35,8 @@ public class TodayFragment extends AbstractTabFragment implements RemindItemClic
 
     private static final int LAYOUT = R.layout.today_fragment;
     private static final int REQUEST_TODAY = 1;
-    Observer<List<RemindDTO>> observer;
-
     private static final String TAG = "TODAY_FRAGMENT";
 
-
-
-    private FloatingActionButton fab;
 
     private RemindListAdapter adapter;
     RecyclerView rv;
@@ -63,37 +54,21 @@ public class TodayFragment extends AbstractTabFragment implements RemindItemClic
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.d(TAG, "OnCreate ");
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        Log.d(TAG, "OnCreateView ");
         view = inflater.inflate(LAYOUT, container, false);
-        initFAB(view);
         rv = (RecyclerView) view.findViewById(R.id.recyclerView);
         rv.setLayoutManager(new LinearLayoutManager(context));
         adapter = new RemindListAdapter(this);
         rv.setAdapter(adapter);
-        /*observer = new Observer<List<RemindDTO>>() {
-            @Override
-            public void onChanged(@Nullable List<RemindDTO> remindDTOS) {
-                Log.d(TAG, "OnChanged ");
-                if(remindDTOS!=null) {
-                    filterListReminds(remindDTOS);
-                    //adapter.setData(datas);
-                }
-            }
-        };
-        mViewModel.getAllReminds().observeForever(observer);*/
+
         mViewModel.getAllReminds().observe(this, new Observer<List<RemindDTO>>() {
             @Override
             public void onChanged(@Nullable final List<RemindDTO> reminds) {
-                // Update the cached copy of the words in the adapter.
-                Log.d(TAG, "OnChanged ");
                 filterListReminds(reminds);
-                //adapter.setData(datas);
 
             }
         });
@@ -119,18 +94,7 @@ public class TodayFragment extends AbstractTabFragment implements RemindItemClic
         this.context = context;
     }
 
-
-    private void initFAB(View view) {
-        fab = (FloatingActionButton) view.findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showEditDialog();
-            }
-        });
-    }
-
-    private void showEditDialog() {
+    public void showEditDialog() {
         FragmentManager fm = getFragmentManager();
         CreateItemDialog createItemDialog = new CreateItemDialog();
         createItemDialog.setTargetFragment(TodayFragment.this, REQUEST_TODAY);
@@ -152,11 +116,6 @@ public class TodayFragment extends AbstractTabFragment implements RemindItemClic
         createItemDialog.show(fm, "create_item_dialog");
     }
 
-    /*@Override
-    public void onDestroy() {
-        super.onDestroy();
-        mViewModel.getAllReminds().removeObserver(observer);
-    }*/
 
     @Override
     public void popupMenuItemClicked(final View view, final int position) {
