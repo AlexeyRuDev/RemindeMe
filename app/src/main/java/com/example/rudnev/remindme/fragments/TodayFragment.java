@@ -2,21 +2,19 @@ package com.example.rudnev.remindme.fragments;
 
 import android.arch.lifecycle.Observer;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.rudnev.remindme.CreateItemDialog;
+import com.example.rudnev.remindme.CreateItemActivity;
 import com.example.rudnev.remindme.R;
 import com.example.rudnev.remindme.RemindItemClickListener;
 import com.example.rudnev.remindme.adapter.RemindListAdapter;
@@ -31,7 +29,7 @@ import java.util.List;
 
 
 public class TodayFragment extends AbstractTabFragment implements RemindItemClickListener,
-        TabFragmentAdapter.TabSelectedListener, CreateItemDialog.EditNameDialogListener {
+        TabFragmentAdapter.TabSelectedListener {
 
     private static final int LAYOUT = R.layout.today_fragment;
     private static final int REQUEST_TODAY = 1;
@@ -95,10 +93,23 @@ public class TodayFragment extends AbstractTabFragment implements RemindItemClic
     }
 
     public void showEditDialog() {
-        FragmentManager fm = getFragmentManager();
-        CreateItemDialog createItemDialog = new CreateItemDialog();
-        createItemDialog.setTargetFragment(TodayFragment.this, REQUEST_TODAY);
-        createItemDialog.show(fm, "create_item_dialog");
+        Intent intent = new Intent(getActivity(), CreateItemActivity.class);
+        startActivityForResult(intent, REQUEST_TODAY);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode < 0){
+            RemindDTO mRemindItem = (RemindDTO) data.getSerializableExtra("mRemindItem");
+            if(mRemindItem!=null){
+                if(data.getBooleanExtra("updateItem", false)){
+                    mViewModel.update(mRemindItem);
+                }else{
+                    mViewModel.insert(mRemindItem);
+                }
+            }
+        }
     }
 
     @Override
@@ -108,12 +119,9 @@ public class TodayFragment extends AbstractTabFragment implements RemindItemClic
 
     @Override
     public void remindListUpdateClicked(View v, int position) {
-        FragmentManager fm = getActivity().getSupportFragmentManager();
-        CreateItemDialog createItemDialog = new CreateItemDialog();
-        createItemDialog.setTargetFragment(this, REQUEST_TODAY);
-        createItemDialog.setmUpdateRemindItem(adapter.getItemById(position));
-
-        createItemDialog.show(fm, "create_item_dialog");
+        Intent intent = new Intent(getActivity(), CreateItemActivity.class);
+        intent.putExtra("mRemindItem", adapter.getItemById(position));
+        startActivityForResult(intent, REQUEST_TODAY);
     }
 
 
@@ -149,13 +157,5 @@ public class TodayFragment extends AbstractTabFragment implements RemindItemClic
 
     }
 
-    @Override
-    public void onFinishEditDialog(RemindDTO remindItem, boolean fromEditDialog) {
-        //SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
-        if (fromEditDialog) {
-            mViewModel.update(remindItem);
-        } else {
-            mViewModel.insert(remindItem);
-        }
-    }
+
 }

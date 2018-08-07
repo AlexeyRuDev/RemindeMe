@@ -25,6 +25,10 @@
             </intent-filter>
         </activity>
 
+        <activity android:name=".CreateItemActivity"
+            android:screenOrientation="portrait"
+            android:configChanges="keyboardHidden|orientation|screenSize"/>
+
         <receiver android:name=".NotificationReceiver">
             <intent-filter>
                 <action android:name="doot.remind.action.DISPLAY_NOTIFICATION"/>

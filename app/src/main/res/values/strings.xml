@@ -14,4 +14,5 @@
     <string name="ok">OK</string>
     <string name="close">Close</string>
     <string name="add_cal_item">Add item</string>
+    <string name="create_item">Create Item</string>
 </resources>

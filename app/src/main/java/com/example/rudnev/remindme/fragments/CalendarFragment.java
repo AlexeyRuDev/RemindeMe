@@ -28,8 +28,7 @@ import java.util.HashSet;
 import java.util.List;
 
 
-public class CalendarFragment extends AbstractTabFragment implements TabFragmentAdapter.TabSelectedListener,
-        CalendarItemsDialog.CalendarItemsUpdateListener {
+public class CalendarFragment extends AbstractTabFragment implements TabFragmentAdapter.TabSelectedListener{
 
 
     private static final String TAG = "CALENDAR_FRAGMENT";
@@ -119,12 +118,5 @@ public class CalendarFragment extends AbstractTabFragment implements TabFragment
         dates = mViewModel.updateCalendar(datas);
         calendarView.addDecorator(new EventDecorator(R.color.colorPrimary, dates, context));
     }
-
-    @Override
-    public void onCloseDialog() {
-        if(datas != null)
-            updateCalendar(datas);
-    }
-
 
 }

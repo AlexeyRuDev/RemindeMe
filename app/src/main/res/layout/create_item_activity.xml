@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/colorPrimary">
 
@@ -13,39 +13,13 @@
         android:paddingEnd="24dp"
         android:paddingStart="24dp"
         android:paddingTop="18dp"
-        android:text="Create Item"
+        android:text="@string/create_item"
         android:textColor="@color/mainBackground"
         android:textSize="20sp" />
 
-    <EditText
-        android:id="@+id/titleText"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:background="@color/mainBackground"
-        android:ems="10"
-        android:paddingBottom="8dp"
-        android:paddingEnd="8dp"
-        android:paddingStart="8dp"
-        android:paddingTop="8dp"
-        android:selectAllOnFocus="false" />
-
-    <EditText
-        android:id="@+id/noteText"
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:background="@color/mainBackground"
-        android:ems="10"
-        android:inputType="textMultiLine"
-        android:paddingBottom="8dp"
-        android:paddingEnd="8dp"
-        android:paddingStart="8dp"
-        android:paddingTop="8dp" />
-
-
-
     <LinearLayout
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_gravity="end"
         android:orientation="horizontal">
 
@@ -68,10 +42,38 @@
             android:gravity="center" />
     </LinearLayout>
 
+
+
+    <EditText
+        android:id="@+id/titleText"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/mainBackground"
+        android:ems="10"
+        android:paddingBottom="8dp"
+        android:paddingEnd="8dp"
+        android:paddingStart="8dp"
+        android:paddingTop="8dp"
+        android:selectAllOnFocus="false" />
+
+    <EditText
+        android:id="@+id/noteText"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:background="@color/mainBackground"
+        android:ems="10"
+        android:inputType="textMultiLine"
+        android:paddingBottom="8dp"
+        android:paddingEnd="8dp"
+        android:paddingStart="8dp"
+        android:paddingTop="8dp" />
+
+
+
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="50dp"
-        android:layout_gravity="end"
+        android:layout_gravity="bottom|end"
         android:orientation="horizontal">
 
         <Button
