@@ -4,13 +4,17 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 
@@ -82,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initNavigationView() {
-       /* drawerLayout = (DrawerLayout)findViewById(R.id.drawer);
+        drawerLayout = (DrawerLayout)findViewById(R.id.drawer);
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.view_navigation_open,
                 R.string.view_navigation_close);
@@ -94,12 +98,19 @@ public class MainActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 drawerLayout.closeDrawer(Gravity.LEFT);
                 switch(item.getItemId()){
-                    case R.id.actionNotifItem:
-                        showCalendarTab();
+                    case R.id.actionArchiveItem:
+                        // move archive fragment to activity
+                        break;
+                    case R.id.actionNotesItem:
+                        // move note fragment to activity
+                        break;
+                    case R.id.actionSettingThemeItem:
+                        // add theme settings
+                        break;
                 }
                 return true;
             }
-        });*/
+        });
     }
 
     private void initTabs() {

@@ -2,9 +2,19 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/actionNotifItem"
+        android:id="@+id/actionArchiveItem"
         android:orderInCategory="1"
-        android:title="@string/calendar_tab"
+        android:title="@string/archive_tab"
+        android:icon="@mipmap/ic_message_text"/>
+    <item
+        android:id="@+id/actionNotesItem"
+        android:orderInCategory="1"
+        android:title="@string/notes_tab"
+        android:icon="@mipmap/ic_message_text"/>
+    <item
+        android:id="@+id/actionSettingThemeItem"
+        android:orderInCategory="1"
+        android:title="@string/theme_setting"
         android:icon="@mipmap/ic_message_text"/>
 
 </menu>

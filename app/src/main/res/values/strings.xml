@@ -9,6 +9,7 @@
     <string name="calendar_tab">Calendar</string>
     <string name="archive_tab">Archive</string>
     <string name="notes_tab">Notes</string>
+    <string name="theme_setting">Themes</string>
     <string name="edit">Edit</string>
     <string name="delete">Delete</string>
     <string name="ok">OK</string>

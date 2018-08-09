@@ -9,6 +9,7 @@
     <string name="calendar_tab">Календарь</string>
     <string name="archive_tab">История</string>
     <string name="notes_tab">Заметки</string>
+    <string name="theme_setting">Темы</string>
     <string name="edit">Редактировать</string>
     <string name="delete">Удалить</string>
     <string name="ok">ОК</string>

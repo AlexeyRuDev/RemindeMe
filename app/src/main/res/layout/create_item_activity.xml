@@ -20,7 +20,7 @@
             android:paddingStart="24dp"
             android:paddingTop="18dp"
             android:text="@string/create_item"
-            android:textColor="@color/mainBackground"
+            android:textColor="@color/cardview_light_background"
             android:textSize="20sp" />
 
         <LinearLayout
@@ -113,7 +113,7 @@
                         android:layout_weight="1"
                         android:background="@color/colorPrimary"
                         android:text="@string/ok"
-                        android:textColor="@color/mainBackground" />
+                        android:textColor="@color/cardview_light_background" />
 
                     <Button
                         android:id="@+id/closeBtn"
@@ -123,7 +123,7 @@
                         android:layout_weight="1"
                         android:background="@color/colorPrimary"
                         android:text="@string/close"
-                        android:textColor="@color/mainBackground" />
+                        android:textColor="@color/cardview_light_background" />
                 </LinearLayout>
 
             </LinearLayout>
