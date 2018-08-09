@@ -10,6 +10,7 @@
         android:layout_height="match_parent"
         android:background="@color/cardview_light_background"
         android:elevation="1dp"
-        app:mcv_selectionColor="@color/colorPrimary" />
+        app:mcv_selectionColor="@color/colorWhite"
+        app:mcv_dateTextAppearance="@color/colorBlack"/>
 
 </LinearLayout>

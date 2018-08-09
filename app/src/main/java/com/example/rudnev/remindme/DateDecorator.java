@@ -1,38 +1,37 @@
 package com.example.rudnev.remindme;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
+import android.text.style.ForegroundColorSpan;
 
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.DayViewDecorator;
 import com.prolificinteractive.materialcalendarview.DayViewFacade;
-import com.prolificinteractive.materialcalendarview.spans.DotSpan;
 
 import java.util.Collection;
 import java.util.HashSet;
 
+public class DateDecorator implements DayViewDecorator {
 
-public class EventDecorator implements DayViewDecorator {
-
+    CalendarDay date;
     private final int color;
-    private final HashSet<CalendarDay> dates;
-    private Drawable drawable;
 
-    public EventDecorator(int color, Collection<CalendarDay> dates, Context context) {
+    public DateDecorator(int color, CalendarDay date, Context context) {
         this.color = color;
-        this.dates = new HashSet<>(dates);
-        drawable = ContextCompat.getDrawable(context, R.drawable.custom_item_selector);
+        this.date = date;
     }
 
 
     @Override
     public boolean shouldDecorate(CalendarDay day) {
-        return dates.contains(day);
+        return day.getYear()==date.getYear() && day.getMonth()==date.getMonth() && day.getDay()==date.getDay();
     }
 
     @Override
     public void decorate(DayViewFacade view) {
-        view.setSelectionDrawable(drawable);
+        //view.addSpan(new DotSpan(8, R.color.mainBackground));
+        view.addSpan(new ForegroundColorSpan(Color.rgb(27,164,171)));
     }
 }

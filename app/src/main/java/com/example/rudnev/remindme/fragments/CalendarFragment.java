@@ -5,12 +5,12 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.rudnev.remindme.CalendarItemsDialog;
+import com.example.rudnev.remindme.DateDecorator;
 import com.example.rudnev.remindme.EventDecorator;
 import com.example.rudnev.remindme.R;
 import com.example.rudnev.remindme.adapter.TabFragmentAdapter;
@@ -59,7 +59,6 @@ public class CalendarFragment extends AbstractTabFragment implements TabFragment
         view = inflater.inflate(LAYOUT, container, false);
         calendarView = view.findViewById(R.id.calendarView);
         calendarView.setPagingEnabled(false);
-
         dates = new HashSet<CalendarDay>();
 
         mViewModel.getAllReminds().observe(this, new Observer<List<RemindDTO>>() {
@@ -77,6 +76,7 @@ public class CalendarFragment extends AbstractTabFragment implements TabFragment
                 calendar.set(Calendar.MONTH, date.getMonth());
                 calendar.set(Calendar.DATE, date.getDay());
                 widget.addDecorator(new EventDecorator(R.color.colorPrimary, dates, context));
+                widget.addDecorator(new DateDecorator(R.color.colorPrimary, CalendarDay.today(), context));
                 CalendarItemsDialog calendarItemsDialog = CalendarItemsDialog.getInstance(context, calendar.getTime(), mViewModel);
                 calendarItemsDialog.setTargetFragment(CalendarFragment.this, CALENDARFRAGMENT);
                 calendarItemsDialog.show(getFragmentManager(), "add_calendar_item");
@@ -117,6 +117,7 @@ public class CalendarFragment extends AbstractTabFragment implements TabFragment
         calendarView.removeDecorators();
         dates = mViewModel.updateCalendar(datas);
         calendarView.addDecorator(new EventDecorator(R.color.colorPrimary, dates, context));
+        calendarView.addDecorator(new DateDecorator(R.color.colorPrimary, CalendarDay.today(), context));
     }
 
 }
