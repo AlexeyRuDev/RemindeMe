@@ -13,7 +13,7 @@
         android:paddingEnd="24dp"
         android:paddingStart="24dp"
         android:paddingTop="20dp"
-        android:text="Add item to calendar"
+        android:text="@string/create_item"
         android:textColor="@color/mainBackground"
         android:textSize="17sp" />
 
