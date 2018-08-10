@@ -99,6 +99,8 @@ public class MainActivity extends AppCompatActivity {
                 drawerLayout.closeDrawer(Gravity.LEFT);
                 switch(item.getItemId()){
                     case R.id.actionArchiveItem:
+                        Intent intent = new Intent(getApplicationContext(), ArchiveActivity.class);
+                        startActivity(intent);
                         // move archive fragment to activity
                         break;
                     case R.id.actionNotesItem:
