@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
-    android:layout_height="470dp"
+    android:layout_height="300dp"
     android:orientation="vertical">
 
     <TextView
@@ -20,7 +20,8 @@
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recyclerViewCalItems"
         android:layout_width="330dp"
-        android:layout_height="365dp"
+        android:layout_height="300dp"
+        android:minHeight="100dp"
         android:background="@color/mainBackground"/>
 
     <Button

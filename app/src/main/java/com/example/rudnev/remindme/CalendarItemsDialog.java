@@ -77,9 +77,7 @@ public class CalendarItemsDialog extends DialogFragment implements RemindItemCli
         addItem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getActivity(), CreateItemActivity.class);
-                intent.putExtra("mDateField", calendar);
-                startActivityForResult(intent, REQUEST_CALENDAR_DIALOG);
+                showAddItemActivity();
             }
         });
         return view;
@@ -92,6 +90,12 @@ public class CalendarItemsDialog extends DialogFragment implements RemindItemCli
 
     }
 
+
+    private void showAddItemActivity(){
+        Intent intent = new Intent(getActivity(), CreateItemActivity.class);
+        intent.putExtra("mDateField", calendar);
+        startActivityForResult(intent, REQUEST_CALENDAR_DIALOG);
+    }
 
     private void filterListReminds(List<RemindDTO> reminds) {
         DateTimeComparator dateTimeComparator = DateTimeComparator.getDateOnlyInstance();
