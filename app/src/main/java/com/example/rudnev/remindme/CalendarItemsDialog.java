@@ -18,7 +18,7 @@ import android.widget.Button;
 
 import com.example.rudnev.remindme.adapter.CalendarItemsListAdapter;
 import com.example.rudnev.remindme.dto.RemindDTO;
-import com.example.rudnev.remindme.viewmodels.TodayFragmentViewModel;
+import com.example.rudnev.remindme.viewmodels.FragmentsViewModel;
 
 import org.joda.time.DateTimeComparator;
 import org.joda.time.LocalDate;
@@ -41,10 +41,10 @@ public class CalendarItemsDialog extends DialogFragment implements RemindItemCli
     Calendar calendar;
     private CalendarItemsListAdapter adapter;
     private Context context;
-    private TodayFragmentViewModel mViewModel;
+    private FragmentsViewModel mViewModel;
 
 
-    public static CalendarItemsDialog getInstance(Context context, Date date, TodayFragmentViewModel mViewModel) {
+    public static CalendarItemsDialog getInstance(Context context, Date date, FragmentsViewModel mViewModel) {
         Bundle args = new Bundle();
         CalendarItemsDialog calendarFragment = new CalendarItemsDialog();
         calendarFragment.setArguments(args);
@@ -176,7 +176,7 @@ public class CalendarItemsDialog extends DialogFragment implements RemindItemCli
         this.datas = data;
     }
 
-    public void setViewModel(TodayFragmentViewModel viewModel){
+    public void setViewModel(FragmentsViewModel viewModel){
         this.mViewModel = viewModel;
     }
 

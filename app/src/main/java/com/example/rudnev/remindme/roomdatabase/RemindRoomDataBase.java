@@ -9,16 +9,19 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 
+import com.example.rudnev.remindme.dao.NoteDAO;
 import com.example.rudnev.remindme.dao.RemindMeDAO;
+import com.example.rudnev.remindme.dto.Notes;
 import com.example.rudnev.remindme.dto.RemindDTO;
 
-@Database(entities = {RemindDTO.class}, version = 3)
+@Database(entities = {RemindDTO.class, Notes.class}, version = 4)
 @TypeConverters({DateTypeConverter.class})
 public abstract class RemindRoomDataBase extends RoomDatabase {
 
     private static RemindRoomDataBase INSTANCE;
 
     public abstract RemindMeDAO remindMeDAO();
+    public abstract NoteDAO notesDAO();
 
     public static RemindRoomDataBase getDatabase(final Context context) {
         if (INSTANCE == null) {

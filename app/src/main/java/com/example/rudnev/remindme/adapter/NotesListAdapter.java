@@ -10,33 +10,32 @@ import android.widget.TextView;
 
 import com.example.rudnev.remindme.R;
 import com.example.rudnev.remindme.RemindItemClickListener;
+import com.example.rudnev.remindme.dto.Notes;
 import com.example.rudnev.remindme.dto.RemindDTO;
 
 import java.util.Date;
 import java.util.List;
 
 
-public class NotesListAdapter extends RecyclerView.Adapter<NotesListAdapter.RemindViewHolder> {
-    private List<RemindDTO> data;
+public class NotesListAdapter extends RecyclerView.Adapter<NotesListAdapter.NoteViewHolder> {
+    private List<Notes> data;
     private static RemindItemClickListener itemClickListener;
 
-    public NotesListAdapter(List<RemindDTO> data, RemindItemClickListener remindItemClickListener){
-        this.data = data;
+    public NotesListAdapter(RemindItemClickListener remindItemClickListener){
         itemClickListener = remindItemClickListener;
     }
 
     @Override
-    public NotesListAdapter.RemindViewHolder onCreateViewHolder(final ViewGroup parent, int viewType) {
+    public NotesListAdapter.NoteViewHolder onCreateViewHolder(final ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.remind_item, parent, false);
-        return new NotesListAdapter.RemindViewHolder(view);
+        return new NotesListAdapter.NoteViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(NotesListAdapter.RemindViewHolder holder, int position) {
+    public void onBindViewHolder(NotesListAdapter.NoteViewHolder holder, int position) {
 
         holder.title.setText(data.get(position).getTitle());
         holder.note.setText(data.get(position).getNote());
-        holder.date.setText(data.get(position).getDate().toString());
     }
 
     @Override
@@ -47,14 +46,14 @@ public class NotesListAdapter extends RecyclerView.Adapter<NotesListAdapter.Remi
             return 0;
     }
 
-    public static class RemindViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    public static class NoteViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
         CardView cardView;
         TextView title;
         TextView note;
         TextView date;
 
-        public RemindViewHolder(View itemView) {
+        public NoteViewHolder(View itemView) {
             super(itemView);
             itemView.setOnClickListener(this);
             cardView = (CardView) itemView.findViewById(R.id.cardview);
@@ -78,12 +77,12 @@ public class NotesListAdapter extends RecyclerView.Adapter<NotesListAdapter.Remi
         }
     }
 
-    public void setData(List<RemindDTO> data) {
+    public void setData(List<Notes> data) {
         this.data = data;
         notifyDataSetChanged();
     }
 
-    public RemindDTO getItemById(int id){
+    public Notes getItemById(int id){
         return data.get(id);
     }
 
@@ -95,8 +94,5 @@ public class NotesListAdapter extends RecyclerView.Adapter<NotesListAdapter.Remi
 
         return data.get(position).getNote();
     }
-    public Date getDate(int position){
 
-        return data.get(position).getDate();
-    }
 }

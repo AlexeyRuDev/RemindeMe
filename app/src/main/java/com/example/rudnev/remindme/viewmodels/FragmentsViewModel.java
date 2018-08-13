@@ -6,19 +6,26 @@ import android.arch.lifecycle.LiveData;
 
 import com.example.rudnev.remindme.dto.RemindDTO;
 import com.example.rudnev.remindme.repositories.RemindMeRepository;
+import com.prolificinteractive.materialcalendarview.CalendarDay;
 
+import java.text.SimpleDateFormat;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 
-public class ArchiveViewModel extends AndroidViewModel {
+public class FragmentsViewModel extends AndroidViewModel {
 
     private RemindMeRepository mRepository;
 
     private LiveData<List<RemindDTO>> mAllReminds;
 
-    public ArchiveViewModel (Application application) {
+    HashSet<CalendarDay> dates;
+
+    public FragmentsViewModel(Application application) {
         super(application);
         mRepository = new RemindMeRepository(application);
         mAllReminds = mRepository.getAllReminds();
+        dates = new HashSet<>();
     }
 
     public LiveData<List<RemindDTO>> getAllReminds() { return mAllReminds; }
@@ -28,4 +35,14 @@ public class ArchiveViewModel extends AndroidViewModel {
     public void update(RemindDTO remind) { mRepository.update(remind); }
 
     public void delete(RemindDTO remind) { mRepository.delete(remind); }
+
+    public HashSet<CalendarDay> updateCalendar(List<RemindDTO> datas) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+        dates.clear();
+        if (datas != null)
+            for (RemindDTO s : datas) {
+                dates.add(CalendarDay.from(s.getDate()));
+            }
+        return dates;
+    }
 }

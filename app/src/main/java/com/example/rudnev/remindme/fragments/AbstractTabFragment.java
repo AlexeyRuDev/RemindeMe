@@ -7,10 +7,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.View;
 
-import com.example.rudnev.remindme.dto.RemindDTO;
-import com.example.rudnev.remindme.viewmodels.TodayFragmentViewModel;
-
-import java.util.List;
+import com.example.rudnev.remindme.viewmodels.FragmentsViewModel;
 
 
 public class AbstractTabFragment extends Fragment {
@@ -18,7 +15,7 @@ public class AbstractTabFragment extends Fragment {
     private String title;
     protected View view;
     protected Context context;
-    protected TodayFragmentViewModel mViewModel;
+    protected FragmentsViewModel mViewModel;
 
     public String getTitle() {
         return title;
@@ -31,6 +28,6 @@ public class AbstractTabFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mViewModel = ViewModelProviders.of(this).get(TodayFragmentViewModel.class);
+        mViewModel = ViewModelProviders.of(this).get(FragmentsViewModel.class);
     }
 }

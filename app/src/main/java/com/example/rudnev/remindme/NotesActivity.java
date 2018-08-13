@@ -5,6 +5,7 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
@@ -12,61 +13,55 @@ import android.support.v7.widget.RecyclerView;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
-import com.example.rudnev.remindme.adapter.ArchiveListAdapter;
+import com.example.rudnev.remindme.adapter.NotesListAdapter;
+import com.example.rudnev.remindme.dto.Notes;
 import com.example.rudnev.remindme.dto.RemindDTO;
 import com.example.rudnev.remindme.viewmodels.FragmentsViewModel;
-
-import org.joda.time.DateTimeComparator;
-import org.joda.time.LocalDate;
+import com.example.rudnev.remindme.viewmodels.NoteViewModel;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
-public class ArchiveActivity extends AppCompatActivity implements RemindItemClickListener{
+public class NotesActivity extends AppCompatActivity implements RemindItemClickListener{
 
-    private ArchiveListAdapter adapter;
+    private static final int LAYOUT = R.layout.notes_activity;
+    private NotesListAdapter adapter;
     RecyclerView rv;
-    FragmentsViewModel mViewModel;
-    private static final int REQUEST_ARCHIVE = 3;
+    NoteViewModel mViewModel;
+    FloatingActionButton fab;
+    private static final int REQUEST_NOTE = 4;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.archive_activity);
-        rv = (RecyclerView) findViewById(R.id.recyclerViewArchive);
+        setContentView(LAYOUT);
+        rv = (RecyclerView) findViewById(R.id.recyclerViewNote);
         rv.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
-        adapter = new ArchiveListAdapter( this);
+        adapter = new NotesListAdapter( this);
         rv.setAdapter(adapter);
-        mViewModel = ViewModelProviders.of(this).get(FragmentsViewModel.class);
+        fab = (FloatingActionButton)findViewById(R.id.fab);
 
-        mViewModel.getAllReminds().observe(this, new Observer<List<RemindDTO>>() {
+        mViewModel = ViewModelProviders.of(this).get(NoteViewModel.class);
+
+        mViewModel.getAllNotes().observe(this, new Observer<List<Notes>>() {
             @Override
-            public void onChanged(@Nullable final List<RemindDTO> reminds) {
-                filterListReminds(reminds);
+            public void onChanged(@Nullable final List<Notes> reminds) {
+                adapter.setData(reminds);
+                adapter.notifyDataSetChanged();
+            }
+        });
+
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getApplicationContext(), "FAB clicked", Toast.LENGTH_SHORT).show();
             }
         });
     }
-
-    private void filterListReminds(List<RemindDTO> reminds) {
-        DateTimeComparator dateTimeComparator = DateTimeComparator.getDateOnlyInstance();
-        LocalDate localDate = LocalDate.now();
-        List<RemindDTO>datas = new ArrayList<>();
-
-        if (reminds != null) {
-            for (RemindDTO item : reminds) {
-                LocalDate itemLocalDate = LocalDate.fromDateFields(item.getDate());
-                if (dateTimeComparator.compare(itemLocalDate.toDate(), localDate.toDate()) < 0) {
-                    datas.add(item);
-                }
-            }
-        }
-        adapter.setData(datas);
-    }
-
     @Override
     public void remindListRemoveClicked(View v, int position) {
         mViewModel.delete(adapter.getItemById(position));
@@ -74,13 +69,10 @@ public class ArchiveActivity extends AppCompatActivity implements RemindItemClic
 
     @Override
     public void remindListUpdateClicked(View v, int position) {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(adapter.getItemById(position).getDate());
+
         Intent intent = new Intent(getApplicationContext(), CreateItemActivity.class);
-        intent.putExtra("mRemindItem", adapter.getItemById(position));
-        intent.putExtra("mDateField", calendar);
-        startActivityForResult(intent, REQUEST_ARCHIVE);
+        intent.putExtra("mNoteItem", adapter.getItemById(position));
+        startActivityForResult(intent, REQUEST_NOTE);
 
     }
 
@@ -116,12 +108,12 @@ public class ArchiveActivity extends AppCompatActivity implements RemindItemClic
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(resultCode < 0){
-            RemindDTO mRemindItem = (RemindDTO) data.getSerializableExtra("mRemindItem");
-            if(mRemindItem!=null){
+            Notes mNoteItem = (Notes) data.getSerializableExtra("mNoteItem");
+            if(mNoteItem!=null){
                 if(data.getBooleanExtra("updateItem", false)){
-                    mViewModel.update(mRemindItem);
+                    mViewModel.update(mNoteItem);
                 }else{
-                    mViewModel.insert(mRemindItem);
+                    mViewModel.insert(mNoteItem);
                 }
                 adapter.notifyDataSetChanged();
             }

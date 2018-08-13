@@ -101,10 +101,10 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.actionArchiveItem:
                         Intent intent = new Intent(getApplicationContext(), ArchiveActivity.class);
                         startActivity(intent);
-                        // move archive fragment to activity
                         break;
                     case R.id.actionNotesItem:
-                        // move note fragment to activity
+                        intent = new Intent(getApplicationContext(), NotesActivity.class);
+                        startActivity(intent);
                         break;
                     case R.id.actionSettingThemeItem:
                         // add theme settings
