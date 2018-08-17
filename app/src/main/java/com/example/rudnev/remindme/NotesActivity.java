@@ -17,14 +17,10 @@ import android.widget.Toast;
 
 import com.example.rudnev.remindme.adapter.NotesListAdapter;
 import com.example.rudnev.remindme.dto.Notes;
-import com.example.rudnev.remindme.dto.RemindDTO;
-import com.example.rudnev.remindme.viewmodels.FragmentsViewModel;
 import com.example.rudnev.remindme.viewmodels.NoteViewModel;
 
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
-import java.util.Locale;
 
 public class NotesActivity extends AppCompatActivity implements RemindItemClickListener{
 
@@ -58,7 +54,9 @@ public class NotesActivity extends AppCompatActivity implements RemindItemClickL
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), "FAB clicked", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(getApplicationContext(), CreateItemActivity.class);
+                intent.putExtra("isNote", true);
+                startActivityForResult(intent, REQUEST_NOTE);
             }
         });
     }
@@ -72,6 +70,7 @@ public class NotesActivity extends AppCompatActivity implements RemindItemClickL
 
         Intent intent = new Intent(getApplicationContext(), CreateItemActivity.class);
         intent.putExtra("mNoteItem", adapter.getItemById(position));
+        intent.putExtra("isNote", true);
         startActivityForResult(intent, REQUEST_NOTE);
 
     }

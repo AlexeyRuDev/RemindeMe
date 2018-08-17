@@ -14,6 +14,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
+import com.example.rudnev.remindme.dto.Notes;
 import com.example.rudnev.remindme.dto.RemindDTO;
 
 import java.util.Calendar;
@@ -28,7 +29,9 @@ public class CreateItemActivity extends AppCompatActivity{
     private TextView mTextViewDate;
     private TextView mTextViewTime;
     private Intent resultIntent;
-    private RemindDTO item;
+    private RemindDTO remindItem;
+    private Notes noteItem;
+    private boolean isNote;
 
 
     private Date formatDate;
@@ -50,17 +53,39 @@ public class CreateItemActivity extends AppCompatActivity{
 
         if(resultIntent!=null){
             setDateField((Calendar)resultIntent.getSerializableExtra("mDateField"));
-            item = (RemindDTO) resultIntent.getSerializableExtra("mRemindItem");
-            if(item!=null){
-                mEditTextTitle.setText(item.getTitle());
-                mEditTextNote.setText(item.getNote());
+            isNote = resultIntent.getBooleanExtra("isNote", false);
+            remindItem = (RemindDTO) resultIntent.getSerializableExtra("mRemindItem");
+            noteItem = (Notes) resultIntent.getSerializableExtra("mNoteItem");
+            if(remindItem!=null){
+                mTextViewDate.setVisibility(View.VISIBLE);
+                mTextViewTime.setVisibility(View.VISIBLE);
+                mEditTextTitle.setText(remindItem.getTitle());
+                mEditTextNote.setText(remindItem.getNote());
+            }else if(noteItem!=null){
+                mTextViewDate.setVisibility(View.INVISIBLE);
+                mTextViewTime.setVisibility(View.INVISIBLE);
+                mEditTextTitle.setText(noteItem.getTitle());
+                mEditTextNote.setText(noteItem.getNote());
             }
         }
 
-        if(date == null)
-            date = Calendar.getInstance();
-        setInitialDateTime();
-
+        if(!isNote) {
+            if (date == null)
+                date = Calendar.getInstance();
+            setInitialDateTime();
+            mTextViewDate.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    setDate(view);
+                }
+            });
+            mTextViewTime.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    setTime(view);
+                }
+            });
+        }
         mOkBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -73,18 +98,7 @@ public class CreateItemActivity extends AppCompatActivity{
                 setResultFromActivity(RESULT_CANCELED);
             }
         });
-        mTextViewDate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                setDate(view);
-            }
-        });
-        mTextViewTime.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                setTime(view);
-            }
-        });
+
 
     }
 
@@ -92,17 +106,28 @@ public class CreateItemActivity extends AppCompatActivity{
         if(resultIntent == null){
             resultIntent = new Intent();
         }
-        if(item==null){
-            item = new RemindDTO(mEditTextTitle.getText().toString(), mEditTextNote.getText().toString(), formatDate);
-            resultIntent.putExtra("updateItem", false);
+        if(!isNote) {
+            if (remindItem == null) {
+                remindItem = new RemindDTO(mEditTextTitle.getText().toString(), mEditTextNote.getText().toString(), formatDate);
+                resultIntent.putExtra("updateItem", false);
+            } else {
+                remindItem.setTitle(mEditTextTitle.getText().toString());
+                remindItem.setNote(mEditTextNote.getText().toString());
+                remindItem.setDate(date.getTime());
+                resultIntent.putExtra("updateItem", true);
+            }
+            resultIntent.putExtra("mRemindItem", remindItem);
+        }else{
+            if (noteItem == null) {
+                noteItem = new Notes(mEditTextTitle.getText().toString(), mEditTextNote.getText().toString(), formatDate);
+                resultIntent.putExtra("updateItem", false);
+            } else {
+                noteItem.setTitle(mEditTextTitle.getText().toString());
+                noteItem.setNote(mEditTextNote.getText().toString());
+                resultIntent.putExtra("updateItem", true);
+            }
+            resultIntent.putExtra("mNoteItem", noteItem);
         }
-        else{
-            item.setTitle(mEditTextTitle.getText().toString());
-            item.setNote(mEditTextNote.getText().toString());
-            item.setDate(date.getTime());
-            resultIntent.putExtra("updateItem", true);
-        }
-        resultIntent.putExtra("mRemindItem", item);
         setResult(resultCode, resultIntent);
         finish();
     }
