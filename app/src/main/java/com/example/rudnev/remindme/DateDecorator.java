@@ -7,6 +7,7 @@ import android.text.style.ForegroundColorSpan;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.DayViewDecorator;
 import com.prolificinteractive.materialcalendarview.DayViewFacade;
+import com.prolificinteractive.materialcalendarview.spans.DotSpan;
 
 public class DateDecorator implements DayViewDecorator {
 
@@ -26,7 +27,7 @@ public class DateDecorator implements DayViewDecorator {
 
     @Override
     public void decorate(DayViewFacade view) {
-        //view.addSpan(new DotSpan(8, R.color.mainBackground));
-        view.addSpan(new ForegroundColorSpan(Color.rgb(27,164,171)));
+        view.addSpan(new DotSpan(9, Color.rgb(27,164,171)));
+        //view.addSpan(new ForegroundColorSpan(Color.rgb(27,164,171)));
     }
 }

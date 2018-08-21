@@ -15,6 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.example.rudnev.remindme.adapter.CalendarItemsListAdapter;
 import com.example.rudnev.remindme.dto.RemindDTO;
@@ -37,6 +38,7 @@ public class CalendarItemsDialog extends DialogFragment implements RemindItemCli
     private List<RemindDTO> datas;
     private RecyclerView listViewItems;
     private Button addItem;
+    private TextView titleCalItemDialog;
     private Date date;
     Calendar calendar;
     private CalendarItemsListAdapter adapter;
@@ -63,6 +65,8 @@ public class CalendarItemsDialog extends DialogFragment implements RemindItemCli
         listViewItems.setLayoutManager(new LinearLayoutManager(context));
         calendar = Calendar.getInstance();
         calendar.setTime(date);
+        titleCalItemDialog = (TextView)view.findViewById(R.id.titleCalItemDialog);
+        titleCalItemDialog.setText(calendar.get(Calendar.DATE) + " " + calendar.getDisplayName(Calendar.MONTH, Calendar.SHORT, Locale.getDefault()) + " " + calendar.get(Calendar.YEAR));
         adapter = new CalendarItemsListAdapter(this);
         listViewItems.setAdapter(adapter);
 
