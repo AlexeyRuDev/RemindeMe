@@ -35,7 +35,6 @@ public class NotesListAdapter extends RecyclerView.Adapter<NotesListAdapter.Note
     public void onBindViewHolder(NotesListAdapter.NoteViewHolder holder, int position) {
 
         holder.title.setText(data.get(position).getTitle());
-        holder.note.setText(data.get(position).getNote());
     }
 
     @Override
@@ -58,7 +57,6 @@ public class NotesListAdapter extends RecyclerView.Adapter<NotesListAdapter.Note
             itemView.setOnClickListener(this);
             cardView = (CardView) itemView.findViewById(R.id.cardview);
             title = (TextView) itemView.findViewById(R.id.title);
-            note = (TextView) itemView.findViewById(R.id.note);
             date = (TextView) itemView.findViewById(R.id.date);
             ImageButton imageButton = itemView.findViewById(R.id.ib_popup_menu);
             imageButton.setOnClickListener(new View.OnClickListener() {

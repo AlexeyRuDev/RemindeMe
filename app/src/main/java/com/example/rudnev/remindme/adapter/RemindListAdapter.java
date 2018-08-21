@@ -13,8 +13,10 @@ import com.example.rudnev.remindme.R;
 import com.example.rudnev.remindme.RemindItemClickListener;
 import com.example.rudnev.remindme.dto.RemindDTO;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class RemindListAdapter extends RecyclerView.Adapter<RemindListAdapter.RemindViewHolder> {
 
@@ -44,10 +46,10 @@ public class RemindListAdapter extends RecyclerView.Adapter<RemindListAdapter.Re
 
     @Override
     public void onBindViewHolder(RemindViewHolder holder, int position) {
-
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm", Locale.getDefault());
+        //SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
         holder.title.setText(data.get(position).getTitle());
-        holder.note.setText(data.get(position).getNote());
-        holder.date.setText(data.get(position).getDate().toString());
+        holder.date.setText(sdf.format(data.get(position).getDate()));
     }
 
     //public Cursor getCursor(){return cursor;}
@@ -76,7 +78,6 @@ public class RemindListAdapter extends RecyclerView.Adapter<RemindListAdapter.Re
             itemView.setOnClickListener(this);
             cardView = (CardView) itemView.findViewById(R.id.cardview);
             title = (TextView) itemView.findViewById(R.id.title);
-            note = (TextView) itemView.findViewById(R.id.note);
             date = (TextView) itemView.findViewById(R.id.date);
             ImageButton imageButton = itemView.findViewById(R.id.ib_popup_menu);
             imageButton.setOnClickListener(new View.OnClickListener() {
