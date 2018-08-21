@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
@@ -32,6 +33,7 @@ public class CreateItemActivity extends AppCompatActivity{
     private RemindDTO remindItem;
     private Notes noteItem;
     private boolean isNote;
+    private LinearLayout dateLayout;
 
 
     private Date formatDate;
@@ -43,6 +45,7 @@ public class CreateItemActivity extends AppCompatActivity{
         setContentView(LAYOUT);
         Button mOkBtn = (Button) findViewById(R.id.createBtn);
         Button mCloseBtn = (Button) findViewById(R.id.closeBtn);
+        dateLayout = (LinearLayout)findViewById(R.id.dateLayout);
         mEditTextTitle = (EditText)findViewById(R.id.titleText);
         mEditTextNote = (EditText) findViewById(R.id.noteText);
         mTextViewDate = (TextView) findViewById(R.id.dateText);
@@ -54,16 +57,17 @@ public class CreateItemActivity extends AppCompatActivity{
         if(resultIntent!=null){
             setDateField((Calendar)resultIntent.getSerializableExtra("mDateField"));
             isNote = resultIntent.getBooleanExtra("isNote", false);
+            if(isNote){
+                dateLayout.setVisibility(View.GONE);
+            }else{
+                dateLayout.setVisibility(View.VISIBLE);
+            }
             remindItem = (RemindDTO) resultIntent.getSerializableExtra("mRemindItem");
             noteItem = (Notes) resultIntent.getSerializableExtra("mNoteItem");
             if(remindItem!=null){
-                mTextViewDate.setVisibility(View.VISIBLE);
-                mTextViewTime.setVisibility(View.VISIBLE);
                 mEditTextTitle.setText(remindItem.getTitle());
                 mEditTextNote.setText(remindItem.getNote());
             }else if(noteItem!=null){
-                mTextViewDate.setVisibility(View.INVISIBLE);
-                mTextViewTime.setVisibility(View.INVISIBLE);
                 mEditTextTitle.setText(noteItem.getTitle());
                 mEditTextNote.setText(noteItem.getNote());
             }
