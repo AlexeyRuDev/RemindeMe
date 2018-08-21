@@ -79,11 +79,11 @@ public class RemindListAdapter extends RecyclerView.Adapter<RemindListAdapter.Re
             cardView = (CardView) itemView.findViewById(R.id.cardview);
             title = (TextView) itemView.findViewById(R.id.title);
             date = (TextView) itemView.findViewById(R.id.date);
-            ImageButton imageButton = itemView.findViewById(R.id.ib_popup_menu);
-            imageButton.setOnClickListener(new View.OnClickListener() {
+            itemView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
-                public void onClick(View view) {
+                public boolean onLongClick(View view) {
                     itemClickListener.popupMenuItemClicked(view, getLayoutPosition());
+                    return false;
                 }
             });
 
@@ -91,8 +91,7 @@ public class RemindListAdapter extends RecyclerView.Adapter<RemindListAdapter.Re
         @Override
         public void onClick(View v)
         {
-            itemClickListener.remindListRemoveClicked(v, this.getLayoutPosition());
-
+            //itemClickListener.remindListRemoveClicked(v, this.getLayoutPosition());
         }
     }
 

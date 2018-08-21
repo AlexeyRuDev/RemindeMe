@@ -11,9 +11,7 @@ import android.widget.TextView;
 import com.example.rudnev.remindme.R;
 import com.example.rudnev.remindme.RemindItemClickListener;
 import com.example.rudnev.remindme.dto.Notes;
-import com.example.rudnev.remindme.dto.RemindDTO;
 
-import java.util.Date;
 import java.util.List;
 
 
@@ -58,11 +56,11 @@ public class NotesListAdapter extends RecyclerView.Adapter<NotesListAdapter.Note
             cardView = (CardView) itemView.findViewById(R.id.cardview);
             title = (TextView) itemView.findViewById(R.id.title);
             date = (TextView) itemView.findViewById(R.id.date);
-            ImageButton imageButton = itemView.findViewById(R.id.ib_popup_menu);
-            imageButton.setOnClickListener(new View.OnClickListener() {
+            itemView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
-                public void onClick(View view) {
+                public boolean onLongClick(View view) {
                     itemClickListener.popupMenuItemClicked(view, getLayoutPosition());
+                    return false;
                 }
             });
 
@@ -70,9 +68,10 @@ public class NotesListAdapter extends RecyclerView.Adapter<NotesListAdapter.Note
         @Override
         public void onClick(View v)
         {
-            itemClickListener.remindListRemoveClicked(v, this.getLayoutPosition());
-
+            //change to open item read only
+            //itemClickListener.remindListRemoveClicked(v, this.getLayoutPosition());
         }
+
     }
 
     public void setData(List<Notes> data) {

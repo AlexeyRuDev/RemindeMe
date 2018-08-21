@@ -12,6 +12,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 
 import com.example.rudnev.remindme.adapter.ArchiveListAdapter;
 import com.example.rudnev.remindme.dto.RemindDTO;
@@ -86,9 +87,8 @@ public class ArchiveActivity extends AppCompatActivity implements RemindItemClic
 
     @Override
     public void popupMenuItemClicked(final View view, final int position) {
-        // pass the imageview id
-        View menuItemView = view.findViewById(R.id.ib_popup_menu);
-        PopupMenu popup = new PopupMenu(view.getContext(), menuItemView);
+        TextView mTitleTV = (TextView) view.findViewById(R.id.title);
+        PopupMenu popup = new PopupMenu(view.getContext(), mTitleTV);
         MenuInflater inflate = popup.getMenuInflater();
         inflate.inflate(R.menu.popup_cardview_menu, popup.getMenu());
 

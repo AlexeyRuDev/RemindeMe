@@ -1,5 +1,6 @@
 package com.example.rudnev.remindme;
 
+import android.annotation.SuppressLint;
 import android.arch.lifecycle.Observer;
 import android.content.Context;
 import android.content.Intent;
@@ -56,6 +57,7 @@ public class CalendarItemsDialog extends DialogFragment implements RemindItemCli
         return calendarFragment;
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -142,9 +144,8 @@ public class CalendarItemsDialog extends DialogFragment implements RemindItemCli
 
     @Override
     public void popupMenuItemClicked(final View view, final int position) {
-        // pass the imageview id
-        View menuItemView = view.findViewById(R.id.ib_popup_menu);
-        PopupMenu popup = new PopupMenu(view.getContext(), menuItemView);
+        TextView mTitleTV = (TextView) view.findViewById(R.id.title);
+        PopupMenu popup = new PopupMenu(view.getContext(), mTitleTV);
         MenuInflater inflate = popup.getMenuInflater();
         inflate.inflate(R.menu.popup_cardview_menu, popup.getMenu());
 

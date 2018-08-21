@@ -8,11 +8,14 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.CursorAnchorInfo;
+import android.widget.TextView;
 
 import com.example.rudnev.remindme.CreateItemActivity;
 import com.example.rudnev.remindme.R;
@@ -127,8 +130,8 @@ public class TodayFragment extends AbstractTabFragment implements RemindItemClic
 
     @Override
     public void popupMenuItemClicked(final View view, final int position) {
-        View menuItemView = view.findViewById(R.id.ib_popup_menu);
-        PopupMenu popup = new PopupMenu(view.getContext(), menuItemView);
+        TextView mTitleTV = (TextView) view.findViewById(R.id.title);
+        PopupMenu popup = new PopupMenu(view.getContext(), mTitleTV);
         MenuInflater inflate = popup.getMenuInflater();
         inflate.inflate(R.menu.popup_cardview_menu, popup.getMenu());
 
@@ -149,6 +152,7 @@ public class TodayFragment extends AbstractTabFragment implements RemindItemClic
                 return false;
             }
         });
+        popup.setGravity(Gravity.END | Gravity.TOP);
         popup.show();
     }
 
