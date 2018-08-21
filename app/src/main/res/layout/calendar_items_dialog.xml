@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
-    android:layout_height="300dp"
+    android:layout_height="wrap_content"
     android:orientation="vertical">
 
     <TextView
@@ -17,19 +17,25 @@
         android:textColor="@color/mainBackground"
         android:textSize="17sp" />
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recyclerViewCalItems"
-        android:layout_width="330dp"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="300dp"
-        android:minHeight="100dp"
-        android:background="@color/mainBackground"/>
+        android:orientation="horizontal">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recyclerViewCalItems"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/mainBackground"
+            android:minHeight="100dp" />
+    </LinearLayout>
 
     <Button
         android:id="@+id/addCalItem"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
         android:text="@string/add_cal_item"
-        android:textColor="@color/mainBackground"
-        android:background="@color/colorPrimary"/>
+        android:textColor="@color/mainBackground" />
 
 </LinearLayout>
