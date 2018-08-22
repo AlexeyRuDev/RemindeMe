@@ -1,4 +1,4 @@
-package com.example.rudnev.remindme;
+package com.example.rudnev.remindme.activities;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
@@ -15,6 +15,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
+import com.example.rudnev.remindme.R;
 import com.example.rudnev.remindme.dto.Notes;
 import com.example.rudnev.remindme.dto.RemindDTO;
 

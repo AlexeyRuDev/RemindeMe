@@ -11,7 +11,6 @@ import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
 
 import com.example.rudnev.remindme.dto.RemindDTO;
-import com.example.rudnev.remindme.sql.RemindDBAdapter;
 
 import java.util.Calendar;
 import java.util.List;

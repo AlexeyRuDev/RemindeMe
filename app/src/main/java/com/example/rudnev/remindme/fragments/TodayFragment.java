@@ -14,10 +14,9 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.CursorAnchorInfo;
 import android.widget.TextView;
 
-import com.example.rudnev.remindme.CreateItemActivity;
+import com.example.rudnev.remindme.activities.CreateItemActivity;
 import com.example.rudnev.remindme.R;
 import com.example.rudnev.remindme.RemindItemClickListener;
 import com.example.rudnev.remindme.adapter.RemindListAdapter;

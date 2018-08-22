@@ -25,15 +25,15 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".CreateItemActivity"
+        <activity android:name=".activities.CreateItemActivity"
             android:screenOrientation="portrait"
             android:configChanges="keyboardHidden|orientation|screenSize"/>
 
-        <activity android:name=".ArchiveActivity"
+        <activity android:name=".activities.ArchiveActivity"
             android:screenOrientation="portrait"
             android:configChanges="keyboardHidden|orientation|screenSize"/>
 
-        <activity android:name=".NotesActivity"
+        <activity android:name=".activities.NotesActivity"
             android:screenOrientation="portrait"
             android:configChanges="keyboardHidden|orientation|screenSize"/>
 

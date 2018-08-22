@@ -1,4 +1,4 @@
-package com.example.rudnev.remindme;
+package com.example.rudnev.remindme.activities;
 
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
@@ -14,16 +14,17 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.example.rudnev.remindme.R;
+import com.example.rudnev.remindme.RemindItemClickListener;
+import com.example.rudnev.remindme.activities.CreateItemActivity;
 import com.example.rudnev.remindme.adapter.NotesListAdapter;
 import com.example.rudnev.remindme.dto.Notes;
 import com.example.rudnev.remindme.viewmodels.NoteViewModel;
 
-import java.util.Calendar;
 import java.util.List;
 
-public class NotesActivity extends AppCompatActivity implements RemindItemClickListener{
+public class NotesActivity extends AppCompatActivity implements RemindItemClickListener {
 
     private static final int LAYOUT = R.layout.notes_activity;
     private NotesListAdapter adapter;

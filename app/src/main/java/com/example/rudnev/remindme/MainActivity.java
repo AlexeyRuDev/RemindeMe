@@ -18,6 +18,8 @@ import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.example.rudnev.remindme.activities.ArchiveActivity;
+import com.example.rudnev.remindme.activities.NotesActivity;
 import com.example.rudnev.remindme.adapter.TabFragmentAdapter;
 
 import net.danlew.android.joda.JodaTimeAndroid;

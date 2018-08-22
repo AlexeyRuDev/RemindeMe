@@ -1,4 +1,4 @@
-package com.example.rudnev.remindme;
+package com.example.rudnev.remindme.activities;
 
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
@@ -14,6 +14,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import com.example.rudnev.remindme.R;
+import com.example.rudnev.remindme.RemindItemClickListener;
 import com.example.rudnev.remindme.adapter.ArchiveListAdapter;
 import com.example.rudnev.remindme.dto.RemindDTO;
 import com.example.rudnev.remindme.viewmodels.FragmentsViewModel;
@@ -27,7 +29,7 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
-public class ArchiveActivity extends AppCompatActivity implements RemindItemClickListener{
+public class ArchiveActivity extends AppCompatActivity implements RemindItemClickListener {
 
     private ArchiveListAdapter adapter;
     RecyclerView rv;
