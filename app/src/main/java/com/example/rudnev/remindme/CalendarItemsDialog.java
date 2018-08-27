@@ -200,6 +200,8 @@ public class CalendarItemsDialog extends DialogFragment implements RemindItemCli
                 }
                 adapter.notifyDataSetChanged();
             }
+        }else if(datas.size()==0){
+            dismiss();
         }
     }
 }
