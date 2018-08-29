@@ -6,7 +6,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.example.rudnev.remindme.R;
@@ -18,22 +17,17 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-public class RemindListAdapter extends RecyclerView.Adapter<RemindListAdapter.RemindViewHolder> {
+public class TodayListAdapter extends RecyclerView.Adapter<TodayListAdapter.RemindViewHolder> {
 
     private List<RemindDTO> data;
-    //private Cursor cursor;
-    //private DataSetObserver mDataSetObserver;
     private static RemindItemClickListener itemClickListener;
 
-    public RemindListAdapter(List<RemindDTO> data, RemindItemClickListener remindItemClickListener/*,Cursor cursor*/){
+    public TodayListAdapter(List<RemindDTO> data, RemindItemClickListener remindItemClickListener/*,Cursor cursor*/){
         this.data = data;
         itemClickListener = remindItemClickListener;
-        //this.cursor = cursor;
-        //mDataSetObserver = new NotifyingDataSetObserver(this);
-        /*if(cursor!=null){cursor.registerDataSetObserver(mDataSetObserver)}*/
     }
 
-    public RemindListAdapter(RemindItemClickListener remindItemClickListener){
+    public TodayListAdapter(RemindItemClickListener remindItemClickListener){
         itemClickListener = remindItemClickListener;
 
     }
@@ -52,11 +46,6 @@ public class RemindListAdapter extends RecyclerView.Adapter<RemindListAdapter.Re
         holder.date.setText(sdf.format(data.get(position).getDate()));
     }
 
-    //public Cursor getCursor(){return cursor;}
-    /*@Override
-    public void setHasStableIds(boolean hasStableIds) {
-        super.setHasStableIds(true);
-    }*/
 
     @Override
     public int getItemCount() {

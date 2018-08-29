@@ -19,7 +19,7 @@ import android.widget.TextView;
 import com.example.rudnev.remindme.activities.CreateItemActivity;
 import com.example.rudnev.remindme.R;
 import com.example.rudnev.remindme.RemindItemClickListener;
-import com.example.rudnev.remindme.adapter.RemindListAdapter;
+import com.example.rudnev.remindme.adapter.TodayListAdapter;
 import com.example.rudnev.remindme.adapter.TabFragmentAdapter;
 import com.example.rudnev.remindme.dto.RemindDTO;
 
@@ -38,7 +38,7 @@ public class TodayFragment extends AbstractTabFragment implements RemindItemClic
     private static final String TAG = "TODAY_FRAGMENT";
 
 
-    private RemindListAdapter adapter;
+    private TodayListAdapter adapter;
     RecyclerView rv;
 
     public static TodayFragment getInstance(Context context) {
@@ -62,7 +62,7 @@ public class TodayFragment extends AbstractTabFragment implements RemindItemClic
         view = inflater.inflate(LAYOUT, container, false);
         rv = (RecyclerView) view.findViewById(R.id.recyclerView);
         rv.setLayoutManager(new LinearLayoutManager(context));
-        adapter = new RemindListAdapter(this);
+        adapter = new TodayListAdapter(this);
         rv.setAdapter(adapter);
 
         mViewModel.getAllReminds().observe(this, new Observer<List<RemindDTO>>() {
