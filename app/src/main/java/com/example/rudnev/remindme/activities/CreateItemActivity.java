@@ -1,8 +1,13 @@
 package com.example.rudnev.remindme.activities;
 
+import android.app.AlarmManager;
 import android.app.DatePickerDialog;
+import android.app.Notification;
+import android.app.PendingIntent;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -18,6 +23,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
+import com.example.rudnev.remindme.NotificationReceiver;
 import com.example.rudnev.remindme.R;
 import com.example.rudnev.remindme.dto.Notes;
 import com.example.rudnev.remindme.dto.RemindDTO;
@@ -134,6 +140,7 @@ public class CreateItemActivity extends AppCompatActivity {
                 remindItem.setDate(LocalDateTime.fromDateFields(date.getTime()));
                 resultIntent.putExtra("updateItem", true);
             }
+            scheduleNotification(getNotification(remindItem.getTitle()), remindItem);
             resultIntent.putExtra("mRemindItem", remindItem);
         } else {
             if (noteItem == null) {
@@ -252,6 +259,32 @@ public class CreateItemActivity extends AppCompatActivity {
             }
 
         };
+    }
+
+    private void scheduleNotification(Notification notification, RemindDTO remindItem) {
+
+
+        Intent notificationIntent = new Intent(this, NotificationReceiver.class);
+        notificationIntent.putExtra(NotificationReceiver.NOTIFICATION_ID, (int)System.currentTimeMillis());
+        notificationIntent.putExtra(NotificationReceiver.NOTIFICATION, notification);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, (int)System.currentTimeMillis(), notificationIntent, PendingIntent.FLAG_ONE_SHOT);
+
+        long futureInMillis = remindItem.getDate().toDate().getTime();
+        AlarmManager alarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
+        alarmManager.set(AlarmManager.RTC_WAKEUP, futureInMillis, pendingIntent);
+    }
+
+    private Notification getNotification(String content) {
+
+        Notification.Builder builder = new Notification.Builder(this);
+        builder.setContentTitle("Scheduled Notification");
+        builder.setContentText(content);
+        builder.setSmallIcon(R.mipmap.ic_launcher);
+        builder.setDefaults(Notification.DEFAULT_SOUND);
+        builder.setDefaults(Notification.DEFAULT_VIBRATE);
+        builder.setAutoCancel(true);
+        builder.setLights(Color.BLUE, 500, 500);
+        return builder.build();
     }
 
 

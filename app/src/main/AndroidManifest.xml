@@ -12,10 +12,6 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <!--<provider
-            android:authorities="com.rudnev.providers.RemindMe"
-            android:name=".sql.RemindMeContentProvider"/>-->
-
         <activity android:name=".MainActivity"
             android:screenOrientation="portrait"
             android:configChanges="keyboardHidden|orientation|screenSize">
@@ -39,7 +35,7 @@
 
         <receiver android:name=".NotificationReceiver">
             <intent-filter>
-                <action android:name="doot.remind.action.DISPLAY_NOTIFICATION"/>
+                <action android:name="doot.remind.action.NOTIFICATION"/>
             </intent-filter>
         </receiver>
 
