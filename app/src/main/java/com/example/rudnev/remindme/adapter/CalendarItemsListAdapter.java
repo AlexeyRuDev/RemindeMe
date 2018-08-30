@@ -12,6 +12,9 @@ import com.example.rudnev.remindme.R;
 import com.example.rudnev.remindme.RemindItemClickListener;
 import com.example.rudnev.remindme.dto.RemindDTO;
 
+import org.joda.time.LocalDate;
+import org.joda.time.LocalDateTime;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -42,7 +45,7 @@ public class CalendarItemsListAdapter extends RecyclerView.Adapter<CalendarItems
         //SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm", Locale.getDefault());
         holder.title.setText(data.get(position).getTitle());
-        holder.date.setText(sdf.format(data.get(position).getDate()));
+        holder.date.setText(sdf.format(data.get(position).getDate().toDate()));
     }
 
     @Override
@@ -100,7 +103,7 @@ public class CalendarItemsListAdapter extends RecyclerView.Adapter<CalendarItems
 
         return data.get(position).getNote();
     }
-    public Date getDate(int position){
+    public LocalDateTime getDate(int position){
 
         return data.get(position).getDate();
     }

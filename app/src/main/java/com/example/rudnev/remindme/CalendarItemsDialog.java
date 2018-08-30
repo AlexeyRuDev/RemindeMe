@@ -1,6 +1,7 @@
 package com.example.rudnev.remindme;
 
 import android.annotation.SuppressLint;
+import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.Observer;
 import android.content.Context;
 import android.content.Intent;
@@ -25,6 +26,7 @@ import com.example.rudnev.remindme.viewmodels.FragmentsViewModel;
 
 import org.joda.time.DateTimeComparator;
 import org.joda.time.LocalDate;
+import org.joda.time.LocalDateTime;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -73,10 +75,11 @@ public class CalendarItemsDialog extends DialogFragment implements RemindItemCli
         adapter = new CalendarItemsListAdapter(this);
         listViewItems.setAdapter(adapter);
 
-        mViewModel.getAllReminds().observe(this, new Observer<List<RemindDTO>>() {
+        mViewModel.getRemindsForConcreteDate(LocalDateTime.fromDateFields(calendar.getTime())).observe(this, new Observer<List<RemindDTO>>() {
             @Override
             public void onChanged(@Nullable final List<RemindDTO> reminds) {
-                filterListReminds(reminds);
+                datas = reminds;
+                adapter.setData(reminds);
 
             }
         });
@@ -104,24 +107,6 @@ public class CalendarItemsDialog extends DialogFragment implements RemindItemCli
         startActivityForResult(intent, REQUEST_CALENDAR_DIALOG);
     }
 
-    private void filterListReminds(List<RemindDTO> reminds) {
-        DateTimeComparator dateTimeComparator = DateTimeComparator.getDateOnlyInstance();
-        LocalDate localDate = LocalDate.fromDateFields(date);
-        if (datas == null) {
-            datas = new ArrayList<>();
-        } else {
-            datas.clear();
-        }
-        if (reminds != null) {
-            for (RemindDTO item : reminds) {
-                LocalDate itemLocalDate = LocalDate.fromDateFields(item.getDate());
-                if (dateTimeComparator.compare(itemLocalDate.toDate(), localDate.toDate()) == 0) {
-                    datas.add(item);
-                }
-            }
-        }
-        adapter.setData(datas);
-    }
 
     public void setContext(Context context) {
         this.context = context;
@@ -136,7 +121,7 @@ public class CalendarItemsDialog extends DialogFragment implements RemindItemCli
     public void remindListUpdateClicked(View v, int position) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
         Calendar calendar = Calendar.getInstance();
-        calendar.setTime(datas.get(position).getDate());
+        calendar.setTime(datas.get(position).getDate().toDate());
         Intent intent = new Intent(getActivity(), CreateItemActivity.class);
         intent.putExtra("mRemindItem", datas.get(position));
         intent.putExtra("mDateField", calendar);

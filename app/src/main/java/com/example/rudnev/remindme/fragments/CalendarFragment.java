@@ -1,7 +1,10 @@
 package com.example.rudnev.remindme.fragments;
 
+import android.arch.lifecycle.LiveData;
+import android.arch.lifecycle.MediatorLiveData;
 import android.arch.lifecycle.Observer;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -13,6 +16,7 @@ import com.example.rudnev.remindme.CalendarItemsDialog;
 import com.example.rudnev.remindme.DateDecorator;
 import com.example.rudnev.remindme.EventDecorator;
 import com.example.rudnev.remindme.R;
+import com.example.rudnev.remindme.activities.CreateItemActivity;
 import com.example.rudnev.remindme.adapter.TabFragmentAdapter;
 import com.example.rudnev.remindme.dto.RemindDTO;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
@@ -21,6 +25,7 @@ import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
 
 import org.joda.time.DateTimeComparator;
 import org.joda.time.LocalDate;
+import org.joda.time.LocalDateTime;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -29,7 +34,6 @@ import java.util.List;
 
 
 public class CalendarFragment extends AbstractTabFragment implements TabFragmentAdapter.TabSelectedListener{
-
 
     private static final String TAG = "CALENDAR_FRAGMENT";
     private static final int LAYOUT = R.layout.calendar_fragment;
@@ -61,10 +65,11 @@ public class CalendarFragment extends AbstractTabFragment implements TabFragment
         calendarView.setPagingEnabled(false);
         dates = new HashSet<CalendarDay>();
 
-        mViewModel.getAllReminds().observe(this, new Observer<List<RemindDTO>>() {
+        mViewModel.getRemindsForCalendar().observe(this, new Observer<List<RemindDTO>>() {
             @Override
             public void onChanged(@Nullable final List<RemindDTO> reminds) {
-                filterListReminds(reminds);
+                datas = reminds;
+                updateCalendar(datas);
             }
         });
 
@@ -77,29 +82,34 @@ public class CalendarFragment extends AbstractTabFragment implements TabFragment
                 calendar.set(Calendar.DATE, date.getDay());
                 widget.addDecorator(new EventDecorator(R.color.colorPrimary, dates, context));
                 widget.addDecorator(new DateDecorator(R.color.colorPrimary, CalendarDay.today(), context));
-                CalendarItemsDialog calendarItemsDialog = CalendarItemsDialog.getInstance(context, calendar.getTime(), mViewModel);
-                calendarItemsDialog.setTargetFragment(CalendarFragment.this, CALENDARFRAGMENT);
-                calendarItemsDialog.show(getFragmentManager(), "add_calendar_item");
+
+                if(haveItemsForConcreteDate(calendar)) {
+                    CalendarItemsDialog calendarItemsDialog = CalendarItemsDialog.getInstance(context, calendar.getTime(), mViewModel);
+                    calendarItemsDialog.setTargetFragment(CalendarFragment.this, CALENDARFRAGMENT);
+                    calendarItemsDialog.show(getFragmentManager(), "add_calendar_item");
+                }else{
+                    showAddItemActivity(calendar);
+                }
 
             }
         });
         return view;
     }
 
-
-    private void filterListReminds(List<RemindDTO> reminds) {
-        DateTimeComparator dateTimeComparator = DateTimeComparator.getDateOnlyInstance();
-        LocalDate localDate = LocalDate.now();
-        datas = new ArrayList<>();
-        if (reminds != null) {
-            for (RemindDTO item : reminds) {
-                LocalDate itemLocalDate = LocalDate.fromDateFields(item.getDate());
-                if (dateTimeComparator.compare(itemLocalDate.toDate(), localDate.toDate()) >= 0) {
-                    datas.add(item);
-                }
+    private boolean haveItemsForConcreteDate(Calendar calendar){
+        final LocalDateTime dateTime = LocalDateTime.fromDateFields(calendar.getTime());
+        for(RemindDTO remindDto : datas){
+            if(remindDto.getDate().toLocalDate().equals(dateTime.toLocalDate())){
+                return true;
             }
         }
-        updateCalendar(datas);
+        return false;
+    }
+
+    private void showAddItemActivity(Calendar calendar){
+        Intent intent = new Intent(getActivity(), CreateItemActivity.class);
+        intent.putExtra("mDateField", calendar);
+        startActivityForResult(intent, CALENDARFRAGMENT);
     }
 
     public void setContext(Context context) {
@@ -118,6 +128,21 @@ public class CalendarFragment extends AbstractTabFragment implements TabFragment
         dates = mViewModel.updateCalendar(datas);
         calendarView.addDecorator(new EventDecorator(R.color.colorPrimary, dates, context));
         calendarView.addDecorator(new DateDecorator(R.color.colorPrimary, CalendarDay.today(), context));
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode < 0){
+            RemindDTO mRemindItem = (RemindDTO) data.getSerializableExtra("mRemindItem");
+            if(mRemindItem!=null){
+                if(data.getBooleanExtra("updateItem", false)){
+                    mViewModel.update(mRemindItem);
+                }else{
+                    mViewModel.insert(mRemindItem);
+                }
+            }
+        }
     }
 
 }

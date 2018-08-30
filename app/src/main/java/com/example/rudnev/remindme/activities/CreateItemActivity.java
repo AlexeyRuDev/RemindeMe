@@ -22,6 +22,9 @@ import com.example.rudnev.remindme.R;
 import com.example.rudnev.remindme.dto.Notes;
 import com.example.rudnev.remindme.dto.RemindDTO;
 
+import org.joda.time.LocalDate;
+import org.joda.time.LocalDateTime;
+
 import java.util.Calendar;
 import java.util.Date;
 
@@ -123,12 +126,12 @@ public class CreateItemActivity extends AppCompatActivity {
         }
         if (!isNote) {
             if (remindItem == null) {
-                remindItem = new RemindDTO(mEditTextTitle.getText().toString(), mEditTextNote.getText().toString(), formatDate);
+                remindItem = new RemindDTO(mEditTextTitle.getText().toString(), mEditTextNote.getText().toString(), LocalDateTime.fromDateFields(formatDate));
                 resultIntent.putExtra("updateItem", false);
             } else {
                 remindItem.setTitle(mEditTextTitle.getText().toString());
                 remindItem.setNote(mEditTextNote.getText().toString());
-                remindItem.setDate(date.getTime());
+                remindItem.setDate(LocalDateTime.fromDateFields(date.getTime()));
                 resultIntent.putExtra("updateItem", true);
             }
             resultIntent.putExtra("mRemindItem", remindItem);

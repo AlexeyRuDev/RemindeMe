@@ -6,6 +6,9 @@ import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
 
+import org.joda.time.LocalDate;
+import org.joda.time.LocalDateTime;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -26,16 +29,16 @@ public class RemindDTO implements Serializable {
 
     @NonNull
     @ColumnInfo(name = "date")
-    private Date date;
+    private LocalDateTime date;
 
-    public RemindDTO(long id, @NonNull String title, @NonNull String note, @NonNull Date date) {
+    public RemindDTO(long id, @NonNull String title, @NonNull String note, @NonNull LocalDateTime date) {
         this.id = id;
         this.title = title;
         this.note = note;
         this.date = date;
     }
 
-    public RemindDTO(@NonNull String title, @NonNull String note, @NonNull Date date) {
+    public RemindDTO(@NonNull String title, @NonNull String note, @NonNull LocalDateTime date) {
         this.title = title;
         this.note = note;
         this.date = date;
@@ -63,11 +66,11 @@ public class RemindDTO implements Serializable {
     }
 
     @NonNull
-    public Date getDate() {
+    public LocalDateTime getDate() {
         return date;
     }
 
-    public void setDate(@NonNull Date date) {
+    public void setDate(@NonNull LocalDateTime date) {
         this.date = date;
     }
 

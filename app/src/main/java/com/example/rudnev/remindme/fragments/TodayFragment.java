@@ -65,30 +65,16 @@ public class TodayFragment extends AbstractTabFragment implements RemindItemClic
         adapter = new TodayListAdapter(this);
         rv.setAdapter(adapter);
 
-        mViewModel.getAllReminds().observe(this, new Observer<List<RemindDTO>>() {
+        mViewModel.getRemindsForToday().observe(this, new Observer<List<RemindDTO>>() {
             @Override
             public void onChanged(@Nullable final List<RemindDTO> reminds) {
-                filterListReminds(reminds);
+                adapter.setData(reminds);
 
             }
         });
         return view;
     }
 
-    private void filterListReminds(List<RemindDTO> reminds) {
-        DateTimeComparator dateTimeComparator = DateTimeComparator.getDateOnlyInstance();
-        LocalDate localDate = LocalDate.now();
-        List<RemindDTO>datas = new ArrayList<>();
-        if (reminds != null) {
-            for (RemindDTO item : reminds) {
-                LocalDate itemLocalDate = LocalDate.fromDateFields(item.getDate());
-                if (dateTimeComparator.compare(itemLocalDate.toDate(), localDate.toDate()) == 0) {
-                    datas.add(item);
-                }
-            }
-        }
-        adapter.setData(datas);
-    }
 
     public void setContext(Context context) {
         this.context = context;

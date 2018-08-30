@@ -12,6 +12,9 @@ import com.example.rudnev.remindme.R;
 import com.example.rudnev.remindme.RemindItemClickListener;
 import com.example.rudnev.remindme.dto.RemindDTO;
 
+import org.joda.time.LocalDate;
+import org.joda.time.LocalDateTime;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -41,7 +44,7 @@ public class ArchiveListAdapter extends RecyclerView.Adapter<ArchiveListAdapter.
     public void onBindViewHolder(ArchiveListAdapter.RemindViewHolder holder, int position) {
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
         holder.title.setText(data.get(position).getTitle());
-        holder.date.setText(sdf.format(data.get(position).getDate()));
+        holder.date.setText(sdf.format(data.get(position).getDate().toDate()));
     }
 
     @Override
@@ -99,7 +102,7 @@ public class ArchiveListAdapter extends RecyclerView.Adapter<ArchiveListAdapter.
 
         return data.get(position).getNote();
     }
-    public Date getDate(int position){
+    public LocalDateTime getDate(int position){
 
         return data.get(position).getDate();
     }

@@ -46,29 +46,14 @@ public class ArchiveActivity extends AppCompatActivity implements RemindItemClic
         rv.setAdapter(adapter);
         mViewModel = ViewModelProviders.of(this).get(FragmentsViewModel.class);
 
-        mViewModel.getAllReminds().observe(this, new Observer<List<RemindDTO>>() {
+        mViewModel.getRemindsForArchive().observe(this, new Observer<List<RemindDTO>>() {
             @Override
             public void onChanged(@Nullable final List<RemindDTO> reminds) {
-                filterListReminds(reminds);
+                adapter.setData(reminds);
             }
         });
     }
 
-    private void filterListReminds(List<RemindDTO> reminds) {
-        DateTimeComparator dateTimeComparator = DateTimeComparator.getDateOnlyInstance();
-        LocalDate localDate = LocalDate.now();
-        List<RemindDTO>datas = new ArrayList<>();
-
-        if (reminds != null) {
-            for (RemindDTO item : reminds) {
-                LocalDate itemLocalDate = LocalDate.fromDateFields(item.getDate());
-                if (dateTimeComparator.compare(itemLocalDate.toDate(), localDate.toDate()) < 0) {
-                    datas.add(item);
-                }
-            }
-        }
-        adapter.setData(datas);
-    }
 
     @Override
     public void remindListRemoveClicked(View v, int position) {
@@ -79,7 +64,7 @@ public class ArchiveActivity extends AppCompatActivity implements RemindItemClic
     public void remindListUpdateClicked(View v, int position) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
         Calendar calendar = Calendar.getInstance();
-        calendar.setTime(adapter.getItemById(position).getDate());
+        calendar.setTime(adapter.getItemById(position).getDate().toDate());
         Intent intent = new Intent(getApplicationContext(), CreateItemActivity.class);
         intent.putExtra("mRemindItem", adapter.getItemById(position));
         intent.putExtra("mDateField", calendar);

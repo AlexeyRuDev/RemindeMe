@@ -2,7 +2,6 @@ package com.example.rudnev.remindme.repositories;
 
 import android.app.Application;
 import android.arch.lifecycle.LiveData;
-import android.arch.lifecycle.MutableLiveData;
 import android.os.AsyncTask;
 
 import com.example.rudnev.remindme.dao.RemindMeDAO;
@@ -10,10 +9,10 @@ import com.example.rudnev.remindme.dto.RemindDTO;
 import com.example.rudnev.remindme.roomdatabase.RemindRoomDataBase;
 
 import org.joda.time.LocalDate;
+import org.joda.time.LocalDateTime;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -26,39 +25,47 @@ public class RemindMeRepository {
 
     public RemindMeRepository(Application application) {
         RemindRoomDataBase db = RemindRoomDataBase.getDatabase(application);
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+        //SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
         Calendar calendar = Calendar.getInstance();
-        LocalDate localDate = LocalDate.now();
+        LocalDateTime localDate = LocalDateTime.now();
         String date = sdf.format(calendar.getTime());
         remindMeDAO = db.remindMeDAO();
         mAllReminds = remindMeDAO.getAllReminds();
-        //mRemindsForToday = mAllReminds;//remindMeDAO.getRemindsForTodayFragment(localDate.toDate());
-        //mRemindsForArchive = mAllReminds;//remindMeDAO.getRemindsForArchiveFragment(calendar.getTime());
-        //mRemindsForCalendar = mAllReminds;//remindMeDAO.getRemindsForCalendarFragment(calendar.getTime());
+        mRemindsForToday = remindMeDAO.getRemindsForTodayFragment(localDate);
+        mRemindsForArchive = remindMeDAO.getRemindsForArchiveFragment(localDate);
+        mRemindsForCalendar = remindMeDAO.getRemindsForCalendarFragment(localDate);
     }
 
     public LiveData<List<RemindDTO>> getAllReminds() {
         return mAllReminds;
     }
+
     public LiveData<List<RemindDTO>> getRemindsForToday() {
         return mRemindsForToday;
     }
+
     public LiveData<List<RemindDTO>> getRemindsForArchive() {
         return mRemindsForArchive;
     }
+
     public LiveData<List<RemindDTO>> getRemindsForCalendar() {
         return mRemindsForCalendar;
     }
 
-    public void insert (RemindDTO remind) {
+    public LiveData<List<RemindDTO>> getRemindsForConcreteDate(LocalDateTime dateTime){
+        return remindMeDAO.getRemindsForTodayFragment(dateTime);
+    }
+
+    public void insert(RemindDTO remind) {
         new insertAsyncTask(remindMeDAO).execute(remind);
     }
 
-    public void update (RemindDTO remind) {
+    public void update(RemindDTO remind) {
         new updateAsyncTask(remindMeDAO).execute(remind);
     }
 
-    public void delete (RemindDTO remind) {
+    public void delete(RemindDTO remind) {
         new deleteAsyncTask(remindMeDAO).execute(remind);
     }
 

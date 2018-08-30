@@ -14,7 +14,7 @@ import com.example.rudnev.remindme.dao.RemindMeDAO;
 import com.example.rudnev.remindme.dto.Notes;
 import com.example.rudnev.remindme.dto.RemindDTO;
 
-@Database(entities = {RemindDTO.class, Notes.class}, version = 4)
+@Database(entities = {RemindDTO.class, Notes.class}, version = 8)
 @TypeConverters({DateTypeConverter.class})
 public abstract class RemindRoomDataBase extends RoomDatabase {
 
