@@ -140,8 +140,8 @@ public class CreateItemActivity extends AppCompatActivity {
                 remindItem.setDate(LocalDateTime.fromDateFields(date.getTime()));
                 resultIntent.putExtra("updateItem", true);
             }
-            scheduleNotification(getNotification(remindItem.getTitle()), remindItem);
             resultIntent.putExtra("mRemindItem", remindItem);
+            scheduleNotification(getNotification(remindItem.getTitle()), remindItem);
         } else {
             if (noteItem == null) {
                 noteItem = new Notes(mEditTextTitle.getText().toString(), mEditTextNote.getText().toString(), formatDate);
