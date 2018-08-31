@@ -35,7 +35,9 @@
 
         <receiver android:name=".NotificationReceiver">
             <intent-filter>
-                <action android:name="doot.remind.action.NOTIFICATION"/>
+                <action android:name="android.media.action.DISPLAY_NOTIFICATION" />
+                <!--<action android:name="doot.remind.action.NOTIFICATION"/>-->
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </receiver>
 
