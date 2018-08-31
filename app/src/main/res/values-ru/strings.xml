@@ -16,4 +16,5 @@
     <string name="close">Закрыть</string>
     <string name="add_cal_item">Добавить</string>
     <string name="create_item">Добавить новое напоминание</string>
+    <string name="ScheduledTitle">Напоминание</string>
 </resources>

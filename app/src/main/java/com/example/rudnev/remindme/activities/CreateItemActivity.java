@@ -31,8 +31,10 @@ import com.example.rudnev.remindme.dto.RemindDTO;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 public class CreateItemActivity extends AppCompatActivity {
 
@@ -114,6 +116,10 @@ public class CreateItemActivity extends AppCompatActivity {
         mOkBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(mEditTextTitle.getText().toString().isEmpty()){
+                    SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault());
+                    mEditTextTitle.setText(sdf.format(date.getTime()));
+                }
                 setResultFromActivity(RESULT_OK);
             }
         });
@@ -141,7 +147,8 @@ public class CreateItemActivity extends AppCompatActivity {
                 resultIntent.putExtra("updateItem", true);
             }
             resultIntent.putExtra("mRemindItem", remindItem);
-            scheduleNotification(getNotification(remindItem.getTitle()), remindItem);
+            if(resultCode<0)
+                scheduleNotification(getNotification(remindItem.getTitle()), remindItem);
         } else {
             if (noteItem == null) {
                 noteItem = new Notes(mEditTextTitle.getText().toString(), mEditTextNote.getText().toString(), formatDate);
@@ -277,7 +284,7 @@ public class CreateItemActivity extends AppCompatActivity {
     private Notification getNotification(String content) {
 
         Notification.Builder builder = new Notification.Builder(this);
-        builder.setContentTitle("Scheduled Notification");
+        builder.setContentTitle(getString(R.string.ScheduledTitle));
         builder.setContentText(content);
         builder.setSmallIcon(R.mipmap.ic_launcher);
         builder.setDefaults(Notification.DEFAULT_SOUND);
