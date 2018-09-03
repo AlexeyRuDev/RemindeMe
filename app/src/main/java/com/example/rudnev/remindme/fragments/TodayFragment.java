@@ -1,9 +1,14 @@
 package com.example.rudnev.remindme.fragments;
 
+import android.app.AlarmManager;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.arch.lifecycle.Observer;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.service.notification.NotificationListenerService;
+import android.service.notification.StatusBarNotification;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
@@ -16,6 +21,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.example.rudnev.remindme.NotificationReceiver;
 import com.example.rudnev.remindme.activities.CreateItemActivity;
 import com.example.rudnev.remindme.R;
 import com.example.rudnev.remindme.RemindItemClickListener;
@@ -89,7 +95,7 @@ public class TodayFragment extends AbstractTabFragment implements RemindItemClic
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(resultCode < 0){
-            RemindDTO mRemindItem = (RemindDTO) data.getSerializableExtra("mRemindItem");
+            RemindDTO mRemindItem = (RemindDTO) data.getParcelableExtra("mRemindItem");
             if(mRemindItem!=null){
                 if(data.getBooleanExtra("updateItem", false)){
                     mViewModel.update(mRemindItem);
@@ -102,7 +108,14 @@ public class TodayFragment extends AbstractTabFragment implements RemindItemClic
 
     @Override
     public void remindListRemoveClicked(View v, int position) {
-        mViewModel.delete(adapter.getItemById(position));
+        RemindDTO remindDTO = adapter.getItemById(position);
+        int notificationID = remindDTO.getDate().getYear() + remindDTO.getDate().getMonthOfYear() + remindDTO.getDate().getDayOfMonth() +
+                remindDTO.getDate().getHourOfDay() + remindDTO.getDate().getMinuteOfHour() + remindDTO.getDate().getSecondOfMinute();
+        Intent notificationIntent = new Intent(context, NotificationReceiver.class);
+        notificationIntent.putExtra(NotificationReceiver.NOTIFICATION_ID, notificationID);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, notificationID, notificationIntent, PendingIntent.FLAG_ONE_SHOT);
+        pendingIntent.cancel();
+        mViewModel.delete(remindDTO);
     }
 
     @Override

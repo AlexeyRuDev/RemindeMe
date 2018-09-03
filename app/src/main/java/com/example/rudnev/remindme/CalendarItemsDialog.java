@@ -1,6 +1,7 @@
 package com.example.rudnev.remindme;
 
 import android.annotation.SuppressLint;
+import android.app.PendingIntent;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.Observer;
 import android.content.Context;
@@ -114,6 +115,13 @@ public class CalendarItemsDialog extends DialogFragment implements RemindItemCli
 
     @Override
     public void remindListRemoveClicked(View v, int position) {
+        RemindDTO remindDTO = adapter.getItemById(position);
+        int notificationID = remindDTO.getDate().getYear() + remindDTO.getDate().getMonthOfYear() + remindDTO.getDate().getDayOfMonth() +
+                remindDTO.getDate().getHourOfDay() + remindDTO.getDate().getMinuteOfHour() + remindDTO.getDate().getSecondOfMinute();
+        Intent notificationIntent = new Intent(context, NotificationReceiver.class);
+        notificationIntent.putExtra(NotificationReceiver.NOTIFICATION_ID, notificationID);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, notificationID, notificationIntent, PendingIntent.FLAG_ONE_SHOT);
+        pendingIntent.cancel();
         mViewModel.delete(datas.get(position));
     }
 
@@ -176,7 +184,7 @@ public class CalendarItemsDialog extends DialogFragment implements RemindItemCli
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(resultCode < 0){
-            RemindDTO mRemindItem = (RemindDTO) data.getSerializableExtra("mRemindItem");
+            RemindDTO mRemindItem = (RemindDTO) data.getParcelableExtra("mRemindItem");
             if(mRemindItem!=null){
                 if(data.getBooleanExtra("updateItem", false)){
                     mViewModel.update(mRemindItem);

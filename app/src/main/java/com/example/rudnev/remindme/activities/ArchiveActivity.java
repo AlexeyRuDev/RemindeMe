@@ -103,7 +103,7 @@ public class ArchiveActivity extends AppCompatActivity implements RemindItemClic
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(resultCode < 0){
-            RemindDTO mRemindItem = (RemindDTO) data.getSerializableExtra("mRemindItem");
+            RemindDTO mRemindItem = (RemindDTO) data.getParcelableExtra("mRemindItem");
             if(mRemindItem!=null){
                 if(data.getBooleanExtra("updateItem", false)){
                     mViewModel.update(mRemindItem);

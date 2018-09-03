@@ -32,9 +32,13 @@ import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 public class CreateItemActivity extends AppCompatActivity {
 
@@ -85,9 +89,11 @@ public class CreateItemActivity extends AppCompatActivity {
             } else {
                 dateLayout.setVisibility(View.VISIBLE);
             }
-            remindItem = (RemindDTO) resultIntent.getSerializableExtra("mRemindItem");
-            noteItem = (Notes) resultIntent.getSerializableExtra("mNoteItem");
+            remindItem = (RemindDTO) resultIntent.getParcelableExtra("mRemindItem");
+            noteItem = (Notes) resultIntent.getParcelableExtra("mNoteItem");
             if (remindItem != null) {
+                date = Calendar.getInstance();
+                date.setTime(remindItem.getDate().toDate());
                 mEditTextTitle.setText(remindItem.getTitle());
                 mEditTextNote.setText(remindItem.getNote());
             } else if (noteItem != null) {
@@ -141,14 +147,17 @@ public class CreateItemActivity extends AppCompatActivity {
                 remindItem = new RemindDTO(mEditTextTitle.getText().toString(), mEditTextNote.getText().toString(), LocalDateTime.fromDateFields(formatDate));
                 resultIntent.putExtra("updateItem", false);
             } else {
+                cancelOldNotification(remindItem);
                 remindItem.setTitle(mEditTextTitle.getText().toString());
                 remindItem.setNote(mEditTextNote.getText().toString());
                 remindItem.setDate(LocalDateTime.fromDateFields(date.getTime()));
                 resultIntent.putExtra("updateItem", true);
             }
+            if(resultCode<0) {
+                scheduleNotification(getNotification(remindItem.getTitle(), remindItem.getDate().toDate().getTime()), remindItem);
+            }
             resultIntent.putExtra("mRemindItem", remindItem);
-            if(resultCode<0)
-                scheduleNotification(getNotification(remindItem.getTitle()), remindItem);
+
         } else {
             if (noteItem == null) {
                 noteItem = new Notes(mEditTextTitle.getText().toString(), mEditTextNote.getText().toString(), formatDate);
@@ -243,14 +252,6 @@ public class CreateItemActivity extends AppCompatActivity {
             public void beforeTextChanged(CharSequence s, int start, int count,
                                           int after) {
 
-                if (mEditTextTitle.getText().hashCode() == s.hashCode())
-                {
-
-                }
-                else if (mEditTextNote.getText().hashCode() == s.hashCode())
-                {
-
-                }
             }
 
             @Override
@@ -269,29 +270,40 @@ public class CreateItemActivity extends AppCompatActivity {
     }
 
     private void scheduleNotification(Notification notification, RemindDTO remindItem) {
-
-
+        int notificationID = remindItem.getDate().getYear() + remindItem.getDate().getMonthOfYear() + remindItem.getDate().getDayOfMonth() +
+                remindItem.getDate().getHourOfDay() + remindItem.getDate().getMinuteOfHour() + remindItem.getDate().getSecondOfMinute();
         Intent notificationIntent = new Intent(this, NotificationReceiver.class);
-        notificationIntent.putExtra(NotificationReceiver.NOTIFICATION_ID, (int)System.currentTimeMillis());
+        notificationIntent.putExtra(NotificationReceiver.NOTIFICATION_ID, notificationID);
         notificationIntent.putExtra(NotificationReceiver.NOTIFICATION, notification);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, (int)System.currentTimeMillis(), notificationIntent, PendingIntent.FLAG_ONE_SHOT);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, notificationID, notificationIntent, PendingIntent.FLAG_ONE_SHOT);
 
         long futureInMillis = remindItem.getDate().toDate().getTime();
         AlarmManager alarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
         alarmManager.set(AlarmManager.RTC_WAKEUP, futureInMillis, pendingIntent);
+
     }
 
-    private Notification getNotification(String content) {
+    private Notification getNotification(String content, long when) {
 
         Notification.Builder builder = new Notification.Builder(this);
         builder.setContentTitle(getString(R.string.ScheduledTitle));
         builder.setContentText(content);
+        builder.setWhen(when);
         builder.setSmallIcon(R.mipmap.ic_launcher);
         builder.setDefaults(Notification.DEFAULT_SOUND);
         builder.setDefaults(Notification.DEFAULT_VIBRATE);
         builder.setAutoCancel(true);
         builder.setLights(Color.BLUE, 500, 500);
         return builder.build();
+    }
+
+    private void cancelOldNotification(RemindDTO remindItem){
+        int notificationID = remindItem.getDate().getYear() + remindItem.getDate().getMonthOfYear() + remindItem.getDate().getDayOfMonth() +
+                remindItem.getDate().getHourOfDay() + remindItem.getDate().getMinuteOfHour() + remindItem.getDate().getSecondOfMinute();
+        Intent notificationIntent = new Intent(this, NotificationReceiver.class);
+        notificationIntent.putExtra(NotificationReceiver.NOTIFICATION_ID, notificationID);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, notificationID, notificationIntent, PendingIntent.FLAG_ONE_SHOT);
+        pendingIntent.cancel();
     }
 
 
