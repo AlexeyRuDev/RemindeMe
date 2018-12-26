@@ -6,13 +6,16 @@ import android.app.PendingIntent;
 import android.arch.lifecycle.Observer;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.service.notification.NotificationListenerService;
 import android.service.notification.StatusBarNotification;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
@@ -22,6 +25,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.rudnev.remindme.NotificationReceiver;
+import com.example.rudnev.remindme.RecyclerItemTouchHelper;
 import com.example.rudnev.remindme.activities.CreateItemActivity;
 import com.example.rudnev.remindme.R;
 import com.example.rudnev.remindme.RemindItemClickListener;
@@ -37,7 +41,7 @@ import java.util.List;
 
 
 public class TodayFragment extends AbstractTabFragment implements RemindItemClickListener,
-        TabFragmentAdapter.TabSelectedListener {
+        TabFragmentAdapter.TabSelectedListener, RecyclerItemTouchHelper.RecyclerItemTouchHelperListener {
 
     private static final int LAYOUT = R.layout.today_fragment;
     private static final int REQUEST_TODAY = 1;
@@ -78,6 +82,8 @@ public class TodayFragment extends AbstractTabFragment implements RemindItemClic
 
             }
         });
+        ItemTouchHelper.SimpleCallback itemTouchHelperCallback = new RecyclerItemTouchHelper(0, ItemTouchHelper.RIGHT, this);
+        new ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(rv);
         return view;
     }
 
@@ -107,51 +113,10 @@ public class TodayFragment extends AbstractTabFragment implements RemindItemClic
     }
 
     @Override
-    public void remindListRemoveClicked(View v, int position) {
-        RemindDTO remindDTO = adapter.getItemById(position);
-        int notificationID = remindDTO.getDate().getYear() + remindDTO.getDate().getMonthOfYear() + remindDTO.getDate().getDayOfMonth() +
-                remindDTO.getDate().getHourOfDay() + remindDTO.getDate().getMinuteOfHour() + remindDTO.getDate().getSecondOfMinute();
-        Intent notificationIntent = new Intent(context, NotificationReceiver.class);
-        notificationIntent.putExtra(NotificationReceiver.NOTIFICATION_ID, notificationID);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, notificationID, notificationIntent, PendingIntent.FLAG_ONE_SHOT);
-        pendingIntent.cancel();
-        mViewModel.delete(remindDTO);
-    }
-
-    @Override
-    public void remindListUpdateClicked(View v, int position) {
+    public void remindListOpenClicked(View v, int position) {
         Intent intent = new Intent(getActivity(), CreateItemActivity.class);
         intent.putExtra("mRemindItem", adapter.getItemById(position));
         startActivityForResult(intent, REQUEST_TODAY);
-    }
-
-
-    @Override
-    public void popupMenuItemClicked(final View view, final int position) {
-        TextView mTitleTV = (TextView) view.findViewById(R.id.title);
-        PopupMenu popup = new PopupMenu(view.getContext(), mTitleTV);
-        MenuInflater inflate = popup.getMenuInflater();
-        inflate.inflate(R.menu.popup_cardview_menu, popup.getMenu());
-
-        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                switch (item.getItemId()) {
-                    case R.id.edit:
-                        remindListUpdateClicked(view, position);
-                        break;
-                    case R.id.delete:
-                        remindListRemoveClicked(view, position);
-                        break;
-                    default:
-                        return false;
-                }
-                return false;
-            }
-        });
-        popup.setGravity(Gravity.END | Gravity.TOP);
-        popup.show();
     }
 
     @Override
@@ -160,4 +125,40 @@ public class TodayFragment extends AbstractTabFragment implements RemindItemClic
     }
 
 
+    @Override
+    public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction, int position) {
+        if (viewHolder instanceof TodayListAdapter.RemindViewHolder) {
+            // get the removed item name to display it in snack bar
+            //String name = cartList.get(viewHolder.getAdapterPosition()).getName();
+
+            // backup of removed item for undo purpose
+            //final RemindDTO deletedItem = cartList.get(viewHolder.getAdapterPosition());
+            //final int deletedIndex = viewHolder.getAdapterPosition();
+
+            // remove the item from recycler view
+            //adapter.removeItem(viewHolder.getAdapterPosition());
+
+            /*showing snack bar with Undo option
+            Snackbar snackbar = Snackbar
+                    .make(coordinatorLayout, name + " removed from cart!", Snackbar.LENGTH_LONG);
+            snackbar.setAction("UNDO", new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    // undo is selected, restore the deleted item
+                    //adapter.restoreItem(deletedItem, deletedIndex);
+                }
+            });
+            snackbar.setActionTextColor(Color.YELLOW);
+            snackbar.show();*/
+            RemindDTO remindDTO = adapter.getItemById(position);
+            int notificationID = remindDTO.getDate().getYear() + remindDTO.getDate().getMonthOfYear() + remindDTO.getDate().getDayOfMonth() +
+                    remindDTO.getDate().getHourOfDay() + remindDTO.getDate().getMinuteOfHour() + remindDTO.getDate().getSecondOfMinute();
+            Intent notificationIntent = new Intent(context, NotificationReceiver.class);
+            notificationIntent.putExtra(NotificationReceiver.NOTIFICATION_ID, notificationID);
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(context, notificationID, notificationIntent, PendingIntent.FLAG_ONE_SHOT);
+            pendingIntent.cancel();
+            mViewModel.delete(remindDTO);
+        }
+    }
 }

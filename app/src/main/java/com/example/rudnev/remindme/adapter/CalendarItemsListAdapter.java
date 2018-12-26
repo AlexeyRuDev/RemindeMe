@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.rudnev.remindme.R;
@@ -56,12 +57,13 @@ public class CalendarItemsListAdapter extends RecyclerView.Adapter<CalendarItems
             return 0;
     }
 
-    public static class RemindViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    public static class RemindViewHolder extends CommonViewHolder implements View.OnClickListener{
 
         CardView cardView;
         TextView title;
         TextView note;
         TextView date;
+        public RelativeLayout viewBackground, viewForeground;
 
         public RemindViewHolder(View itemView) {
             super(itemView);
@@ -69,21 +71,22 @@ public class CalendarItemsListAdapter extends RecyclerView.Adapter<CalendarItems
             cardView = (CardView) itemView.findViewById(R.id.cardview);
             title = (TextView) itemView.findViewById(R.id.title);
             date = (TextView) itemView.findViewById(R.id.date);
-            itemView.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View view) {
-                    calItemClickListener.popupMenuItemClicked(view, getLayoutPosition());
-                    return false;
-                }
-            });
 
+            viewBackground = itemView.findViewById(R.id.view_background);
+            viewForeground = itemView.findViewById(R.id.view_foreground);
         }
+
+        @Override
+        public View getForegroundView() {
+            return viewForeground;
+        }
+
         @Override
         public void onClick(View v)
         {
-            //calItemClickListener.remindListRemoveClicked(v, this.getLayoutPosition());
-
+            calItemClickListener.remindListOpenClicked(v, this.getLayoutPosition());
         }
+
     }
 
     public void setData(List<RemindDTO> data) {

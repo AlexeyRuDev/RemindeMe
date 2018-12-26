@@ -3,13 +3,26 @@ package com.example.rudnev.remindme.dto;
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 
 import java.io.Serializable;
 import java.util.Date;
 
 @Entity(tableName = "notestable")
-public class Notes implements Serializable {
+public class Notes implements Parcelable {
+
+    public static final Parcelable.Creator<Notes> CREATOR = new Parcelable.Creator<Notes>() {
+        // распаковываем объект из Parcel
+        public Notes createFromParcel(Parcel in) {
+            return new Notes(in);
+        }
+
+        public Notes[] newArray(int size) {
+            return new Notes[size];
+        }
+    };
 
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")
@@ -23,6 +36,12 @@ public class Notes implements Serializable {
     @ColumnInfo(name = "note")
     private String note;
 
+    public Notes(Parcel parcel){
+        this.id = parcel.readLong();
+        this.title = parcel.readString();
+        this.note = parcel.readString();
+    }
+
     public Notes(long id, @NonNull String title, @NonNull String note, @NonNull Date date) {
         this.id = id;
         this.title = title;
@@ -35,6 +54,20 @@ public class Notes implements Serializable {
     }
 
     public Notes() {
+    }
+
+
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeLong(id);
+        dest.writeString(title);
+        dest.writeString(note);
     }
 
     @NonNull

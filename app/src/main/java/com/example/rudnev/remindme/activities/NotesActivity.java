@@ -10,12 +10,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
 import com.example.rudnev.remindme.R;
+import com.example.rudnev.remindme.RecyclerItemTouchHelper;
 import com.example.rudnev.remindme.RemindItemClickListener;
 import com.example.rudnev.remindme.activities.CreateItemActivity;
 import com.example.rudnev.remindme.adapter.NotesListAdapter;
@@ -24,7 +26,7 @@ import com.example.rudnev.remindme.viewmodels.NoteViewModel;
 
 import java.util.List;
 
-public class NotesActivity extends AppCompatActivity implements RemindItemClickListener {
+public class NotesActivity extends AppCompatActivity implements RemindItemClickListener, RecyclerItemTouchHelper.RecyclerItemTouchHelperListener {
 
     private static final int LAYOUT = R.layout.notes_activity;
     private NotesListAdapter adapter;
@@ -61,14 +63,13 @@ public class NotesActivity extends AppCompatActivity implements RemindItemClickL
                 startActivityForResult(intent, REQUEST_NOTE);
             }
         });
-    }
-    @Override
-    public void remindListRemoveClicked(View v, int position) {
-        mViewModel.delete(adapter.getItemById(position));
+
+        ItemTouchHelper.SimpleCallback itemTouchHelperCallback = new RecyclerItemTouchHelper(0, ItemTouchHelper.RIGHT, this);
+        new ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(rv);
     }
 
     @Override
-    public void remindListUpdateClicked(View v, int position) {
+    public void remindListOpenClicked(View v, int position) {
 
         Intent intent = new Intent(getApplicationContext(), CreateItemActivity.class);
         intent.putExtra("mNoteItem", adapter.getItemById(position));
@@ -78,37 +79,10 @@ public class NotesActivity extends AppCompatActivity implements RemindItemClickL
     }
 
     @Override
-    public void popupMenuItemClicked(final View view, final int position) {
-        TextView mTitleTV = (TextView) view.findViewById(R.id.title);
-        PopupMenu popup = new PopupMenu(view.getContext(), mTitleTV);
-        MenuInflater inflate = popup.getMenuInflater();
-        inflate.inflate(R.menu.popup_cardview_menu, popup.getMenu());
-
-        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                switch (item.getItemId()) {
-                    case R.id.edit:
-                        remindListUpdateClicked(view, position);
-                        break;
-                    case R.id.delete:
-                        remindListRemoveClicked(view, position);
-                        break;
-                    default:
-                        return false;
-                }
-                return false;
-            }
-        });
-        popup.show();
-    }
-
-    @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(resultCode < 0){
-            Notes mNoteItem = (Notes) data.getSerializableExtra("mNoteItem");
+            Notes mNoteItem = (Notes) data.getParcelableExtra("mNoteItem");
             if(mNoteItem!=null){
                 if(data.getBooleanExtra("updateItem", false)){
                     mViewModel.update(mNoteItem);
@@ -118,5 +92,10 @@ public class NotesActivity extends AppCompatActivity implements RemindItemClickL
                 adapter.notifyDataSetChanged();
             }
         }
+    }
+
+    @Override
+    public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction, int position) {
+        mViewModel.delete(adapter.getItemById(position));
     }
 }

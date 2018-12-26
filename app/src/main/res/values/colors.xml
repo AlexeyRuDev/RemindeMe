@@ -5,4 +5,8 @@
     <color name="mainBackground">#fffae5</color>
     <color name="colorWhite">#e2e2e2</color>
     <color name="colorBlack">#191919</color>
+    <color name="colorAccent">#ea3732</color>
+    <color name="bg_row_background">#fa315b</color>
+    <color name="item_name">#535353</color>
+    <color name="description">#a9a9a9</color>
 </resources>

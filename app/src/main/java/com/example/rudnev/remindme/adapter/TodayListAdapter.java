@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.rudnev.remindme.R;
@@ -58,11 +59,12 @@ public class TodayListAdapter extends RecyclerView.Adapter<TodayListAdapter.Remi
             return 0;
     }
 
-    public static class RemindViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    public static class RemindViewHolder extends CommonViewHolder implements View.OnClickListener{
 
         CardView cardView;
         TextView title;
         TextView date;
+        public RelativeLayout viewBackground, viewForeground;
 
         public RemindViewHolder(View itemView) {
             super(itemView);
@@ -70,19 +72,20 @@ public class TodayListAdapter extends RecyclerView.Adapter<TodayListAdapter.Remi
             cardView = (CardView) itemView.findViewById(R.id.cardview);
             title = (TextView) itemView.findViewById(R.id.title);
             date = (TextView) itemView.findViewById(R.id.date);
-            itemView.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View view) {
-                    itemClickListener.popupMenuItemClicked(view, getLayoutPosition());
-                    return false;
-                }
-            });
+
+            viewBackground = itemView.findViewById(R.id.view_background);
+            viewForeground = itemView.findViewById(R.id.view_foreground);
 
         }
         @Override
         public void onClick(View v)
         {
-            //itemClickListener.remindListRemoveClicked(v, this.getLayoutPosition());
+            itemClickListener.remindListOpenClicked(v, this.getLayoutPosition());
+        }
+
+        @Override
+        public View getForegroundView() {
+            return viewForeground;
         }
     }
 

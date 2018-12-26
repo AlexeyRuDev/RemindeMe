@@ -9,12 +9,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
 import com.example.rudnev.remindme.R;
+import com.example.rudnev.remindme.RecyclerItemTouchHelper;
 import com.example.rudnev.remindme.RemindItemClickListener;
 import com.example.rudnev.remindme.adapter.ArchiveListAdapter;
 import com.example.rudnev.remindme.dto.RemindDTO;
@@ -29,7 +31,7 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
-public class ArchiveActivity extends AppCompatActivity implements RemindItemClickListener {
+public class ArchiveActivity extends AppCompatActivity implements RemindItemClickListener, RecyclerItemTouchHelper.RecyclerItemTouchHelperListener {
 
     private ArchiveListAdapter adapter;
     RecyclerView rv;
@@ -52,16 +54,14 @@ public class ArchiveActivity extends AppCompatActivity implements RemindItemClic
                 adapter.setData(reminds);
             }
         });
+
+        ItemTouchHelper.SimpleCallback itemTouchHelperCallback = new RecyclerItemTouchHelper(0, ItemTouchHelper.RIGHT, this);
+        new ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(rv);
     }
 
 
     @Override
-    public void remindListRemoveClicked(View v, int position) {
-        mViewModel.delete(adapter.getItemById(position));
-    }
-
-    @Override
-    public void remindListUpdateClicked(View v, int position) {
+    public void remindListOpenClicked(View v, int position) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(adapter.getItemById(position).getDate().toDate());
@@ -72,32 +72,6 @@ public class ArchiveActivity extends AppCompatActivity implements RemindItemClic
 
     }
 
-    @Override
-    public void popupMenuItemClicked(final View view, final int position) {
-        TextView mTitleTV = (TextView) view.findViewById(R.id.title);
-        PopupMenu popup = new PopupMenu(view.getContext(), mTitleTV);
-        MenuInflater inflate = popup.getMenuInflater();
-        inflate.inflate(R.menu.popup_cardview_menu, popup.getMenu());
-
-        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                switch (item.getItemId()) {
-                    case R.id.edit:
-                        remindListUpdateClicked(view, position);
-                        break;
-                    case R.id.delete:
-                        remindListRemoveClicked(view, position);
-                        break;
-                    default:
-                        return false;
-                }
-                return false;
-            }
-        });
-        popup.show();
-    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -112,6 +86,36 @@ public class ArchiveActivity extends AppCompatActivity implements RemindItemClic
                 }
                 adapter.notifyDataSetChanged();
             }
+        }
+    }
+
+    @Override
+    public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction, int position) {
+        if (viewHolder instanceof ArchiveListAdapter.RemindViewHolder) {
+            // get the removed item name to display it in snack bar
+            //String name = cartList.get(viewHolder.getAdapterPosition()).getName();
+
+            // backup of removed item for undo purpose
+            //final RemindDTO deletedItem = cartList.get(viewHolder.getAdapterPosition());
+            //final int deletedIndex = viewHolder.getAdapterPosition();
+
+            // remove the item from recycler view
+            //adapter.removeItem(viewHolder.getAdapterPosition());
+
+            /*showing snack bar with Undo option
+            Snackbar snackbar = Snackbar
+                    .make(coordinatorLayout, name + " removed from cart!", Snackbar.LENGTH_LONG);
+            snackbar.setAction("UNDO", new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    // undo is selected, restore the deleted item
+                    //adapter.restoreItem(deletedItem, deletedIndex);
+                }
+            });
+            snackbar.setActionTextColor(Color.YELLOW);
+            snackbar.show();*/
+            mViewModel.delete(adapter.getItemById(position));
         }
     }
 }

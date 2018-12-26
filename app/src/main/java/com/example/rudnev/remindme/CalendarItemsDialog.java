@@ -12,6 +12,7 @@ import android.support.v4.app.DialogFragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -36,7 +37,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-public class CalendarItemsDialog extends DialogFragment implements RemindItemClickListener {
+public class CalendarItemsDialog extends DialogFragment implements RemindItemClickListener, RecyclerItemTouchHelper.RecyclerItemTouchHelperListener {
 
     private static final String TAG = "CALENDAR_ITEMS_DIALOG";
     private static final int REQUEST_CALENDAR_DIALOG = 2;
@@ -85,6 +86,9 @@ public class CalendarItemsDialog extends DialogFragment implements RemindItemCli
             }
         });
 
+        ItemTouchHelper.SimpleCallback itemTouchHelperCallback = new RecyclerItemTouchHelper(0, ItemTouchHelper.RIGHT, this);
+        new ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(listViewItems);
+
         addItem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -113,20 +117,9 @@ public class CalendarItemsDialog extends DialogFragment implements RemindItemCli
         this.context = context;
     }
 
-    @Override
-    public void remindListRemoveClicked(View v, int position) {
-        RemindDTO remindDTO = adapter.getItemById(position);
-        int notificationID = remindDTO.getDate().getYear() + remindDTO.getDate().getMonthOfYear() + remindDTO.getDate().getDayOfMonth() +
-                remindDTO.getDate().getHourOfDay() + remindDTO.getDate().getMinuteOfHour() + remindDTO.getDate().getSecondOfMinute();
-        Intent notificationIntent = new Intent(context, NotificationReceiver.class);
-        notificationIntent.putExtra(NotificationReceiver.NOTIFICATION_ID, notificationID);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, notificationID, notificationIntent, PendingIntent.FLAG_ONE_SHOT);
-        pendingIntent.cancel();
-        mViewModel.delete(datas.get(position));
-    }
 
     @Override
-    public void remindListUpdateClicked(View v, int position) {
+    public void remindListOpenClicked(View v, int position) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(datas.get(position).getDate().toDate());
@@ -136,32 +129,6 @@ public class CalendarItemsDialog extends DialogFragment implements RemindItemCli
         startActivityForResult(intent, REQUEST_CALENDAR_DIALOG);
     }
 
-    @Override
-    public void popupMenuItemClicked(final View view, final int position) {
-        TextView mTitleTV = (TextView) view.findViewById(R.id.title);
-        PopupMenu popup = new PopupMenu(view.getContext(), mTitleTV);
-        MenuInflater inflate = popup.getMenuInflater();
-        inflate.inflate(R.menu.popup_cardview_menu, popup.getMenu());
-
-        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                switch (item.getItemId()) {
-                    case R.id.edit:
-                        remindListUpdateClicked(view, position);
-                        break;
-                    case R.id.delete:
-                        remindListRemoveClicked(view, position);
-                        break;
-                    default:
-                        return false;
-                }
-                return false;
-            }
-        });
-        popup.show();
-    }
 
     public Date getDate() {
         return date;
@@ -196,5 +163,17 @@ public class CalendarItemsDialog extends DialogFragment implements RemindItemCli
         }else if(datas.size()==0){
             dismiss();
         }
+    }
+
+    @Override
+    public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction, int position) {
+        RemindDTO remindDTO = adapter.getItemById(position);
+        int notificationID = remindDTO.getDate().getYear() + remindDTO.getDate().getMonthOfYear() + remindDTO.getDate().getDayOfMonth() +
+                remindDTO.getDate().getHourOfDay() + remindDTO.getDate().getMinuteOfHour() + remindDTO.getDate().getSecondOfMinute();
+        Intent notificationIntent = new Intent(context, NotificationReceiver.class);
+        notificationIntent.putExtra(NotificationReceiver.NOTIFICATION_ID, notificationID);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, notificationID, notificationIntent, PendingIntent.FLAG_ONE_SHOT);
+        pendingIntent.cancel();
+        mViewModel.delete(datas.get(position));
     }
 }

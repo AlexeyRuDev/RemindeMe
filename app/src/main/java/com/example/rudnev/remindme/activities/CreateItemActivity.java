@@ -52,7 +52,6 @@ public class CreateItemActivity extends AppCompatActivity {
     private RemindDTO remindItem;
     private Notes noteItem;
     private boolean isNote;
-    private LinearLayout dateLayout;
     private boolean fillFromNote;
     private boolean charFromNote;
     private TextWatcher generalTextWatcher;
@@ -70,7 +69,7 @@ public class CreateItemActivity extends AppCompatActivity {
         Button mCloseBtn = (Button) findViewById(R.id.closeBtn);
         charFromNote = false;
         fillFromNote = true;
-        dateLayout = (LinearLayout) findViewById(R.id.dateLayout);
+        LinearLayout dateLayout = (LinearLayout) findViewById(R.id.dateLayout);
         initTextWatcher();
         mEditTextTitle = (EditText) findViewById(R.id.titleText);
         mEditTextTitle.addTextChangedListener(generalTextWatcher);
@@ -133,6 +132,13 @@ public class CreateItemActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 setResultFromActivity(RESULT_CANCELED);
+            }
+        });
+
+        mEditTextNote.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
             }
         });
 
