@@ -38,6 +38,7 @@ public class NotesActivity extends AppCompatActivity implements RemindItemClickL
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setTheme(R.style.AppDefault);
         setContentView(LAYOUT);
         rv = (RecyclerView) findViewById(R.id.recyclerViewNote);
         rv.setLayoutManager(new LinearLayoutManager(getApplicationContext()));

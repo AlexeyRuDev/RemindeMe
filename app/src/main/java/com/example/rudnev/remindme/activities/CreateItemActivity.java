@@ -64,6 +64,7 @@ public class CreateItemActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setTheme(R.style.AppDefault);
         setContentView(LAYOUT);
         Button mOkBtn = (Button) findViewById(R.id.createBtn);
         Button mCloseBtn = (Button) findViewById(R.id.closeBtn);

@@ -41,6 +41,7 @@ public class ArchiveActivity extends AppCompatActivity implements RemindItemClic
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setTheme(R.style.AppDefault);
         setContentView(R.layout.archive_activity);
         rv = (RecyclerView) findViewById(R.id.recyclerViewArchive);
         rv.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
