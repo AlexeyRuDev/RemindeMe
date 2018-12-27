@@ -11,6 +11,7 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.rudnev.remindme.CalendarItemsDialog;
 import com.example.rudnev.remindme.DateDecorator;
@@ -87,8 +88,14 @@ public class CalendarFragment extends AbstractTabFragment implements TabFragment
                     CalendarItemsDialog calendarItemsDialog = CalendarItemsDialog.getInstance(context, calendar.getTime(), mViewModel);
                     calendarItemsDialog.setTargetFragment(CalendarFragment.this, CALENDARFRAGMENT);
                     calendarItemsDialog.show(getFragmentManager(), "add_calendar_item");
-                }else{
-                    showAddItemActivity(calendar);
+                }else {
+                    LocalDate localDate = LocalDateTime.fromDateFields(calendar.getTime()).toLocalDate();
+                    LocalDate localDateNow = LocalDate.now();
+                    if(localDate.compareTo(localDateNow) < 0){
+                        Toast.makeText(context, R.string.PreviousNotes, Toast.LENGTH_SHORT).show();
+                    }else {
+                        showAddItemActivity(calendar);
+                    }
                 }
 
             }
@@ -97,7 +104,7 @@ public class CalendarFragment extends AbstractTabFragment implements TabFragment
     }
 
     private boolean haveItemsForConcreteDate(Calendar calendar){
-        final LocalDateTime dateTime = LocalDateTime.fromDateFields(calendar.getTime());
+        LocalDateTime dateTime = LocalDateTime.fromDateFields(calendar.getTime());
         for(RemindDTO remindDto : datas){
             if(remindDto.getDate().toLocalDate().equals(dateTime.toLocalDate())){
                 return true;

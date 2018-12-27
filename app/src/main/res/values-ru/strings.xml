@@ -17,4 +17,5 @@
     <string name="add_cal_item">Добавить</string>
     <string name="create_item">Добавить новое напоминание</string>
     <string name="ScheduledTitle">Напоминание</string>
+    <string name="PreviousNotes">Предыдущие заметки можно посмотреть в истории.</string>
 </resources>

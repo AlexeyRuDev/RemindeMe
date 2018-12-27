@@ -17,4 +17,5 @@
     <string name="add_cal_item">Add item</string>
     <string name="create_item">Create Item</string>
     <string name="ScheduledTitle">Notification</string>
+    <string name="PreviousNotes">Previous notes can be viewed in history.</string>
 </resources>
