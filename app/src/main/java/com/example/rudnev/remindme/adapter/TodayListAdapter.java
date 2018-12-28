@@ -87,6 +87,11 @@ public class TodayListAdapter extends RecyclerView.Adapter<TodayListAdapter.Remi
         public View getForegroundView() {
             return viewForeground;
         }
+
+        @Override
+        public View getBackgroundView() {
+            return viewBackground;
+        }
     }
 
     public void setData(List<RemindDTO> data) {

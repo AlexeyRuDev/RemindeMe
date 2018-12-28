@@ -82,6 +82,11 @@ public class CalendarItemsListAdapter extends RecyclerView.Adapter<CalendarItems
         }
 
         @Override
+        public View getBackgroundView() {
+            return viewBackground;
+        }
+
+        @Override
         public void onClick(View v)
         {
             calItemClickListener.remindListOpenClicked(v, this.getLayoutPosition());

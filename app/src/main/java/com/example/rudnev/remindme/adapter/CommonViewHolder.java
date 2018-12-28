@@ -9,4 +9,5 @@ public abstract class CommonViewHolder extends RecyclerView.ViewHolder{
     }
 
     public abstract View getForegroundView();
+    public abstract View getBackgroundView();
 }

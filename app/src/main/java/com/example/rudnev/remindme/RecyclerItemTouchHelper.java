@@ -4,6 +4,7 @@ import android.graphics.Canvas;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.View;
+import android.view.animation.AlphaAnimation;
 
 import com.example.rudnev.remindme.adapter.CommonViewHolder;
 
@@ -35,6 +36,7 @@ public class RecyclerItemTouchHelper extends ItemTouchHelper.SimpleCallback {
                                 RecyclerView.ViewHolder viewHolder, float dX, float dY,
                                 int actionState, boolean isCurrentlyActive) {
         final View foregroundView = ((CommonViewHolder) viewHolder).getForegroundView();
+
         getDefaultUIUtil().onDrawOver(c, recyclerView, foregroundView, dX, dY,
                 actionState, isCurrentlyActive);
     }
@@ -42,6 +44,9 @@ public class RecyclerItemTouchHelper extends ItemTouchHelper.SimpleCallback {
     @Override
     public void clearView(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
         final View foregroundView = ((CommonViewHolder) viewHolder).getForegroundView();
+        final View backgroundView = ((CommonViewHolder) viewHolder).getBackgroundView();
+        backgroundView.setAlpha(0.3f);
+        foregroundView.setAlpha(1.0f);
         getDefaultUIUtil().clearView(foregroundView);
     }
 
@@ -50,7 +55,15 @@ public class RecyclerItemTouchHelper extends ItemTouchHelper.SimpleCallback {
                             RecyclerView.ViewHolder viewHolder, float dX, float dY,
                             int actionState, boolean isCurrentlyActive) {
         final View foregroundView = ((CommonViewHolder) viewHolder).getForegroundView();
-
+        final View backgroundView = ((CommonViewHolder) viewHolder).getBackgroundView();
+        if (actionState == ItemTouchHelper.ACTION_STATE_SWIPE) {
+            float width = (float) viewHolder.itemView.getWidth();
+            float alphaForeground = 1.0f - Math.abs(dX) / width;
+            float alphaBackground = 0.3f + Math.abs(dX) / width;
+            foregroundView.setAlpha(alphaForeground);
+            backgroundView.setAlpha(alphaBackground);
+            foregroundView.setTranslationX(dX);
+        }
         getDefaultUIUtil().onDraw(c, recyclerView, foregroundView, dX, dY,
                 actionState, isCurrentlyActive);
     }

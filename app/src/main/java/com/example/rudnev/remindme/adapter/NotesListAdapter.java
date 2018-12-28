@@ -73,6 +73,11 @@ public class NotesListAdapter extends RecyclerView.Adapter<NotesListAdapter.Note
         }
 
         @Override
+        public View getBackgroundView() {
+            return viewBackground;
+        }
+
+        @Override
         public void onClick(View v)
         {
             itemClickListener.remindListOpenClicked(v, this.getLayoutPosition());

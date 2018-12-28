@@ -86,6 +86,11 @@ public class ArchiveListAdapter extends RecyclerView.Adapter<ArchiveListAdapter.
         }
 
         @Override
+        public View getBackgroundView() {
+            return viewBackground;
+        }
+
+        @Override
         public void onClick(View v)
         {
             itemClickListener.remindListOpenClicked(v, this.getLayoutPosition());
