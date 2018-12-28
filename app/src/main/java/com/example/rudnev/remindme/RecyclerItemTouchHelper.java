@@ -45,7 +45,7 @@ public class RecyclerItemTouchHelper extends ItemTouchHelper.SimpleCallback {
     public void clearView(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
         final View foregroundView = ((CommonViewHolder) viewHolder).getForegroundView();
         final View backgroundView = ((CommonViewHolder) viewHolder).getBackgroundView();
-        backgroundView.setAlpha(0.3f);
+        backgroundView.setAlpha(0.2f);
         foregroundView.setAlpha(1.0f);
         getDefaultUIUtil().clearView(foregroundView);
     }
@@ -59,7 +59,7 @@ public class RecyclerItemTouchHelper extends ItemTouchHelper.SimpleCallback {
         if (actionState == ItemTouchHelper.ACTION_STATE_SWIPE) {
             float width = (float) viewHolder.itemView.getWidth();
             float alphaForeground = 1.0f - Math.abs(dX) / width;
-            float alphaBackground = 0.3f + Math.abs(dX) / width;
+            float alphaBackground = 0.2f + Math.abs(dX) / width;
             foregroundView.setAlpha(alphaForeground);
             backgroundView.setAlpha(alphaBackground);
             foregroundView.setTranslationX(dX);
