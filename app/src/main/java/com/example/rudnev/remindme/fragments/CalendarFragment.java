@@ -96,7 +96,6 @@ public class CalendarFragment extends AbstractTabFragment implements TabFragment
                     }else {
                         showAddItemActivity(calendar);
                     }
-                    showAddItemActivity(calendar);
                 }
 
             }
