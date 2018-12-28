@@ -1,7 +1,9 @@
 package com.example.rudnev.remindme.activities;
 
+import android.app.SearchManager;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -9,8 +11,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -36,11 +40,14 @@ import java.util.Locale;
 
 public class ArchiveActivity extends AppCompatActivity implements RemindItemClickListener, RecyclerItemTouchHelper.RecyclerItemTouchHelperListener {
 
+    private static final int REQUEST_ARCHIVE = 3;
     private ArchiveListAdapter adapter;
     RecyclerView rv;
     FragmentsViewModel mViewModel;
+    private List<RemindDTO> remindsData;
     private Toolbar toolbar;
-    private static final int REQUEST_ARCHIVE = 3;
+    private SearchView searchView;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -58,6 +65,8 @@ public class ArchiveActivity extends AppCompatActivity implements RemindItemClic
             @Override
             public void onChanged(@Nullable final List<RemindDTO> reminds) {
                 adapter.setData(reminds);
+                remindsData = reminds;
+                adapter.notifyDataSetChanged();
             }
         });
 
@@ -69,13 +78,43 @@ public class ArchiveActivity extends AppCompatActivity implements RemindItemClic
     private void initToolbar() {
         toolbar = (Toolbar)findViewById(R.id.tbArchive);
         toolbar.setTitle(R.string.archive_tab);
-        toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+        setSupportActionBar(toolbar);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu, menu);
+
+        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        searchView = (SearchView) menu.findItem(R.id.search)
+                .getActionView();
+        searchView.setSearchableInfo(searchManager
+                .getSearchableInfo(getComponentName()));
+        searchView.setMaxWidth(Integer.MAX_VALUE);
+
+        // listening to search query text change
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
-            public boolean onMenuItemClick(MenuItem item) {
+            public boolean onQueryTextSubmit(String query) {
+                if(query.isEmpty()){
+                    adapter.setData(remindsData);
+                }else{
+                    adapter.getFilter().filter(query);
+                }
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String query) {
+                if(query.isEmpty()){
+                    adapter.setData(remindsData);
+                }else{
+                    adapter.getFilter().filter(query);
+                }
                 return false;
             }
         });
-        toolbar.inflateMenu(R.menu.menu);
+        return true;
     }
 
     @Override
@@ -135,5 +174,27 @@ public class ArchiveActivity extends AppCompatActivity implements RemindItemClic
             snackbar.show();*/
             mViewModel.delete(adapter.getItemById(position));
         }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        int id = item.getItemId();
+
+        if (id == R.id.search) {
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        // close search view on back button pressed
+        if (!searchView.isIconified()) {
+            searchView.setIconified(true);
+            return;
+        }
+        super.onBackPressed();
     }
 }

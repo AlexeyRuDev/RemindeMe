@@ -5,6 +5,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -17,13 +19,15 @@ import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
 
-public class ArchiveListAdapter extends RecyclerView.Adapter<ArchiveListAdapter.RemindViewHolder> {
+public class ArchiveListAdapter extends RecyclerView.Adapter<ArchiveListAdapter.RemindViewHolder> implements Filterable {
     private List<RemindDTO> data;
+    private List<RemindDTO> filteredData;
     private static RemindItemClickListener itemClickListener;
 
     public ArchiveListAdapter(List<RemindDTO> data, RemindItemClickListener remindItemClickListener){
@@ -50,11 +54,12 @@ public class ArchiveListAdapter extends RecyclerView.Adapter<ArchiveListAdapter.
 
     @Override
     public int getItemCount() {
-        if(data!=null)
-            return data.size();
+        if(filteredData!=null)
+            return filteredData.size();
         else
             return 0;
     }
+
 
     public static class RemindViewHolder extends CommonViewHolder implements View.OnClickListener{
 
@@ -90,23 +95,57 @@ public class ArchiveListAdapter extends RecyclerView.Adapter<ArchiveListAdapter.
 
     public void setData(List<RemindDTO> data) {
         this.data = data;
+        this.filteredData = data;
         notifyDataSetChanged();
     }
 
     public RemindDTO getItemById(int id){
-        return data.get(id);
+        return filteredData.get(id);
     }
 
     public String getTitle(int position){
 
-        return data.get(position).getTitle();
+        return filteredData.get(position).getTitle();
     }
     public String getNote(int position){
 
-        return data.get(position).getNote();
+        return filteredData.get(position).getNote();
     }
     public LocalDateTime getDate(int position){
 
-        return data.get(position).getDate();
+        return filteredData.get(position).getDate();
+    }
+
+    @Override
+    public Filter getFilter() {
+        return new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence charSequence) {
+                String charString = charSequence.toString();
+                if (charString.isEmpty()) {
+                    filteredData = data;
+                } else {
+                    List<RemindDTO> filteredList = new ArrayList<>();
+                    for (RemindDTO row : data) {
+
+                        if (row.getTitle().toLowerCase().contains(charString.toLowerCase())) {
+                            filteredList.add(row);
+                        }
+                    }
+
+                    filteredData = filteredList;
+                }
+
+                FilterResults filterResults = new FilterResults();
+                filterResults.values = filteredData;
+                return filterResults;
+            }
+
+            @Override
+            protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
+                filteredData = (ArrayList<RemindDTO>) filterResults.values;
+                setData(filteredData);
+            }
+        };
     }
 }

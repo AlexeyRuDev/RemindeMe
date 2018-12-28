@@ -30,7 +30,15 @@
 
         <activity android:name=".activities.NotesActivity"
             android:screenOrientation="portrait"
-            android:configChanges="keyboardHidden|orientation|screenSize"/>
+            android:configChanges="keyboardHidden|orientation|screenSize">
+            <meta-data
+                android:name="android.app.searchable"
+                android:resource="@drawable/magnify" />
+
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+            </intent-filter>
+        </activity>
 
         <receiver android:name=".NotificationReceiver">
             <intent-filter>

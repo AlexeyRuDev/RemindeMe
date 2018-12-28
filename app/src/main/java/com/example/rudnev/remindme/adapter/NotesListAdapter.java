@@ -5,6 +5,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -13,11 +15,13 @@ import com.example.rudnev.remindme.R;
 import com.example.rudnev.remindme.RemindItemClickListener;
 import com.example.rudnev.remindme.dto.Notes;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
-public class NotesListAdapter extends RecyclerView.Adapter<NotesListAdapter.NoteViewHolder> {
+public class NotesListAdapter extends RecyclerView.Adapter<NotesListAdapter.NoteViewHolder> implements Filterable {
     private List<Notes> data;
+    private List<Notes> filteredData;
     private static RemindItemClickListener itemClickListener;
 
     public NotesListAdapter(RemindItemClickListener remindItemClickListener){
@@ -78,20 +82,54 @@ public class NotesListAdapter extends RecyclerView.Adapter<NotesListAdapter.Note
 
     public void setData(List<Notes> data) {
         this.data = data;
+        this.filteredData = data;
         notifyDataSetChanged();
     }
 
     public Notes getItemById(int id){
-        return data.get(id);
+        return filteredData.get(id);
     }
 
     public String getTitle(int position){
 
-        return data.get(position).getTitle();
+        return filteredData.get(position).getTitle();
     }
     public String getNote(int position){
 
-        return data.get(position).getNote();
+        return filteredData.get(position).getNote();
+    }
+
+    @Override
+    public Filter getFilter() {
+        return new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence charSequence) {
+                String charString = charSequence.toString();
+                if (charString.isEmpty()) {
+                    filteredData = data;
+                } else {
+                    List<Notes> filteredList = new ArrayList<>();
+                    for (Notes row : data) {
+
+                        if (row.getTitle().toLowerCase().contains(charString.toLowerCase())) {
+                            filteredList.add(row);
+                        }
+                    }
+
+                    filteredData = filteredList;
+                }
+
+                FilterResults filterResults = new FilterResults();
+                filterResults.values = filteredData;
+                return filterResults;
+            }
+
+            @Override
+            protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
+                filteredData = (ArrayList<Notes>) filterResults.values;
+                setData(filteredData);
+            }
+        };
     }
 
 }
