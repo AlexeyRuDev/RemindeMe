@@ -8,6 +8,7 @@ import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -183,7 +184,13 @@ public class CreateItemActivity extends AppCompatActivity {
     public void setTime(View v) {
         new TimePickerDialog(this, android.R.style.Theme_Holo_Light_Dialog, t,
                 date.get(Calendar.HOUR_OF_DAY),
-                date.get(Calendar.MINUTE), true)
+                date.get(Calendar.MINUTE), true){
+                    @Override
+                    public void onCreate(Bundle savedInstanceState) {
+                        super.onCreate(savedInstanceState);
+                        getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                    }
+                }
                 .show();
     }
 
@@ -191,7 +198,13 @@ public class CreateItemActivity extends AppCompatActivity {
         new DatePickerDialog(this, android.R.style.Theme_Holo_Light_Dialog, d,
                 date.get(Calendar.YEAR),
                 date.get(Calendar.MONTH),
-                date.get(Calendar.DAY_OF_MONTH))
+                date.get(Calendar.DAY_OF_MONTH)){
+                    @Override
+                    public void onCreate(Bundle savedInstanceState) {
+                        super.onCreate(savedInstanceState);
+                        getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                    }
+                }
                 .show();
     }
 
