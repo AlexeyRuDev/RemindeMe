@@ -10,11 +10,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.rudnev.remindme.R;
 import com.example.rudnev.remindme.RecyclerItemTouchHelper;
@@ -33,6 +35,7 @@ public class NotesActivity extends AppCompatActivity implements RemindItemClickL
     RecyclerView rv;
     NoteViewModel mViewModel;
     FloatingActionButton fab;
+    private Toolbar toolbar;
     private static final int REQUEST_NOTE = 4;
 
     @Override
@@ -40,6 +43,7 @@ public class NotesActivity extends AppCompatActivity implements RemindItemClickL
         super.onCreate(savedInstanceState);
         setTheme(R.style.AppDefault);
         setContentView(LAYOUT);
+        initToolbar();
         rv = (RecyclerView) findViewById(R.id.recyclerViewNote);
         rv.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         adapter = new NotesListAdapter( this);
@@ -77,6 +81,19 @@ public class NotesActivity extends AppCompatActivity implements RemindItemClickL
         intent.putExtra("isNote", true);
         startActivityForResult(intent, REQUEST_NOTE);
 
+    }
+
+    private void initToolbar() {
+        toolbar = (Toolbar)findViewById(R.id.tbNotes);
+        toolbar.setTitle(R.string.notes_tab);
+        toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                Toast.makeText(getApplicationContext(), "Search", Toast.LENGTH_SHORT).show();
+                return false;
+            }
+        });
+        toolbar.inflateMenu(R.menu.menu);
     }
 
     @Override

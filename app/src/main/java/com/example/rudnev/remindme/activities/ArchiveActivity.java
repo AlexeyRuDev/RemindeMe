@@ -9,12 +9,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.rudnev.remindme.MainActivity;
 import com.example.rudnev.remindme.R;
 import com.example.rudnev.remindme.RecyclerItemTouchHelper;
 import com.example.rudnev.remindme.RemindItemClickListener;
@@ -36,6 +39,7 @@ public class ArchiveActivity extends AppCompatActivity implements RemindItemClic
     private ArchiveListAdapter adapter;
     RecyclerView rv;
     FragmentsViewModel mViewModel;
+    private Toolbar toolbar;
     private static final int REQUEST_ARCHIVE = 3;
 
     @Override
@@ -43,6 +47,7 @@ public class ArchiveActivity extends AppCompatActivity implements RemindItemClic
         super.onCreate(savedInstanceState);
         setTheme(R.style.AppDefault);
         setContentView(R.layout.archive_activity);
+        initToolbar();
         rv = (RecyclerView) findViewById(R.id.recyclerViewArchive);
         rv.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         adapter = new ArchiveListAdapter( this);
@@ -60,6 +65,18 @@ public class ArchiveActivity extends AppCompatActivity implements RemindItemClic
         new ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(rv);
     }
 
+
+    private void initToolbar() {
+        toolbar = (Toolbar)findViewById(R.id.tbArchive);
+        toolbar.setTitle(R.string.archive_tab);
+        toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                return false;
+            }
+        });
+        toolbar.inflateMenu(R.menu.menu);
+    }
 
     @Override
     public void remindListOpenClicked(View v, int position) {

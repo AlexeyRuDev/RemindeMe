@@ -17,6 +17,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.example.rudnev.remindme.activities.ArchiveActivity;
 import com.example.rudnev.remindme.activities.NotesActivity;
@@ -78,13 +79,6 @@ public class MainActivity extends AppCompatActivity {
     private void initToolbar() {
         toolbar = (Toolbar)findViewById(R.id.toolbar);
         toolbar.setTitle(R.string.app_name);
-        toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                return false;
-            }
-        });
-        toolbar.inflateMenu(R.menu.menu);
     }
 
     private void initNavigationView() {

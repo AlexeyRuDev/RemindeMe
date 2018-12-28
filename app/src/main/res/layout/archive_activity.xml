@@ -1,35 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/mainBackground"
     android:fitsSystemWindows="true">
 
-
-    <LinearLayout
+    <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:background="@color/colorPrimary"
-        android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/titleCalItemDialog"
+        android:layout_height="wrap_content">
+        <android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/tbArchive"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:background="@color/colorPrimary"
-            android:paddingBottom="20dp"
-            android:paddingEnd="24dp"
-            android:paddingStart="24dp"
-            android:paddingTop="20dp"
-            android:text="@string/archive_tab"
-            android:textColor="@color/mainBackground"
-            android:textSize="17sp" />
-    </LinearLayout>
+            android:layout_height="?attr/actionBarSize"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark"
+            android:background="?attr/colorPrimary"/>
+    </android.support.design.widget.AppBarLayout>
+
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recyclerViewArchive"
         android:layout_height="match_parent"
-        android:layout_width="match_parent" />
+        android:layout_width="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
 </android.support.design.widget.CoordinatorLayout>
