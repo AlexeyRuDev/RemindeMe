@@ -4,6 +4,7 @@ import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
 
+import com.example.rudnev.remindme.RemindMeApplication;
 import com.example.rudnev.remindme.components.DaggerRemindMeComponent;
 import com.example.rudnev.remindme.components.RemindMeComponent;
 import com.example.rudnev.remindme.dto.RemindDTO;
@@ -35,8 +36,7 @@ public class FragmentsViewModel extends AndroidViewModel {
 
     public FragmentsViewModel(Application application) {
         super(application);
-        DaggerRemindMeComponent.builder().applicationModule(new ApplicationModule(application))
-                .build().injectFragmentViewModel(this);
+        RemindMeApplication.get().getRemindMeComponent().injectFragmentViewModel(this);
         mAllReminds = mRepository.getAllReminds();
         mRemindsForToday = mRepository.getRemindsForToday();
         mRemindsForArchive = mRepository.getRemindsForArchive();

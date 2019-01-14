@@ -4,6 +4,7 @@ import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
 
+import com.example.rudnev.remindme.RemindMeApplication;
 import com.example.rudnev.remindme.components.DaggerRemindMeComponent;
 import com.example.rudnev.remindme.components.RemindMeComponent;
 import com.example.rudnev.remindme.dto.Notes;
@@ -24,8 +25,7 @@ public class NoteViewModel extends AndroidViewModel {
 
     public NoteViewModel(Application application) {
         super(application);
-        DaggerRemindMeComponent.builder().applicationModule(new ApplicationModule(application))
-                .build().injectNoteViewModel(this);
+        RemindMeApplication.get().getRemindMeComponent().injectNoteViewModel(this);
         mAllNotes = mRepository.getAllNotes();
     }
 
