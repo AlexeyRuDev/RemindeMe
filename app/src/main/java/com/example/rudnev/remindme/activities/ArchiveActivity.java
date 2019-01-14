@@ -9,39 +9,36 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.TextView;
-import android.widget.Toast;
 
-import com.example.rudnev.remindme.MainActivity;
 import com.example.rudnev.remindme.R;
 import com.example.rudnev.remindme.RecyclerItemTouchHelper;
 import com.example.rudnev.remindme.RemindItemClickListener;
 import com.example.rudnev.remindme.adapter.ArchiveListAdapter;
+import com.example.rudnev.remindme.components.DaggerArchiveActivityComponent;
 import com.example.rudnev.remindme.dto.RemindDTO;
+import com.example.rudnev.remindme.modules.ArchiveActivityModule;
 import com.example.rudnev.remindme.viewmodels.FragmentsViewModel;
 
-import org.joda.time.DateTimeComparator;
-import org.joda.time.LocalDate;
-
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
+import javax.inject.Inject;
+
 public class ArchiveActivity extends AppCompatActivity implements RemindItemClickListener, RecyclerItemTouchHelper.RecyclerItemTouchHelperListener {
 
+    @Inject
+    ArchiveListAdapter adapter;
+
     private static final int REQUEST_ARCHIVE = 3;
-    private ArchiveListAdapter adapter;
     RecyclerView rv;
     FragmentsViewModel mViewModel;
     private List<RemindDTO> remindsData;
@@ -57,7 +54,10 @@ public class ArchiveActivity extends AppCompatActivity implements RemindItemClic
         initToolbar();
         rv = (RecyclerView) findViewById(R.id.recyclerViewArchive);
         rv.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
-        adapter = new ArchiveListAdapter( this);
+        DaggerArchiveActivityComponent.builder()
+                .archiveActivityModule(new ArchiveActivityModule(this, this))
+                .build()
+                .injectArchiveActivity(this);
         rv.setAdapter(adapter);
         mViewModel = ViewModelProviders.of(this).get(FragmentsViewModel.class);
 

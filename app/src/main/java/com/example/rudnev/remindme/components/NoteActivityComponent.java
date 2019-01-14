@@ -1,4 +1,12 @@
 package com.example.rudnev.remindme.components;
 
-public class NoteActivityComponent {
+
+import com.example.rudnev.remindme.activities.NotesActivity;
+import com.example.rudnev.remindme.modules.NoteActivityModule;
+
+import dagger.Component;
+
+@Component(modules = {NoteActivityModule.class})
+public interface NoteActivityComponent {
+    void injectNotesActivity(NotesActivity activity);
 }

@@ -11,33 +11,35 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.rudnev.remindme.R;
 import com.example.rudnev.remindme.RecyclerItemTouchHelper;
 import com.example.rudnev.remindme.RemindItemClickListener;
-import com.example.rudnev.remindme.activities.CreateItemActivity;
 import com.example.rudnev.remindme.adapter.NotesListAdapter;
+import com.example.rudnev.remindme.components.DaggerNoteActivityComponent;
 import com.example.rudnev.remindme.dto.Notes;
+import com.example.rudnev.remindme.modules.NoteActivityModule;
 import com.example.rudnev.remindme.viewmodels.NoteViewModel;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
 public class NotesActivity extends AppCompatActivity implements RemindItemClickListener, RecyclerItemTouchHelper.RecyclerItemTouchHelperListener {
+
+    @Inject
+    NotesListAdapter adapter;
 
     private static final int REQUEST_NOTE = 4;
     private static final int LAYOUT = R.layout.notes_activity;
-    private NotesListAdapter adapter;
+
     RecyclerView rv;
     private List<Notes> notes;
     NoteViewModel mViewModel;
@@ -55,7 +57,10 @@ public class NotesActivity extends AppCompatActivity implements RemindItemClickL
         rv = (RecyclerView) findViewById(R.id.recyclerViewNote);
         rv.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         rv.setItemAnimator(new DefaultItemAnimator());
-        adapter = new NotesListAdapter( this);
+        DaggerNoteActivityComponent.builder()
+                .noteActivityModule(new NoteActivityModule(this, this))
+                .build()
+                .injectNotesActivity(this);
         rv.setAdapter(adapter);
         fab = (FloatingActionButton)findViewById(R.id.fab);
 
