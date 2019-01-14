@@ -22,14 +22,22 @@ import android.widget.Toast;
 import com.example.rudnev.remindme.activities.ArchiveActivity;
 import com.example.rudnev.remindme.activities.NotesActivity;
 import com.example.rudnev.remindme.adapter.TabFragmentAdapter;
+import com.example.rudnev.remindme.components.DaggerMainActivityComponent;
+import com.example.rudnev.remindme.modules.ContextModule;
+import com.example.rudnev.remindme.modules.MainActivityModule;
 
 import net.danlew.android.joda.JodaTimeAndroid;
 
 import java.util.Calendar;
 import java.util.Objects;
 
+import javax.inject.Inject;
+
 
 public class MainActivity extends AppCompatActivity {
+
+    @Inject
+    TabFragmentAdapter adapter;
 
     private static final int LAYOUT = R.layout.activity_main;
     private Toolbar toolbar;
@@ -37,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
     private ViewPager viewPager;
     private FloatingActionButton fab;
 
-    private TabFragmentAdapter adapter;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -113,7 +121,11 @@ public class MainActivity extends AppCompatActivity {
 
     private void initTabs() {
         viewPager = (ViewPager)findViewById(R.id.viewPager);
-        adapter = new TabFragmentAdapter(this, getSupportFragmentManager());
+        DaggerMainActivityComponent.builder()
+                .contextModule(new ContextModule(this))
+                .mainActivityModule(new MainActivityModule(this))
+                .build()
+                .injectMainActivity(this);
         viewPager.setAdapter(adapter);
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
