@@ -31,11 +31,14 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
     implementation 'com.android.support:appcompat-v7:26.1.0'
-    implementation 'com.android.support:design:26.0.0-alpha1'
-    implementation 'com.android.support:cardview-v7:26.0.0-alpha1'
-    implementation 'com.android.support:recyclerview-v7:26.0.0-alpha1'
+    implementation 'com.android.support:design:26.1.0'
+    implementation 'com.android.support:cardview-v7:26.1.0'
+    implementation 'com.android.support:recyclerview-v7:26.1.0'
     implementation 'com.prolificinteractive:material-calendarview:1.4.3'
     implementation 'net.danlew:android.joda:2.9.9.4'
+    implementation 'com.google.dagger:dagger:2.13'
+    annotationProcessor 'com.google.dagger:dagger-compiler:2.13'
+
     // Room components
     implementation "android.arch.persistence.room:runtime:$rootProject.roomVersion"
     annotationProcessor "android.arch.persistence.room:compiler:$rootProject.roomVersion"
