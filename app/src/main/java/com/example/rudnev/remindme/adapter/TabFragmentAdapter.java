@@ -17,7 +17,7 @@ import java.util.Map;
 import java.util.TreeMap;
 
 
-public class TabFragmentAdapter extends FragmentStatePagerAdapter implements TabLayout.OnTabSelectedListener {
+public class TabFragmentAdapter extends FragmentStatePagerAdapter {
 
     private Map<Integer, AbstractTabFragment> tabs;
     private Context context;
@@ -51,36 +51,10 @@ public class TabFragmentAdapter extends FragmentStatePagerAdapter implements Tab
 
     private void initTabsMap(Context context){
         tabs = new TreeMap<>();
-        todayFragment = TodayFragment.getInstance(context);
-        tabs.put(0, todayFragment);
+        tabs.put(0, TodayFragment.getInstance(context));
         tabs.put(1, CalendarFragment.getInstance(context));
     }
 
-
-    @Override
-    public void onTabSelected(TabLayout.Tab tab) {
-        updateFragmentState(tab.getPosition(), true);
-    }
-
-    @Override
-    public void onTabUnselected(TabLayout.Tab tab) {
-
-    }
-
-    @Override
-    public void onTabReselected(TabLayout.Tab tab) {
-    }
-
-    private void updateFragmentState(int pos, boolean current) {
-        final Fragment fragment = tabs.get(pos);
-        if (fragment != null && fragment instanceof TabSelectedListener) {
-            ((TabSelectedListener) fragment).onFragmentBecomesCurrent(current);
-        }
-    }
-
-   public interface TabSelectedListener {
-        void onFragmentBecomesCurrent(boolean current);
-    }
 
     public void showEditDialog(){
         ((TodayFragment)tabs.get(0)).showEditDialog();

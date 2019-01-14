@@ -34,7 +34,7 @@ import java.util.HashSet;
 import java.util.List;
 
 
-public class CalendarFragment extends AbstractTabFragment implements TabFragmentAdapter.TabSelectedListener{
+public class CalendarFragment extends AbstractTabFragment {
 
     private static final String TAG = "CALENDAR_FRAGMENT";
     private static final int LAYOUT = R.layout.calendar_fragment;
@@ -121,11 +121,6 @@ public class CalendarFragment extends AbstractTabFragment implements TabFragment
 
     public void setContext(Context context) {
         this.context = context;
-    }
-
-    @Override
-    public void onFragmentBecomesCurrent(boolean current) {
-
     }
 
     private void updateCalendar(List<RemindDTO> datas) {

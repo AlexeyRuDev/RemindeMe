@@ -41,7 +41,7 @@ import java.util.List;
 
 
 public class TodayFragment extends AbstractTabFragment implements RemindItemClickListener,
-        TabFragmentAdapter.TabSelectedListener, RecyclerItemTouchHelper.RecyclerItemTouchHelperListener {
+        RecyclerItemTouchHelper.RecyclerItemTouchHelperListener {
 
     private static final int LAYOUT = R.layout.today_fragment;
     private static final int REQUEST_TODAY = 1;
@@ -117,11 +117,6 @@ public class TodayFragment extends AbstractTabFragment implements RemindItemClic
         Intent intent = new Intent(getActivity(), CreateItemActivity.class);
         intent.putExtra("mRemindItem", adapter.getItemById(position));
         startActivityForResult(intent, REQUEST_TODAY);
-    }
-
-    @Override
-    public void onFragmentBecomesCurrent(boolean current) {
-
     }
 
 

@@ -161,7 +161,7 @@ public class CreateItemActivity extends AppCompatActivity {
                 remindItem.setDate(LocalDateTime.fromDateFields(date.getTime()));
                 resultIntent.putExtra("updateItem", true);
             }
-            if(resultCode<0) {
+            if(resultCode < 0) {
                 scheduleNotification(getNotification(remindItem.getTitle(), remindItem.getDate().toDate().getTime()), remindItem);
             }
             resultIntent.putExtra("mRemindItem", remindItem);
