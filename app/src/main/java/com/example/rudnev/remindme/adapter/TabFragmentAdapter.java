@@ -20,17 +20,11 @@ import java.util.TreeMap;
 public class TabFragmentAdapter extends FragmentStatePagerAdapter {
 
     private Map<Integer, AbstractTabFragment> tabs;
-    private Context context;
     private final static int NUM_SIZE = 2;
 
-    private TodayFragment todayFragment;
-
-    private List<RemindDTO> datas;
 
     public TabFragmentAdapter(Context context, FragmentManager fm) {
         super(fm);
-        this.context = context;
-        this.datas = new ArrayList<>();
         initTabsMap(context);
     }
 
