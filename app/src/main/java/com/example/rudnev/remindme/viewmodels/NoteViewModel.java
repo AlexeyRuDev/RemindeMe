@@ -12,17 +12,20 @@ import com.example.rudnev.remindme.repositories.NoteRepository;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
 public class NoteViewModel extends AndroidViewModel {
-    private NoteRepository mRepository;
+
+    @Inject
+    NoteRepository mRepository;
 
     private LiveData<List<Notes>> mAllNotes;
 
 
     public NoteViewModel(Application application) {
         super(application);
-        RemindMeComponent remindMeComponent = DaggerRemindMeComponent.builder().applicationModule(new ApplicationModule(application))
-                .build();
-        mRepository = remindMeComponent.getNoteRepository();
+        DaggerRemindMeComponent.builder().applicationModule(new ApplicationModule(application))
+                .build().injectNoteViewModel(this);
         mAllNotes = mRepository.getAllNotes();
     }
 

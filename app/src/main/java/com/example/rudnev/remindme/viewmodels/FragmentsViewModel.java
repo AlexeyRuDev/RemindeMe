@@ -19,9 +19,12 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 
+import javax.inject.Inject;
+
 public class FragmentsViewModel extends AndroidViewModel {
 
-    private RemindMeRepository mRepository;
+    @Inject
+    RemindMeRepository mRepository;
 
     private LiveData<List<RemindDTO>> mAllReminds;
     private LiveData<List<RemindDTO>> mRemindsForToday;
@@ -32,9 +35,8 @@ public class FragmentsViewModel extends AndroidViewModel {
 
     public FragmentsViewModel(Application application) {
         super(application);
-        RemindMeComponent remindMeComponent = DaggerRemindMeComponent.builder().applicationModule(new ApplicationModule(application))
-                .build();
-        mRepository = remindMeComponent.getRemindMeRepository();
+        DaggerRemindMeComponent.builder().applicationModule(new ApplicationModule(application))
+                .build().injectFragmentViewModel(this);
         mAllReminds = mRepository.getAllReminds();
         mRemindsForToday = mRepository.getRemindsForToday();
         mRemindsForArchive = mRepository.getRemindsForArchive();
