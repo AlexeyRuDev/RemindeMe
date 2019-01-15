@@ -4,6 +4,8 @@ import android.content.Context;
 
 import com.example.rudnev.remindme.MainActivity;
 import com.example.rudnev.remindme.adapter.TabFragmentAdapter;
+import com.example.rudnev.remindme.fragments.CalendarFragment;
+import com.example.rudnev.remindme.fragments.TodayFragment;
 
 import dagger.Module;
 import dagger.Provides;
@@ -20,4 +22,15 @@ public class MainActivityModule {
     public TabFragmentAdapter tabFragmentAdapter(Context context){
         return new TabFragmentAdapter(context, mainActivity.getSupportFragmentManager());
     }
+
+    @Provides
+    public TodayFragment todayFragment(Context context){
+        return TodayFragment.getInstance(context);
+    }
+
+    @Provides
+    public CalendarFragment calendarFragment(Context context){
+        return CalendarFragment.getInstance(context);
+    }
+
 }

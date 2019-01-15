@@ -24,6 +24,7 @@ import com.example.rudnev.remindme.adapter.ArchiveListAdapter;
 import com.example.rudnev.remindme.components.DaggerArchiveActivityComponent;
 import com.example.rudnev.remindme.dto.RemindDTO;
 import com.example.rudnev.remindme.modules.ArchiveActivityModule;
+import com.example.rudnev.remindme.modules.RemindItemClickListenerModule;
 import com.example.rudnev.remindme.viewmodels.FragmentsViewModel;
 
 import java.text.SimpleDateFormat;
@@ -55,7 +56,8 @@ public class ArchiveActivity extends AppCompatActivity implements RemindItemClic
         rv = (RecyclerView) findViewById(R.id.recyclerViewArchive);
         rv.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         DaggerArchiveActivityComponent.builder()
-                .archiveActivityModule(new ArchiveActivityModule(this, this))
+                .remindItemClickListenerModule(new RemindItemClickListenerModule(this))
+                .archiveActivityModule(new ArchiveActivityModule(this))
                 .build()
                 .injectArchiveActivity(this);
         rv.setAdapter(adapter);

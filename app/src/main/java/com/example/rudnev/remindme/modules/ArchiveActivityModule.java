@@ -7,18 +7,16 @@ import com.example.rudnev.remindme.adapter.ArchiveListAdapter;
 import dagger.Module;
 import dagger.Provides;
 
-@Module
+@Module(includes = RemindItemClickListenerModule.class)
 public class ArchiveActivityModule {
     private final ArchiveActivity archiveActivity;
-    private final RemindItemClickListener remindItemClickListener;
 
-    public ArchiveActivityModule(ArchiveActivity archiveActivity, RemindItemClickListener remindItemClickListener){
+    public ArchiveActivityModule(ArchiveActivity archiveActivity){
         this.archiveActivity = archiveActivity;
-        this.remindItemClickListener = remindItemClickListener;
     }
 
     @Provides
-    public ArchiveListAdapter archiveListAdapter(){
+    public ArchiveListAdapter archiveListAdapter(RemindItemClickListener remindItemClickListener){
         return new ArchiveListAdapter(remindItemClickListener);
     }
 }

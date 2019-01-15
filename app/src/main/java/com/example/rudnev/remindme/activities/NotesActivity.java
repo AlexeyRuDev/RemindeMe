@@ -26,6 +26,7 @@ import com.example.rudnev.remindme.adapter.NotesListAdapter;
 import com.example.rudnev.remindme.components.DaggerNoteActivityComponent;
 import com.example.rudnev.remindme.dto.Notes;
 import com.example.rudnev.remindme.modules.NoteActivityModule;
+import com.example.rudnev.remindme.modules.RemindItemClickListenerModule;
 import com.example.rudnev.remindme.viewmodels.NoteViewModel;
 
 import java.util.List;
@@ -58,7 +59,8 @@ public class NotesActivity extends AppCompatActivity implements RemindItemClickL
         rv.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         rv.setItemAnimator(new DefaultItemAnimator());
         DaggerNoteActivityComponent.builder()
-                .noteActivityModule(new NoteActivityModule(this, this))
+                .remindItemClickListenerModule(new RemindItemClickListenerModule(this))
+                .noteActivityModule(new NoteActivityModule(this))
                 .build()
                 .injectNotesActivity(this);
         rv.setAdapter(adapter);

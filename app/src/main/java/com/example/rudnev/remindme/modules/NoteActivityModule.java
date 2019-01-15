@@ -7,19 +7,17 @@ import com.example.rudnev.remindme.adapter.NotesListAdapter;
 import dagger.Module;
 import dagger.Provides;
 
-@Module
+@Module(includes = RemindItemClickListenerModule.class)
 public class NoteActivityModule {
 
     private final NotesActivity notesActivity;
-    private final RemindItemClickListener remindItemClickListener;
 
-    public NoteActivityModule(NotesActivity notesActivity, RemindItemClickListener remindItemClickListener){
+    public NoteActivityModule(NotesActivity notesActivity){
         this.notesActivity = notesActivity;
-        this.remindItemClickListener = remindItemClickListener;
     }
 
     @Provides
-    public NotesListAdapter notesListAdapter(){
+    public NotesListAdapter notesListAdapter(RemindItemClickListener remindItemClickListener){
         return new NotesListAdapter(remindItemClickListener);
     }
 }

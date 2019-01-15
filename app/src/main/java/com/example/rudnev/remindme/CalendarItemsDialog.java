@@ -23,7 +23,9 @@ import android.widget.TextView;
 
 import com.example.rudnev.remindme.activities.CreateItemActivity;
 import com.example.rudnev.remindme.adapter.CalendarItemsListAdapter;
+import com.example.rudnev.remindme.components.DaggerMainActivityComponent;
 import com.example.rudnev.remindme.dto.RemindDTO;
+import com.example.rudnev.remindme.modules.RemindItemClickListenerModule;
 import com.example.rudnev.remindme.viewmodels.FragmentsViewModel;
 
 import org.joda.time.DateTimeComparator;
@@ -37,7 +39,12 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import javax.inject.Inject;
+
 public class CalendarItemsDialog extends DialogFragment implements RemindItemClickListener, RecyclerItemTouchHelper.RecyclerItemTouchHelperListener {
+
+
+    CalendarItemsListAdapter adapter;
 
     private static final String TAG = "CALENDAR_ITEMS_DIALOG";
     private static final int REQUEST_CALENDAR_DIALOG = 2;
@@ -47,7 +54,6 @@ public class CalendarItemsDialog extends DialogFragment implements RemindItemCli
     private TextView titleCalItemDialog;
     private Date date;
     Calendar calendar;
-    private CalendarItemsListAdapter adapter;
     private Context context;
     private FragmentsViewModel mViewModel;
 
@@ -75,6 +81,7 @@ public class CalendarItemsDialog extends DialogFragment implements RemindItemCli
         titleCalItemDialog = (TextView)view.findViewById(R.id.titleCalItemDialog);
         titleCalItemDialog.setText(calendar.get(Calendar.DATE) + " " + calendar.getDisplayName(Calendar.MONTH, Calendar.SHORT, Locale.getDefault()) + " " + calendar.get(Calendar.YEAR));
         adapter = new CalendarItemsListAdapter(this);
+
         listViewItems.setAdapter(adapter);
 
         mViewModel.getRemindsForConcreteDate(LocalDateTime.fromDateFields(calendar.getTime())).observe(this, new Observer<List<RemindDTO>>() {

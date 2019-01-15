@@ -17,7 +17,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
 import com.example.rudnev.remindme.activities.ArchiveActivity;
 import com.example.rudnev.remindme.activities.NotesActivity;
