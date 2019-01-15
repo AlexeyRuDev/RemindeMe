@@ -19,8 +19,8 @@ public class MainActivityModule {
     }
 
     @Provides
-    public TabFragmentAdapter tabFragmentAdapter(Context context){
-        return new TabFragmentAdapter(context, mainActivity.getSupportFragmentManager());
+    public TabFragmentAdapter tabFragmentAdapter(Context context, TodayFragment todayFragment, CalendarFragment calendarFragment){
+        return new TabFragmentAdapter(context, mainActivity.getSupportFragmentManager(), todayFragment, calendarFragment);
     }
 
     @Provides

@@ -21,10 +21,14 @@ public class TabFragmentAdapter extends FragmentStatePagerAdapter {
 
     private Map<Integer, AbstractTabFragment> tabs;
     private final static int NUM_SIZE = 2;
+    private TodayFragment todayFragment;
+    private CalendarFragment calendarFragment;
 
 
-    public TabFragmentAdapter(Context context, FragmentManager fm) {
+    public TabFragmentAdapter(Context context, FragmentManager fm, TodayFragment todayFragment, CalendarFragment calendarFragment) {
         super(fm);
+        this.todayFragment = todayFragment;
+        this.calendarFragment = calendarFragment;
         initTabsMap(context);
     }
 
@@ -45,8 +49,8 @@ public class TabFragmentAdapter extends FragmentStatePagerAdapter {
 
     private void initTabsMap(Context context){
         tabs = new TreeMap<>();
-        tabs.put(0, TodayFragment.getInstance(context));
-        tabs.put(1, CalendarFragment.getInstance(context));
+        tabs.put(0, todayFragment);
+        tabs.put(1, calendarFragment);
     }
 
 

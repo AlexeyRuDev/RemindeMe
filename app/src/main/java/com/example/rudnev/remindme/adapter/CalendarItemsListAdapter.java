@@ -61,7 +61,6 @@ public class CalendarItemsListAdapter extends RecyclerView.Adapter<CalendarItems
 
         CardView cardView;
         TextView title;
-        TextView note;
         TextView date;
         public RelativeLayout viewBackground, viewForeground;
 

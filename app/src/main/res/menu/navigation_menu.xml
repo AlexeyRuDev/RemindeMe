@@ -11,10 +11,5 @@
         android:orderInCategory="1"
         android:title="@string/notes_tab"
         android:icon="@mipmap/ic_message_text"/>
-    <item
-        android:id="@+id/actionSettingThemeItem"
-        android:orderInCategory="1"
-        android:title="@string/theme_setting"
-        android:icon="@mipmap/ic_message_text"/>
 
 </menu>

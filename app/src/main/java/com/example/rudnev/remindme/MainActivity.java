@@ -109,9 +109,7 @@ public class MainActivity extends AppCompatActivity {
                         intent = new Intent(getApplicationContext(), NotesActivity.class);
                         startActivity(intent);
                         break;
-                    case R.id.actionSettingThemeItem:
-                        // add theme settings
-                        break;
+
                 }
                 return true;
             }
