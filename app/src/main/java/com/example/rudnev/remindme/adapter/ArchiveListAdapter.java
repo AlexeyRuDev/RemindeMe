@@ -7,7 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Filter;
 import android.widget.Filterable;
-import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -15,12 +14,10 @@ import com.example.rudnev.remindme.R;
 import com.example.rudnev.remindme.RemindItemClickListener;
 import com.example.rudnev.remindme.dto.RemindDTO;
 
-import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -65,7 +62,6 @@ public class ArchiveListAdapter extends RecyclerView.Adapter<ArchiveListAdapter.
 
         CardView cardView;
         TextView title;
-        TextView note;
         TextView date;
         public RelativeLayout viewBackground, viewForeground;
 

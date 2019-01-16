@@ -44,8 +44,6 @@ public class MainActivity extends AppCompatActivity {
     private ViewPager viewPager;
     private FloatingActionButton fab;
 
-
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,15 +54,9 @@ public class MainActivity extends AppCompatActivity {
         initNavigationView();
         initTabs();
         initFAB();
-
         //Notification
-        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-        Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.SECOND, 10);
-        Intent intent = new Intent("doot.remind.action.DISPLAY_NOTIFICATION");
-        PendingIntent broadCast = PendingIntent.getBroadcast(this, 100, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        initAlarmManager();
 
-        Objects.requireNonNull(alarmManager).setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), broadCast);
     }
 
     @Override
@@ -81,6 +73,16 @@ public class MainActivity extends AppCompatActivity {
                     adapter.showEditDialog();
             }
         });
+    }
+
+    private void initAlarmManager(){
+        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.SECOND, 10);
+        Intent intent = new Intent("doot.remind.action.DISPLAY_NOTIFICATION");
+        PendingIntent broadCast = PendingIntent.getBroadcast(this, 100, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        Objects.requireNonNull(alarmManager).setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), broadCast);
     }
 
     private void initToolbar() {
@@ -149,12 +151,7 @@ public class MainActivity extends AppCompatActivity {
         tabLayout.setupWithViewPager(viewPager);
     }
 
-
     /*private void showCalendarTab(){
         viewPager.setCurrentItem(Constants.TAB_CALENDAR);
     }*/
-
-
-
-
 }

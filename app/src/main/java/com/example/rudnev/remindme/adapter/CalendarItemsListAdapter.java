@@ -5,7 +5,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -13,11 +12,9 @@ import com.example.rudnev.remindme.R;
 import com.example.rudnev.remindme.RemindItemClickListener;
 import com.example.rudnev.remindme.dto.RemindDTO;
 
-import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
 
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 

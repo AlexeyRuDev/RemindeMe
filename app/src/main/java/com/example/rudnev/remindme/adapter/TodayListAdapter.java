@@ -13,11 +13,9 @@ import com.example.rudnev.remindme.R;
 import com.example.rudnev.remindme.RemindItemClickListener;
 import com.example.rudnev.remindme.dto.RemindDTO;
 
-import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
 
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 

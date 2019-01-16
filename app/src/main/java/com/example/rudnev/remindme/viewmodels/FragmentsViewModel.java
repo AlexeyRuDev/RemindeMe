@@ -5,11 +5,7 @@ import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
 
 import com.example.rudnev.remindme.RemindMeApplication;
-import com.example.rudnev.remindme.components.DaggerRemindMeComponent;
-import com.example.rudnev.remindme.components.RemindMeComponent;
 import com.example.rudnev.remindme.dto.RemindDTO;
-import com.example.rudnev.remindme.modules.ApplicationModule;
-import com.example.rudnev.remindme.modules.RepositoryModel;
 import com.example.rudnev.remindme.repositories.RemindMeRepository;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 

@@ -53,25 +53,8 @@ public class ArchiveActivity extends AppCompatActivity implements RemindItemClic
         setTheme(R.style.AppDefault);
         setContentView(R.layout.archive_activity);
         initToolbar();
-        rv = (RecyclerView) findViewById(R.id.recyclerViewArchive);
-        rv.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
-        DaggerArchiveActivityComponent.builder()
-                .remindItemClickListenerModule(new RemindItemClickListenerModule(this))
-                .archiveActivityModule(new ArchiveActivityModule(this))
-                .build()
-                .injectArchiveActivity(this);
-        rv.setAdapter(adapter);
-        mViewModel = ViewModelProviders.of(this).get(FragmentsViewModel.class);
-
-        mViewModel.getRemindsForArchive().observe(this, new Observer<List<RemindDTO>>() {
-            @Override
-            public void onChanged(@Nullable final List<RemindDTO> reminds) {
-                adapter.setData(reminds);
-                remindsData = reminds;
-                adapter.notifyDataSetChanged();
-            }
-        });
-
+        initRecyclerView();
+        initViewModel();
         ItemTouchHelper.SimpleCallback itemTouchHelperCallback = new RecyclerItemTouchHelper(0, ItemTouchHelper.RIGHT, this);
         new ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(rv);
     }
@@ -81,6 +64,29 @@ public class ArchiveActivity extends AppCompatActivity implements RemindItemClic
         toolbar = (Toolbar)findViewById(R.id.tbArchive);
         toolbar.setTitle(R.string.archive_tab);
         setSupportActionBar(toolbar);
+    }
+
+    private void initRecyclerView(){
+        rv = (RecyclerView) findViewById(R.id.recyclerViewArchive);
+        rv.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+        DaggerArchiveActivityComponent.builder()
+                .remindItemClickListenerModule(new RemindItemClickListenerModule(this))
+                .archiveActivityModule(new ArchiveActivityModule(this))
+                .build()
+                .injectArchiveActivity(this);
+        rv.setAdapter(adapter);
+    }
+
+    private void initViewModel(){
+        mViewModel = ViewModelProviders.of(this).get(FragmentsViewModel.class);
+        mViewModel.getRemindsForArchive().observe(this, new Observer<List<RemindDTO>>() {
+            @Override
+            public void onChanged(@Nullable final List<RemindDTO> reminds) {
+                adapter.setData(reminds);
+                remindsData = reminds;
+                adapter.notifyDataSetChanged();
+            }
+        });
     }
 
     @Override

@@ -55,37 +55,9 @@ public class NotesActivity extends AppCompatActivity implements RemindItemClickL
         setTheme(R.style.AppDefault);
         setContentView(LAYOUT);
         initToolbar();
-        rv = (RecyclerView) findViewById(R.id.recyclerViewNote);
-        rv.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
-        rv.setItemAnimator(new DefaultItemAnimator());
-        DaggerNoteActivityComponent.builder()
-                .remindItemClickListenerModule(new RemindItemClickListenerModule(this))
-                .noteActivityModule(new NoteActivityModule(this))
-                .build()
-                .injectNotesActivity(this);
-        rv.setAdapter(adapter);
-        fab = (FloatingActionButton)findViewById(R.id.fab);
-
-        mViewModel = ViewModelProviders.of(this).get(NoteViewModel.class);
-
-        mViewModel.getAllNotes().observe(this, new Observer<List<Notes>>() {
-            @Override
-            public void onChanged(@Nullable final List<Notes> reminds) {
-                adapter.setData(reminds);
-                notes = reminds;
-                adapter.notifyDataSetChanged();
-            }
-        });
-
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), CreateItemActivity.class);
-                intent.putExtra("isNote", true);
-                startActivityForResult(intent, REQUEST_NOTE);
-            }
-        });
-
+        initRecyclerView();
+        initViewModel();
+        initFAB();
         ItemTouchHelper.SimpleCallback itemTouchHelperCallback = new RecyclerItemTouchHelper(0, ItemTouchHelper.RIGHT, this);
         new ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(rv);
     }
@@ -105,6 +77,43 @@ public class NotesActivity extends AppCompatActivity implements RemindItemClickL
         toolbar.setTitle(R.string.notes_tab);
         setSupportActionBar(toolbar);
 
+    }
+
+    private void initRecyclerView(){
+        rv = (RecyclerView) findViewById(R.id.recyclerViewNote);
+        rv.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+        rv.setItemAnimator(new DefaultItemAnimator());
+        DaggerNoteActivityComponent.builder()
+                .remindItemClickListenerModule(new RemindItemClickListenerModule(this))
+                .noteActivityModule(new NoteActivityModule(this))
+                .build()
+                .injectNotesActivity(this);
+        rv.setAdapter(adapter);
+    }
+
+    private void initViewModel(){
+        mViewModel = ViewModelProviders.of(this).get(NoteViewModel.class);
+
+        mViewModel.getAllNotes().observe(this, new Observer<List<Notes>>() {
+            @Override
+            public void onChanged(@Nullable final List<Notes> reminds) {
+                adapter.setData(reminds);
+                notes = reminds;
+                adapter.notifyDataSetChanged();
+            }
+        });
+    }
+
+    private void initFAB(){
+        fab = (FloatingActionButton)findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), CreateItemActivity.class);
+                intent.putExtra("isNote", true);
+                startActivityForResult(intent, REQUEST_NOTE);
+            }
+        });
     }
 
     @Override

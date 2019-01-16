@@ -10,10 +10,8 @@ import android.arch.persistence.room.Update;
 
 import com.example.rudnev.remindme.dto.RemindDTO;
 
-import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
 
-import java.util.Date;
 import java.util.List;
 
 @Dao

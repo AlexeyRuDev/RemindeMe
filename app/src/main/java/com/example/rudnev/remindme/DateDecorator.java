@@ -2,7 +2,6 @@ package com.example.rudnev.remindme;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.text.style.ForegroundColorSpan;
 
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.DayViewDecorator;

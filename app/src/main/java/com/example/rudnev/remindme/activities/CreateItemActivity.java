@@ -13,7 +13,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
-import android.text.InputType;
 import android.text.TextWatcher;
 import android.text.format.DateUtils;
 import android.view.View;
@@ -29,17 +28,12 @@ import com.example.rudnev.remindme.R;
 import com.example.rudnev.remindme.dto.Notes;
 import com.example.rudnev.remindme.dto.RemindDTO;
 
-import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 
 public class CreateItemActivity extends AppCompatActivity {
 
@@ -67,21 +61,22 @@ public class CreateItemActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setTheme(R.style.AppDefault);
         setContentView(LAYOUT);
-        Button mOkBtn = (Button) findViewById(R.id.createBtn);
-        Button mCloseBtn = (Button) findViewById(R.id.closeBtn);
+
         charFromNote = false;
         fillFromNote = true;
-        LinearLayout dateLayout = (LinearLayout) findViewById(R.id.dateLayout);
-        initTextWatcher();
-        mEditTextTitle = (EditText) findViewById(R.id.titleText);
-        mEditTextTitle.addTextChangedListener(generalTextWatcher);
-        mEditTextNote = (EditText) findViewById(R.id.noteText);
-        mEditTextNote.addTextChangedListener(generalTextWatcher);
-        mTextViewDate = (TextView) findViewById(R.id.dateText);
-        mTextViewTime = (TextView) findViewById(R.id.timeText);
-        setFieldsStyle();
-        resultIntent = getIntent();
 
+        initTextWatcher();
+        initTextFields();
+
+        checkIncomingItemAndFillInTheFields();
+
+        initButtons();
+
+    }
+
+    private void checkIncomingItemAndFillInTheFields(){
+        LinearLayout dateLayout = (LinearLayout) findViewById(R.id.dateLayout);
+        resultIntent = getIntent();
         if (resultIntent != null) {
             setDateField((Calendar) resultIntent.getSerializableExtra("mDateField"));
             isNote = resultIntent.getBooleanExtra("isNote", false);
@@ -120,6 +115,12 @@ public class CreateItemActivity extends AppCompatActivity {
                 }
             });
         }
+    }
+
+    private void initButtons(){
+        Button mOkBtn = (Button) findViewById(R.id.createBtn);
+        Button mCloseBtn = (Button) findViewById(R.id.closeBtn);
+
         mOkBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -136,14 +137,17 @@ public class CreateItemActivity extends AppCompatActivity {
                 setResultFromActivity(RESULT_CANCELED);
             }
         });
+    }
 
-        mEditTextNote.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
-
+    //Init fields and set them style
+    private void initTextFields(){
+        mEditTextTitle = (EditText) findViewById(R.id.titleText);
+        mEditTextTitle.addTextChangedListener(generalTextWatcher);
+        mEditTextNote = (EditText) findViewById(R.id.noteText);
+        mEditTextNote.addTextChangedListener(generalTextWatcher);
+        mTextViewDate = (TextView) findViewById(R.id.dateText);
+        mTextViewTime = (TextView) findViewById(R.id.timeText);
+        setFieldsStyle();
     }
 
     private void setResultFromActivity(int resultCode) {
@@ -208,6 +212,7 @@ public class CreateItemActivity extends AppCompatActivity {
                 .show();
     }
 
+    //Add field style
     private void setFieldsStyle() {
         mTextViewDate.setBackgroundResource(R.drawable.edit_text_bg);
         mTextViewTime.setBackgroundResource(R.drawable.edit_text_bg);
@@ -249,6 +254,7 @@ public class CreateItemActivity extends AppCompatActivity {
     };
 
 
+    //if title is empty then fill them from the note field
     private void initTextWatcher(){
          generalTextWatcher = new TextWatcher() {
 
@@ -289,6 +295,7 @@ public class CreateItemActivity extends AppCompatActivity {
         };
     }
 
+    //Create new notification
     private void scheduleNotification(Notification notification, RemindDTO remindItem) {
         int notificationID = remindItem.getDate().getYear() + remindItem.getDate().getMonthOfYear() + remindItem.getDate().getDayOfMonth() +
                 remindItem.getDate().getHourOfDay() + remindItem.getDate().getMinuteOfHour() + remindItem.getDate().getSecondOfMinute();
@@ -317,6 +324,7 @@ public class CreateItemActivity extends AppCompatActivity {
         return builder.build();
     }
 
+    //Remove notification if item has been deleted
     private void cancelOldNotification(RemindDTO remindItem){
         int notificationID = remindItem.getDate().getYear() + remindItem.getDate().getMonthOfYear() + remindItem.getDate().getDayOfMonth() +
                 remindItem.getDate().getHourOfDay() + remindItem.getDate().getMinuteOfHour() + remindItem.getDate().getSecondOfMinute();

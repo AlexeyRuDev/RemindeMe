@@ -1,42 +1,26 @@
 package com.example.rudnev.remindme.fragments;
 
-import android.app.AlarmManager;
-import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.arch.lifecycle.Observer;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.service.notification.NotificationListenerService;
-import android.service.notification.StatusBarNotification;
 import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
-import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.example.rudnev.remindme.NotificationReceiver;
-import com.example.rudnev.remindme.RecyclerItemTouchHelper;
-import com.example.rudnev.remindme.activities.CreateItemActivity;
 import com.example.rudnev.remindme.R;
+import com.example.rudnev.remindme.RecyclerItemTouchHelper;
 import com.example.rudnev.remindme.RemindItemClickListener;
+import com.example.rudnev.remindme.activities.CreateItemActivity;
 import com.example.rudnev.remindme.adapter.TodayListAdapter;
-import com.example.rudnev.remindme.adapter.TabFragmentAdapter;
 import com.example.rudnev.remindme.dto.RemindDTO;
 
-import org.joda.time.DateTimeComparator;
-import org.joda.time.LocalDate;
-
-import java.util.ArrayList;
 import java.util.List;
 
 

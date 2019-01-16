@@ -2,7 +2,6 @@ package com.example.rudnev.remindme.roomdatabase;
 
 import android.arch.persistence.room.TypeConverter;
 
-import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
 
 import java.io.Serializable;

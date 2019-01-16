@@ -8,7 +8,6 @@ import com.example.rudnev.remindme.dao.RemindMeDAO;
 import com.example.rudnev.remindme.dto.RemindDTO;
 import com.example.rudnev.remindme.roomdatabase.RemindRoomDataBase;
 
-import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
 
 import java.text.SimpleDateFormat;

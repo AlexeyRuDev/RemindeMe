@@ -1,7 +1,5 @@
 package com.example.rudnev.remindme.fragments;
 
-import android.arch.lifecycle.LiveData;
-import android.arch.lifecycle.MediatorLiveData;
 import android.arch.lifecycle.Observer;
 import android.content.Context;
 import android.content.Intent;
@@ -18,17 +16,14 @@ import com.example.rudnev.remindme.DateDecorator;
 import com.example.rudnev.remindme.EventDecorator;
 import com.example.rudnev.remindme.R;
 import com.example.rudnev.remindme.activities.CreateItemActivity;
-import com.example.rudnev.remindme.adapter.TabFragmentAdapter;
 import com.example.rudnev.remindme.dto.RemindDTO;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
 
-import org.joda.time.DateTimeComparator;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashSet;
 import java.util.List;

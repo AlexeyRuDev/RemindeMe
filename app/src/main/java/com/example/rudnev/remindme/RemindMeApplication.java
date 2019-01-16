@@ -1,6 +1,5 @@
 package com.example.rudnev.remindme;
 
-import android.app.Activity;
 import android.app.Application;
 
 import com.example.rudnev.remindme.components.DaggerRemindMeComponent;

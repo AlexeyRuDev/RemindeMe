@@ -4,7 +4,6 @@ import android.graphics.Canvas;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.View;
-import android.view.animation.AlphaAnimation;
 
 import com.example.rudnev.remindme.adapter.CommonViewHolder;
 
