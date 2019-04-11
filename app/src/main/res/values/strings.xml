@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">RemindMeBeta</string>
+    <string name="app_name">RemindMe</string>
     <string name="search">Search</string>
     <string name="menu_item_today">Today</string>
     <string name="view_navigation_open">Open</string>

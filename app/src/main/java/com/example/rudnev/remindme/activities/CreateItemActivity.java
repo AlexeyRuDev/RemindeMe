@@ -306,7 +306,8 @@ public class CreateItemActivity extends AppCompatActivity {
 
         long futureInMillis = remindItem.getDate().toDate().getTime();
         AlarmManager alarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
-        alarmManager.set(AlarmManager.RTC_WAKEUP, futureInMillis, pendingIntent);
+        //alarmManager.set(AlarmManager.RTC_WAKEUP, futureInMillis, pendingIntent);
+        alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, futureInMillis,AlarmManager.INTERVAL_HALF_DAY, pendingIntent);
 
     }
 

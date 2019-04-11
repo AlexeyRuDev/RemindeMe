@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">RemindMeBeta</string>
+    <string name="app_name">RemindMe</string>
     <string name="search">Поиск</string>
     <string name="menu_item_today">На сегодня</string>
     <string name="view_navigation_open">Открыть</string>
