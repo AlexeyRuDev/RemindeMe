@@ -335,7 +335,7 @@ public class CreateItemActivity extends AppCompatActivity {
         builder.setAutoCancel(true);
         builder.setLights(Color.BLUE, 500, 500);
 
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && notificationManager != null){
             String CHANNEL_ID = "my_channel_01";
             CharSequence name = "my_channel";
             String description = "this is my channel";
