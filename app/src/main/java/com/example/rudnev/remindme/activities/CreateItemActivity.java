@@ -3,12 +3,15 @@ package com.example.rudnev.remindme.activities;
 import android.app.AlarmManager;
 import android.app.DatePickerDialog;
 import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -305,13 +308,22 @@ public class CreateItemActivity extends AppCompatActivity {
         PendingIntent pendingIntent = PendingIntent.getBroadcast(this, notificationID, notificationIntent, PendingIntent.FLAG_ONE_SHOT);
 
         long futureInMillis = remindItem.getDate().toDate().getTime();
+
         AlarmManager alarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
-        //alarmManager.set(AlarmManager.RTC_WAKEUP, futureInMillis, pendingIntent);
-        alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, futureInMillis,AlarmManager.INTERVAL_HALF_DAY, pendingIntent);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, futureInMillis, pendingIntent);
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            alarmManager.setExact(AlarmManager.RTC_WAKEUP, futureInMillis, pendingIntent);
+        } else {
+            alarmManager.set(AlarmManager.RTC_WAKEUP, futureInMillis, pendingIntent);
+        }
 
     }
 
     private Notification getNotification(String content, long when) {
+
+        NotificationManager notificationManager = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
 
         Notification.Builder builder = new Notification.Builder(this);
         builder.setContentTitle(getString(R.string.ScheduledTitle));
@@ -322,6 +334,23 @@ public class CreateItemActivity extends AppCompatActivity {
         builder.setDefaults(Notification.DEFAULT_VIBRATE);
         builder.setAutoCancel(true);
         builder.setLights(Color.BLUE, 500, 500);
+
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+            String CHANNEL_ID = "my_channel_01";
+            CharSequence name = "my_channel";
+            String description = "this is my channel";
+            int importance = NotificationManager.IMPORTANCE_HIGH;
+            NotificationChannel mChannel = new NotificationChannel(CHANNEL_ID, name, importance);
+            mChannel.setDescription(description);
+            mChannel.enableLights(true);
+            mChannel.setLightColor(Color.RED);
+            mChannel.enableVibration(true);
+            mChannel.setVibrationPattern(new long[]{100, 200, 300, 400, 500, 400, 300, 200, 400});
+            mChannel.setShowBadge(false);
+            notificationManager.createNotificationChannel(mChannel);
+            builder.setChannelId(CHANNEL_ID);
+        }
+
         return builder.build();
     }
 
