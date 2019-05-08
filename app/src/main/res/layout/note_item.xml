@@ -20,7 +20,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_marginRight="@dimen/padd_5"
+            android:layout_marginEnd="@dimen/padd_5"
             android:text="@string/delete"
             android:textColor="#fff"
             android:textSize="13dp" />

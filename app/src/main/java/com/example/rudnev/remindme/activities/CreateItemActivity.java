@@ -329,17 +329,18 @@ public class CreateItemActivity extends AppCompatActivity {
         builder.setContentTitle(getString(R.string.ScheduledTitle));
         builder.setContentText(content);
         builder.setWhen(when);
-        builder.setSmallIcon(R.mipmap.ic_launcher);
+        builder.setSmallIcon(R.mipmap.remindicon);
         builder.setDefaults(Notification.DEFAULT_SOUND);
         builder.setDefaults(Notification.DEFAULT_VIBRATE);
         builder.setAutoCancel(true);
         builder.setLights(Color.BLUE, 500, 500);
 
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && notificationManager != null){
-            String CHANNEL_ID = "my_channel_01";
-            CharSequence name = "my_channel";
-            String description = "this is my channel";
+            String CHANNEL_ID = "remindme_channel_01";
+            CharSequence name = "remindme_channel";
+            String description = "this is remindme notification channel";
             int importance = NotificationManager.IMPORTANCE_HIGH;
+            notificationManager.deleteNotificationChannel(CHANNEL_ID);
             NotificationChannel mChannel = new NotificationChannel(CHANNEL_ID, name, importance);
             mChannel.setDescription(description);
             mChannel.enableLights(true);

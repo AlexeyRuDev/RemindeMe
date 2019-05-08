@@ -54,8 +54,6 @@ public class MainActivity extends AppCompatActivity {
         initNavigationView();
         initTabs();
         initFAB();
-        //Notification
-        initAlarmManager();
 
     }
 
@@ -73,16 +71,6 @@ public class MainActivity extends AppCompatActivity {
                     adapter.showEditDialog();
             }
         });
-    }
-
-    private void initAlarmManager(){
-        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-        Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.SECOND, 10);
-        Intent intent = new Intent("doot.remind.action.DISPLAY_NOTIFICATION");
-        PendingIntent broadCast = PendingIntent.getBroadcast(this, 100, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-        Objects.requireNonNull(alarmManager).setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), broadCast);
     }
 
     private void initToolbar() {
