@@ -55,7 +55,7 @@ public class TodayFragment extends AbstractTabFragment implements RemindItemClic
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(LAYOUT, container, false);
         rv = (RecyclerView) view.findViewById(R.id.recyclerView);
-        rv.setLayoutManager(new LinearLayoutManager(context));
+        rv.setLayoutManager(new LinearLayoutManager(getCurrentContext()));
         adapter = new TodayListAdapter(this);
         rv.setAdapter(adapter);
 
@@ -73,7 +73,7 @@ public class TodayFragment extends AbstractTabFragment implements RemindItemClic
 
 
     public void setContext(Context context) {
-        this.context = context;
+        setCurrentContext(context);
     }
 
     public void showEditDialog() {
@@ -133,9 +133,9 @@ public class TodayFragment extends AbstractTabFragment implements RemindItemClic
             RemindDTO remindDTO = adapter.getItemById(position);
             int notificationID = remindDTO.getDate().getYear() + remindDTO.getDate().getMonthOfYear() + remindDTO.getDate().getDayOfMonth() +
                     remindDTO.getDate().getHourOfDay() + remindDTO.getDate().getMinuteOfHour() + remindDTO.getDate().getSecondOfMinute();
-            Intent notificationIntent = new Intent(context, NotificationReceiver.class);
+            Intent notificationIntent = new Intent(getCurrentContext(), NotificationReceiver.class);
             notificationIntent.putExtra(NotificationReceiver.NOTIFICATION_ID, notificationID);
-            PendingIntent pendingIntent = PendingIntent.getBroadcast(context, notificationID, notificationIntent, PendingIntent.FLAG_ONE_SHOT);
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(getCurrentContext(), notificationID, notificationIntent, PendingIntent.FLAG_ONE_SHOT);
             pendingIntent.cancel();
             mViewModel.delete(remindDTO);
         }

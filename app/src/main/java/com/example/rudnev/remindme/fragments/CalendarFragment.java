@@ -76,18 +76,18 @@ public class CalendarFragment extends AbstractTabFragment {
                 calendar.set(Calendar.YEAR, date.getYear());
                 calendar.set(Calendar.MONTH, date.getMonth());
                 calendar.set(Calendar.DATE, date.getDay());
-                widget.addDecorator(new EventDecorator(R.color.colorPrimary, dates, context));
-                widget.addDecorator(new DateDecorator(R.color.colorPrimary, CalendarDay.today(), context));
+                widget.addDecorator(new EventDecorator(R.color.colorPrimary, dates, getCurrentContext()));
+                widget.addDecorator(new DateDecorator(R.color.colorPrimary, CalendarDay.today(), getCurrentContext()));
 
                 if(haveItemsForConcreteDate(calendar)) {
-                    CalendarItemsDialog calendarItemsDialog = CalendarItemsDialog.getInstance(context, calendar.getTime(), mViewModel);
+                    CalendarItemsDialog calendarItemsDialog = CalendarItemsDialog.getInstance(getCurrentContext(), calendar.getTime(), mViewModel);
                     calendarItemsDialog.setTargetFragment(CalendarFragment.this, CALENDARFRAGMENT);
                     calendarItemsDialog.show(getFragmentManager(), "add_calendar_item");
                 }else {
                     LocalDate localDate = LocalDateTime.fromDateFields(calendar.getTime()).toLocalDate();
                     LocalDate localDateNow = LocalDate.now();
                     if(localDate.compareTo(localDateNow) < 0){
-                        Toast.makeText(context, R.string.PreviousNotes, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getCurrentContext(), R.string.PreviousNotes, Toast.LENGTH_SHORT).show();
                     }else {
                         showAddItemActivity(calendar);
                     }
@@ -115,16 +115,15 @@ public class CalendarFragment extends AbstractTabFragment {
     }
 
     public void setContext(Context context) {
-        this.context = context;
+        setCurrentContext(context);
     }
 
     private void updateCalendar(List<RemindDTO> datas) {
-
         dates.clear();
         calendarView.removeDecorators();
         dates = mViewModel.updateCalendar(datas);
-        calendarView.addDecorator(new EventDecorator(R.color.colorPrimary, dates, context));
-        calendarView.addDecorator(new DateDecorator(R.color.colorPrimary, CalendarDay.today(), context));
+        calendarView.addDecorator(new EventDecorator(R.color.colorPrimary, dates, getCurrentContext()));
+        calendarView.addDecorator(new DateDecorator(R.color.colorPrimary, CalendarDay.today(), getCurrentContext()));
     }
 
     @Override

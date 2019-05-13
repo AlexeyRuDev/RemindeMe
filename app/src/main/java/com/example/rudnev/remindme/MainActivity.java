@@ -27,6 +27,8 @@ import com.example.rudnev.remindme.modules.MainActivityModule;
 
 import net.danlew.android.joda.JodaTimeAndroid;
 
+import org.joda.time.DateTimeZone;
+
 import java.util.Calendar;
 import java.util.Objects;
 

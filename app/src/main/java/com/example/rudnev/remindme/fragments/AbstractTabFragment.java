@@ -14,7 +14,7 @@ public class AbstractTabFragment extends Fragment {
 
     private String title;
     protected View view;
-    protected Context context;
+    private Context context;
     protected FragmentsViewModel mViewModel;
 
     public String getTitle() {
@@ -29,5 +29,13 @@ public class AbstractTabFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mViewModel = ViewModelProviders.of(this).get(FragmentsViewModel.class);
+    }
+
+    protected Context getCurrentContext(){
+        return context == null ? getContext() : context;
+    }
+
+    protected void setCurrentContext(Context context){
+        this.context = context;
     }
 }
