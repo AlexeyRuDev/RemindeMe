@@ -5,11 +5,11 @@
         android:id="@+id/actionArchiveItem"
         android:orderInCategory="1"
         android:title="@string/archive_tab"
-        android:icon="@mipmap/ic_message_text"/>
+        android:icon="@mipmap/baseline_history_black_36"/>
     <item
         android:id="@+id/actionNotesItem"
         android:orderInCategory="1"
         android:title="@string/notes_tab"
-        android:icon="@mipmap/ic_message_text"/>
+        android:icon="@mipmap/baseline_book_black_36"/>
 
 </menu>

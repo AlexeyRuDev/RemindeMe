@@ -16,13 +16,14 @@
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:background="@color/colorPrimary"
-            android:paddingBottom="20dp"
+            android:paddingBottom="16dp"
             android:paddingEnd="24dp"
             android:paddingStart="24dp"
-            android:paddingTop="18dp"
+            android:paddingTop="8dp"
             android:text="@string/create_item"
+            android:fontFamily="@font/pacifico"
             android:textColor="@color/cardview_light_background"
-            android:textSize="20sp" />
+            android:textSize="22sp" />
 
         <LinearLayout
             android:id="@+id/dateLayout"
