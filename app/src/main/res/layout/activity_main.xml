@@ -19,7 +19,7 @@
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                android:theme="@style/ThemeOverlay.AppCompat.Dark"
+                android:theme="@style/ToolbarTheme"
                 android:background="?attr/colorPrimary"/>
 
             <android.support.design.widget.TabLayout
