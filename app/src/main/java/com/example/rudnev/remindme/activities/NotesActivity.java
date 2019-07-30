@@ -81,7 +81,15 @@ public class NotesActivity extends AppCompatActivity implements RemindItemClickL
         toolbar = (Toolbar)findViewById(R.id.tbNotes);
         toolbar.setTitle(R.string.notes_tab);
         setSupportActionBar(toolbar);
+        if(getSupportActionBar() != null)
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+    }
+
+    @Override
+    public boolean onSupportNavigateUp(){
+        finish();
+        return true;
     }
 
     private void initRecyclerView(){

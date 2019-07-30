@@ -70,6 +70,14 @@ public class ArchiveActivity extends AppCompatActivity implements RemindItemClic
         toolbar = (Toolbar)findViewById(R.id.tbArchive);
         toolbar.setTitle(R.string.archive_tab);
         setSupportActionBar(toolbar);
+        if(getSupportActionBar() != null)
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
+
+    @Override
+    public boolean onSupportNavigateUp(){
+        finish();
+        return true;
     }
 
     private void initRecyclerView(){
