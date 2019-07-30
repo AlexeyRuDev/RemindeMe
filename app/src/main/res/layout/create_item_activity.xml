@@ -80,7 +80,7 @@
                     android:paddingTop="8dp"
                     android:selectAllOnFocus="false" />
 
-                <EditText
+                <com.example.rudnev.remindme.customedittext.LinedEditText
                     android:id="@+id/noteText"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
