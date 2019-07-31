@@ -7,6 +7,7 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.TimePickerDialog;
+import android.arch.persistence.room.util.StringUtil;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -16,6 +17,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.text.format.DateUtils;
@@ -55,6 +57,8 @@ public class CreateItemActivity extends AppCompatActivity {
     private boolean charFromNote;
     private TextWatcher generalTextWatcher;
 
+    private Toolbar mCreateItemTb;
+
 
     private Date formatDate;
     private Calendar date;
@@ -71,6 +75,7 @@ public class CreateItemActivity extends AppCompatActivity {
 
         initTextWatcher();
         initTextFields();
+        initToolbar();
 
         checkIncomingItemAndFillInTheFields();
 
@@ -79,6 +84,21 @@ public class CreateItemActivity extends AppCompatActivity {
             getWindow().setStatusBarColor(ResourcesCompat.getColor(getResources(), R.color.colorPrimaryDark, getTheme()));
         }
 
+    }
+
+    private void initToolbar() {
+        mCreateItemTb = (Toolbar)findViewById(R.id.tbCreateItem);
+        mCreateItemTb.setTitle(R.string.create_item);
+        setSupportActionBar(mCreateItemTb);
+        if(getSupportActionBar() != null)
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+    }
+
+    @Override
+    public boolean onSupportNavigateUp(){
+        finish();
+        return true;
     }
 
     private void checkIncomingItemAndFillInTheFields(){
@@ -95,11 +115,13 @@ public class CreateItemActivity extends AppCompatActivity {
             remindItem = (RemindDTO) resultIntent.getParcelableExtra("mRemindItem");
             noteItem = (Notes) resultIntent.getParcelableExtra("mNoteItem");
             if (remindItem != null) {
+                mCreateItemTb.setTitle("");
                 date = Calendar.getInstance();
                 date.setTime(remindItem.getDate().toDate());
                 mEditTextTitle.setText(remindItem.getTitle());
                 mEditTextNote.setText(remindItem.getNote());
             } else if (noteItem != null) {
+                mCreateItemTb.setTitle("");
                 mEditTextTitle.setText(noteItem.getTitle());
                 mEditTextNote.setText(noteItem.getNote());
             }
