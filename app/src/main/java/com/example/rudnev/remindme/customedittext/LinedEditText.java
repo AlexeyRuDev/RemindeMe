@@ -1,14 +1,12 @@
 package com.example.rudnev.remindme.customedittext;
 
 import android.content.Context;
-import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.content.res.ResourcesCompat;
-import android.util.AttributeSet;
 import android.support.v7.widget.AppCompatEditText;
+import android.util.AttributeSet;
 
 import com.example.rudnev.remindme.R;
 

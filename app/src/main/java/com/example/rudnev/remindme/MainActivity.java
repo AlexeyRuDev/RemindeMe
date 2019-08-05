@@ -1,7 +1,5 @@
 package com.example.rudnev.remindme;
 
-import android.app.AlarmManager;
-import android.app.PendingIntent;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -19,9 +17,7 @@ import android.support.v7.widget.Toolbar;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.view.Gravity;
-import android.view.Menu;
 import android.view.MenuItem;
-import android.view.SubMenu;
 import android.view.View;
 
 import com.example.rudnev.remindme.activities.ArchiveActivity;
@@ -29,15 +25,11 @@ import com.example.rudnev.remindme.activities.NotesActivity;
 import com.example.rudnev.remindme.adapter.TabFragmentAdapter;
 import com.example.rudnev.remindme.components.DaggerMainActivityComponent;
 import com.example.rudnev.remindme.customtypefaces.CustomTypefaceSpan;
+import com.example.rudnev.remindme.fragments.TodayFragment;
 import com.example.rudnev.remindme.modules.ContextModule;
 import com.example.rudnev.remindme.modules.MainActivityModule;
 
 import net.danlew.android.joda.JodaTimeAndroid;
-
-import org.joda.time.DateTimeZone;
-
-import java.util.Calendar;
-import java.util.Objects;
 
 import javax.inject.Inject;
 
