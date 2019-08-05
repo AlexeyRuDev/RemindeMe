@@ -107,29 +107,6 @@ public class TodayFragment extends AbstractTabFragment implements RemindItemClic
     @Override
     public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction, int position) {
         if (viewHolder instanceof TodayListAdapter.RemindViewHolder) {
-            // get the removed item name to display it in snack bar
-            //String name = cartList.get(viewHolder.getAdapterPosition()).getName();
-
-            // backup of removed item for undo purpose
-            //final RemindDTO deletedItem = cartList.get(viewHolder.getAdapterPosition());
-            //final int deletedIndex = viewHolder.getAdapterPosition();
-
-            // remove the item from recycler view
-            //adapter.removeItem(viewHolder.getAdapterPosition());
-
-            /*showing snack bar with Undo option
-            Snackbar snackbar = Snackbar
-                    .make(coordinatorLayout, name + " removed from cart!", Snackbar.LENGTH_LONG);
-            snackbar.setAction("UNDO", new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-
-                    // undo is selected, restore the deleted item
-                    //adapter.restoreItem(deletedItem, deletedIndex);
-                }
-            });
-            snackbar.setActionTextColor(Color.YELLOW);
-            snackbar.show();*/
             RemindDTO remindDTO = adapter.getItemById(position);
             int notificationID = remindDTO.getDate().getYear() + remindDTO.getDate().getMonthOfYear() + remindDTO.getDate().getDayOfMonth() +
                     remindDTO.getDate().getHourOfDay() + remindDTO.getDate().getMinuteOfHour() + remindDTO.getDate().getSecondOfMinute();
