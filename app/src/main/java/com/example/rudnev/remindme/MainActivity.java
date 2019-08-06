@@ -20,6 +20,7 @@ import com.example.rudnev.remindme.activities.ArchiveActivity;
 import com.example.rudnev.remindme.activities.NotesActivity;
 import com.example.rudnev.remindme.adapter.TabFragmentAdapter;
 import com.example.rudnev.remindme.components.DaggerMainActivityComponent;
+import com.example.rudnev.remindme.fragments.TodayFragment;
 import com.example.rudnev.remindme.modules.ContextModule;
 import com.example.rudnev.remindme.modules.MainActivityModule;
 
@@ -50,6 +51,13 @@ public class MainActivity extends AppCompatActivity {
         initTabs();
         initFAB();
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(adapter != null && ((TodayFragment) adapter.getItem(0)).getActivity() == null)
+            initTabs();
     }
 
     @Override
